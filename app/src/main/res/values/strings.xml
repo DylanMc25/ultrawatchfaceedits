@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ultra Info Board Replica</string>
+    <string name="config_theme">Theme Color</string>
+    <string name="color_ultra_orange">Ultra Orange</string>
+    <string name="color_neon_green">Neon Green</string>
+    <string name="color_cyber_blue">Cyber Blue</string>
+    <string name="color_pure_white">Pure White</string>
+    <string name="color_night_red">Night Mode Red</string>
+</resources>

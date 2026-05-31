@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+    <!-- User Customization Options -->
+    <UserConfigurations>
+        <ColorConfiguration id="theme_color" displayName="@string/config_theme" defaultValue="orange">
+            <ColorOption id="orange" displayName="@string/color_ultra_orange" colors="#FFFF6600" />
+            <ColorOption id="green" displayName="@string/color_neon_green" colors="#FF00FF00" />
+            <ColorOption id="blue" displayName="@string/color_cyber_blue" colors="#FF00AAFF" />
+            <ColorOption id="white" displayName="@string/color_pure_white" colors="#FFFFFFFF" />
+            <ColorOption id="red" displayName="@string/color_night_red" colors="#FFFF0000" />
+        </ColorConfiguration>
+    </UserConfigurations>
+
+    <Scene>
+        <!-- Background -->
+        <Rectangle x="0" y="0" width="450" height="450">
+            <Fill color="#FF000000" />
+        </Rectangle>
+
+        <!-- Center Time -->
+        <PartText x="100" y="80" width="250" height="100">
+            <Text align="CENTER">
+                <Font family="SYNC_TO_DEVICE" size="90" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                    <Template>%s:%s
+                        <Parameter expression="[HOUR_0_23]" />
+                        <Parameter expression="[MINUTE_0]" />
+                    </Template>
+                </Font>
+            </Text>
+        </PartText>
+        
+        <!-- Center Seconds -->
+        <PartText x="175" y="180" width="100" height="40">
+            <Text align="CENTER">
+                <Font family="SYNC_TO_DEVICE" size="30" color="[CONFIGURATION.theme_color]" weight="MEDIUM">
+                    <Template>%s
+                        <Parameter expression="[SECOND_0]" />
+                    </Template>
+                </Font>
+            </Text>
+        </PartText>
+
+        <!-- COMPLICATION 1: Top-Left -->
+        <ComplicationSlot slotId="1" supportedTypes="SHORT_TEXT" x="60" y="70" width="90" height="90" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="90" height="90" />
+            <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="25" width="90" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="22" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 2: Top-Right -->
+        <ComplicationSlot slotId="2" supportedTypes="SHORT_TEXT" x="300" y="70" width="90" height="90" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="90" height="90" />
+            <DefaultProviderPolicy defaultSystemProvider="SUNRISE_SUNSET" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="25" width="90" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="22" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 3: Bottom-Left -->
+        <ComplicationSlot slotId="3" supportedTypes="SHORT_TEXT" x="60" y="300" width="90" height="90" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="90" height="90" />
+            <DefaultProviderPolicy defaultSystemProvider="HEART_RATE" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="25" width="90" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="22" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 4: Bottom-Right -->
+        <ComplicationSlot slotId="4" supportedTypes="SHORT_TEXT" x="300" y="300" width="90" height="90" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="90" height="90" />
+            <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="25" width="90" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="22" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 5: Center-Left (Row of 3) -->
+        <ComplicationSlot slotId="5" supportedTypes="SHORT_TEXT" x="75" y="210" width="80" height="80" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="80" height="80" />
+            <DefaultProviderPolicy defaultSystemProvider="DAY_OF_WEEK" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="20" width="80" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="20" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 6: Center-Middle (Row of 3) -->
+        <ComplicationSlot slotId="6" supportedTypes="SHORT_TEXT" x="185" y="210" width="80" height="80" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="80" height="80" />
+            <DefaultProviderPolicy defaultSystemProvider="WEATHER" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="20" width="80" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="20" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- COMPLICATION 7: Center-Right (Row of 3) -->
+        <ComplicationSlot slotId="7" supportedTypes="SHORT_TEXT" x="295" y="210" width="80" height="80" tintColor="[CONFIGURATION.theme_color]" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="80" height="80" />
+            <DefaultProviderPolicy defaultSystemProvider="WORLD_CLOCK" defaultSystemProviderType="SHORT_TEXT" />
+            <Complication type="SHORT_TEXT">
+                <PartText x="0" y="20" width="80" height="40">
+                    <Text align="CENTER">
+                        <Font family="SYNC_TO_DEVICE" size="20" color="[CONFIGURATION.theme_color]" weight="BOLD">
+                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]"/></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+    </Scene>
+</WatchFace>
