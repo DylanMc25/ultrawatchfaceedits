@@ -31,6 +31,7 @@ adb shell settings put secure user_setup_complete 1
 adb shell settings put system screen_off_timeout 1800000
 adb shell svc power stayon true
 adb shell input keyevent KEYCODE_WAKEUP
+adb shell dumpsys battery unplug
 adb install -r "$apk"
 sleep 10
 adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
@@ -73,6 +74,8 @@ adb shell settings put system screen_off_timeout 5000
 sleep 20
 adb shell dumpsys display > "$report/display-after-idle.txt"
 adb exec-out screencap -p > "$report/after-idle.png"
+python3 tools/check_ambient_capture.py "$report/after-idle.png" "$report/display-after-idle.txt" > "$report/ambient-pixels.json"
+python3 tools/capture_editor.py
 adb logcat -d > "$report/logcat.txt"
 # Installation is asserted; activation, visuals and ambient state need review of
 # these artifacts. Never report an after-idle image as ambient without DOZE evidence.

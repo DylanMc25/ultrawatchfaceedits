@@ -8,7 +8,8 @@ OUT = ROOT / 'app/src/main/res/raw/watchface.xml'
 # Five WFF 2 palette entries: gradient top/bottom, primary, secondary, surface.
 PALETTE = ['#FF234A77', '#FF4A96ED', '#FFDAF1FF', '#FFB4DAF6', '#FF509EFA']
 # A single fixed palette needs no editor setting. Keep these values centralized
-# for future multi-option themes; WFF runtimes reject a one-option color setting.
+# for future multi-option themes. This avoids the color-setting parse failure
+# observed with this single-option configuration on the API 34/35 emulators.
 C = list(PALETTE)
 C += [C[0], C[3]]  # Tracks and highlights reuse the five WFF 2 palette entries.
 
