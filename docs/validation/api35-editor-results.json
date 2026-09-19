@@ -55,5 +55,6 @@
     }
   ],
   "tap_mismatches": [],
-  "notes": []
+  "notes": [],
+  "edge_alarm_capture": true
 }

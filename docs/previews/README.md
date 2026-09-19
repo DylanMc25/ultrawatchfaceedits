@@ -11,6 +11,10 @@ The `*-editor.png` images are the real Wear OS editor, using **system sample rea
 
 ![Native editor with system sample data](emulator-api34-editor.png)
 
+## Edge-caption regression
+
+The `*-edge-alarm.png` images assign the system Alarm provider to the right edge on the disposable emulator. They verify that its “Set” text and the left battery label are fully visible. The default APK still leaves the right edge unassigned.
+
 ## Illustrative populated-weather layout
 
 `active-illustrative.png` and `ambient-illustrative.png` are **illustrative renders**, not emulator screenshots. They read the committed WFF geometry/colors and use explicit sample data (September 19, 02:26, 71 bpm, 8,420 steps, 62% battery, sample weather). Actual readings always come from Wear OS/providers.

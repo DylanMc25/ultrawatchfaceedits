@@ -1,6 +1,6 @@
 # Ultra Info Board
 
-A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, native weather, and six editable complication areas. Based on the supplied layout references; the artwork and weather glyphs here are original.
+A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, native weather, and six editable complication areas. The layout prioritizes readability on round displays; the artwork and weather glyphs here are original.
 
 **Development milestone, not a store release.** Requires Wear OS 5 (API 34) or later. The working package is `com.example.ultrainfoboard`; choose the permanent publisher/package identity before the first store upload.
 
@@ -33,6 +33,21 @@ adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
 The debug APK is installable and signed with the development key. The release AAB is **unsigned**, for later release preparation. Both builds remove generated Android resource bytecode so no DEX is packaged. Do not enable resource shrinking: resources referenced in raw WFF XML must remain available.
 
 CI runners generate temporary debug signing keys. If an update from a different runner fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, uninstall the earlier development build before installing the new one; this resets that build's watch-face settings. Stable release signing is a later milestone.
+
+### Test a downloaded APK in Android Studio on Windows
+
+1. In Android Studio's **Device Manager**, create and start a round Wear OS API 34 or API 35 virtual device.
+2. Open the latest successful [GitHub Actions run](https://github.com/DylanMc25/ultrawatchfaceedits/actions/workflows/watchface.yml?query=branch%3Acodex%2Fwatchface-redesign) and download **watchface-build-and-reports** under **Artifacts**. Extract the ZIP and locate `app-debug.apk`.
+3. Drag the APK onto the running emulator. This package is a watch face, so it has no normal app launch screen.
+4. Long-press the current watch face, add **Ultra Info Board**, and select it. Long-press again and choose **Customize** or **Edit** to assign complications.
+
+If installation reports mismatched signatures, run this in PowerShell while only one emulator is running, then drag the new APK onto it again:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" -e uninstall com.example.ultrainfoboard
+```
+
+Expect `Success`. Uninstalling resets this face's saved complication choices. The full path avoids the `adb is not recognized` error; if your SDK is elsewhere, use its location from Android Studio's SDK Manager.
 
 For a physical Galaxy Watch, enable developer options and wireless debugging, then use `adb pair WATCH_IP:PAIRING_PORT` and `adb connect WATCH_IP:DEBUG_PORT` with the addresses shown on the watch. After installation, open the watch-face picker and add **Ultra Info Board**. The debug selection broadcast above is used by the emulator tests; use the picker if the watch does not honor it. All physical Galaxy Watch results remain pending.
 

@@ -1,9 +1,9 @@
 {
-  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466914072",
-  "commit": "e8709fca98048acbeeddd8144c92906600d89536",
+  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35470002909",
+  "commit": "d6832f38e7f4be70ff532e074a7563b6220ae38d",
   "captures": {
     "api34": {
-      "artifact_id": 10591980371,
+      "artifact_id": 10592043403,
       "round_display": [
         454,
         454
@@ -11,7 +11,7 @@
       "ambient_state": "DOZE"
     },
     "api35": {
-      "artifact_id": 10591233284,
+      "artifact_id": 10592927097,
       "round_display": [
         384,
         384
@@ -24,7 +24,8 @@
     "ambient": "after-idle.png",
     "editor": "editor-slots.png",
     "shortcut-picker": "editor-slot-bottom.png",
+    "edge-alarm": "active-edge-alarm.png",
     "battery-action": "tap-battery.png"
   },
-  "notes": "Unmodified emulator captures. Active data comes from installed emulator providers; weather service unavailable. Editor uses Wear OS sample weather/health/time. Ambient text is stippled in these captures. Battery emulates unplugged state; system status indicators remain visible."
+  "notes": "Unmodified emulator captures. Active data comes from installed emulator providers; weather service unavailable. Editor uses Wear OS sample weather/health/time. API 34 ambient text is stippled; API 35 has continuous thin text. Edge-alarm captures assign Alarm only on the disposable emulator; the APK default remains EMPTY. Battery emulates unplugged state; system status indicators remain visible."
 }

@@ -7,7 +7,7 @@ Build environment: Linux x86-64, Temurin JDK 17, Gradle 8.13, Android Gradle Plu
 | Check | Result |
 | --- | --- |
 | Generated WFF matches source generator | Pass |
-| Seven regression checks | Pass |
+| Eight regression checks | Pass |
 | Official WFF validator 1.7.0, format 2 | Pass |
 | Debug APK and unsigned release AAB | Build successfully |
 | APK/AAB contents | No DEX; referenced images present |
@@ -15,7 +15,7 @@ Build environment: Linux x86-64, Temurin JDK 17, Gradle 8.13, Android Gradle Plu
 | Official memory evaluator, APK and AAB | Pass: active 3,551,360 bytes; ambient 3,181,712 bytes |
 | Whitespace/diff check | Pass |
 
-The regression checks cover six stable slots and their type renderers, distinct tap regions inside the circular screen, disjoint runtime rectangles and bounded rendering parts, all 16 weather conditions with day/night assets, unavailable forecast fallbacks, every hour across midnight/noon, and ambient layer visibility. Resource-label checks also prevent Android-style `@string/` references in raw WFF editor attributes; WFF expects bare resource names.
+The regression checks cover six stable slots and their type renderers, distinct tap regions inside the circular screen, disjoint runtime rectangles and bounded rendering parts, all 16 weather conditions with day/night assets, unavailable forecast fallbacks, every hour across midnight/noon, and ambient layer visibility. A pixel-by-pixel geometry check verifies the complete horizontal edge-caption rectangles remain inside their clipping masks and the round screen. Resource-label checks also prevent Android-style `@string/` references in raw WFF editor attributes; WFF expects bare resource names.
 
 Lint advisories include newer available tool versions, raw-WFF resource references that Android lint cannot trace, and backup metadata for a code-free package. No resource shrinking is enabled, and the package check confirms referenced image resources survive packaging.
 
@@ -25,21 +25,23 @@ Lint advisories include newer available tool versions, raw-WFF resource referenc
 
 The local Wear OS API 34 emulator was launched with software CPU emulation because this host has no `/dev/kvm`. It reached Android startup, but `system_server` repeatedly exceeded its 61-second watchdog timeout before package installation was available. These are operating-system boot failures; **no successful local install, watch-face rendering, complication interaction or ambient screenshot is claimed**.
 
-Hardware-accelerated [GitHub run 35466914072](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466914072), commit `e8709fc`, passed builds/validation and both emulator jobs. The actual captures were downloaded and visually reviewed:
+Hardware-accelerated [GitHub run 35470002909](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35470002909), commit `d6832f3`, passed builds/validation and both emulator jobs. The actual captures were downloaded and visually reviewed:
 
 | Check | API 34, 454 × 454 round | API 35-ext15, 384 × 384 round |
 | --- | --- | --- |
 | APK installation and face activation | Pass | Pass |
 | Blue gradient, stacked time, date and six areas | Rendered | Rendered |
-| 12/24-hour preference | 08 / 20 hours; forecast labels switch | 08 / 20 hours; forecast labels switch |
+| 12/24-hour preference | 09 / 21 hours; forecast labels switch | 09 / 21 hours; forecast labels switch |
 | Missing weather | `Weather —`, four dashes, future-hour labels | Same |
 | Default providers | Heart rate, steps, battery; unavailable sunrise/sunset | Same |
 | Black always-on with time/date only | Pass, display state `DOZE` | Pass, display state `DOZE` |
-| Ambient illuminated area at captured time | 2.9378% | 2.1914% |
+| Ambient illuminated area at captured time | 2.9371% | 4.4743% |
 
 Illumination counts every non-black pixel within the round screen, including system overlays, with no brightness cutoff. Both captures are below the documented [15% limit](https://developer.android.com/training/wearables/wff/ambient). These measurements establish the captured date/time only, not every possible date, font or device. These captures emulate an unplugged battery so the charging overlay does not cover the shortcut; API 35 still shows the system unread-status dot.
 
 The emulator weather service returned an internal server error; no populated native forecast is claimed. Heart rate and steps are supplied by the emulator's installed providers and are not physical health measurements. Missing provider icons render empty. No readings are fabricated by the face.
+
+Version 0.1.1 fixes edge text cropped by the arc clipping masks. Both edge captions are now horizontal and inset, with smaller text for longer provider values. Rounded rectangular masks contain the complete text rectangles while preserving the six disjoint interaction areas. Native captures still showed cropped bars on the smaller display after widening the earlier arc masks. Rounded bounds preserve the bars and captions and align editor selection with the runtime slot rectangles.
 
 Runtime testing also caught a battery tap being dispatched from the steps circle. The edge slots and all rendering parts now have bounded, disjoint rectangles, with a dedicated regression test; the circular/arc outlines alone were insufficient for native tap dispatch. The native interaction script confirms the blue face before every coordinate tap and reports any launch from the wrong slot.
 
@@ -47,13 +49,13 @@ Runtime testing found a color-setting parse failure that the official schema val
 
 ### Editor and tap verification
 
-Both emulators opened the native editor and independently opened the provider chooser for **all six slots**. The JSON reports in `validation/api34-editor-results.json` and `validation/api35-editor-results.json` record six visible chooser results each, no tap mismatches and no automation errors. Full per-slot PNG/XML/activity captures are in the linked workflow artifacts. The probe cancels each chooser; changing providers and retaining a saved selection across updates remain physical-device checks.
+Both emulators opened the native editor and independently opened the provider chooser for **all six slots**. The JSON reports in `validation/api34-editor-results.json` and `validation/api35-editor-results.json` record six visible chooser results each, no tap mismatches and no automation errors. Full per-slot PNG/XML/activity captures are in the linked workflow artifacts. The probe cancels the six individual chooser checks, then assigns Alarm to the right edge and returns to the active face. This verifies the provider selection and its “Set” label. Retaining selections across updates and reboots remains a physical-device check.
 
 Native tap logs identify the correct steps, sunrise/sunset and battery slots (2, 3, 4). Battery opens the system Battery settings page on both emulators. Steps and sunrise/sunset dispatch to their slots but do not open another foreground app in these images. The emulator placeholder heart-rate provider produces no launch event and leaves the face visible; its real-watch action is unverified. No unsupported launch is reported as successful.
 
 The native editor supplies sample data: September 28 at 09:30, populated weather, heart rate, steps and sunset. Its captures verify the native populated-weather glyphs and spacing, including compact sunset text. These are **Wear OS editor sample readings**, not live weather or health. The actual face continues to display dashes when live weather is unavailable.
 
-The final ambient captures show stippled text. Earlier captures of the same rendering code were also reviewed with continuous thin text and remained below 5% illumination. The measurement applies to each captured state; brightness and readability still need physical Galaxy Watch review.
+The final API 34 ambient capture shows stippled text; API 35 shows continuous thin text. Both remain below 5% illumination. The measurement applies to each captured state; brightness and readability still need physical Galaxy Watch review.
 
 ### Coverage boundaries
 
@@ -61,13 +63,14 @@ The final ambient captures show stippled text. Earlier captures of the same rend
 | --- | --- |
 | September date, real device text metrics | Reviewed on both emulators; no time/date clipping |
 | Longer localized dates, all wide digit pairs | Ellipsis/fit policies implemented; exhaustive native captures pending |
-| Midnight/noon and forecast rollover | All 24 input hours checked against generated label expressions; native captures also show 22:00 / 00:00 / 02:00 / 04:00 forecast labels and 12-hour equivalents. Main-clock noon/midnight transitions remain pending |
+| Midnight/noon and forecast rollover | All 24 input hours checked against generated label expressions; native captures also show 23:00 / 01:00 / 03:00 / 05:00 forecast labels and 12-hour equivalents. Main-clock noon/midnight transitions remain pending |
 | Temperature extremes and unit changes | Uses native temperature values; real weather service unavailable in these emulators |
 | Empty right/bottom complications | Setup placeholders rendered |
+| Edge labels on both display sizes | Battery “100” and assigned Alarm “Set” fully visible; six selectors and correct tap dispatch verified |
 | Unavailable weather and sunrise/sunset | Observed in native captures |
 | Health permission denial | Physical provider consent flow pending |
-| Six separate touch targets | Arc/oval geometry and rectangular runtime bounds pass regression checks; all six provider choosers opened independently on both emulators |
-| Provider selection and tap launches | Correct slot dispatch observed for steps/sunrise/battery; Battery settings opens. Real heart-rate/app destinations and saved-provider persistence require physical hardware |
+| Six separate touch targets | Visible selection geometry and rectangular runtime bounds pass regression checks; all six provider choosers opened independently on both emulators |
+| Provider selection and tap launches | Correct slot dispatch observed for steps/sunrise/battery; Battery settings opens. Alarm selection is saved on exiting the editor. Real heart-rate/app destinations and persistence across updates/reboots require physical hardware |
 
 ## Preview status
 
