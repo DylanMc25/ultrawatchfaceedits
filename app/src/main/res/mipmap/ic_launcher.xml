@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@android:color/white" />
-    <foreground>
-        <inset android:drawable="@android:drawable/ic_menu_info_details" android:inset="25%" />
-    </foreground>
-</adaptive-icon>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#234A77" android:pathData="M54,0 A54,54 0,1 0,54 108 A54,54 0,1 0,54 0" />
+    <path android:fillColor="#DAF1FF" android:pathData="M28,25 H37 V50 H28 Z M28,58 H37 V83 H28 Z M42,25 H49 V50 H42 Z M42,58 H49 V83 H42 Z" />
+    <path android:fillColor="#509EFA" android:pathData="M65,29 A10,10 0,1 0,65 49 A10,10 0,1 0,65 29 M80,46 A8,8 0,1 0,80 62 A8,8 0,1 0,80 46 M65,59 A10,10 0,1 0,65 79 A10,10 0,1 0,65 59" />
+</vector>

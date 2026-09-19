@@ -50,7 +50,6 @@ class WatchFaceTests(unittest.TestCase):
         # Read and evaluate the actual generated arithmetic, not a second formula.
         for offset in (2,4,6,8):
             g=self.face.find(f".//Group[@name='forecast_{offset}']")
-            p=g.find("./Condition/Default/PartText/Text/Font/Template/Parameter")
             # First Condition is weather fallback; select the 12-hour branch explicitly.
             c=g.findall('Condition')[1]
             expr=c.find('./Default/PartText/Text/Font/Template/Parameter').get('expression')

@@ -1010,7 +1010,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="230" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="232" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>
@@ -1031,7 +1031,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="230" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="232" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>
@@ -1052,7 +1052,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="230" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="232" endAngle="252" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>
@@ -1084,7 +1084,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="138" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="136" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>
@@ -1105,7 +1105,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="138" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="136" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>
@@ -1126,7 +1126,7 @@
                     </Arc>
                 </PartDraw>
                 <PartText x="0" y="0" width="450" height="450">
-                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="138" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
+                    <TextCircular centerX="225" centerY="225" width="416" height="416" startAngle="112" endAngle="136" direction="CLOCKWISE" align="CENTER" ellipsis="TRUE">
                         <Font family="sans-serif" size="16" color="[CONFIGURATION.theme_color.2]" weight="MEDIUM">
                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                             </Template>

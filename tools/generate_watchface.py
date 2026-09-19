@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'app/src/main/res/raw/watchface.xml'
-# Palette indices: gradient top/bottom, primary, secondary, surface, track, accent.
+# Five WFF 2 palette entries: gradient top/bottom, primary, secondary, surface.
 PALETTE = ['#FF234A77', '#FF4A96ED', '#FFDAF1FF', '#FFB4DAF6', '#FF509EFA']
 C = [f'[CONFIGURATION.theme_color.{i}]' for i in range(len(PALETTE))]
 C += [C[0], C[3]]  # Tracks and highlights reuse the five WFF 2 palette entries.
@@ -188,7 +188,7 @@ def edge_slot(parent, sid, name, left=False):
         if kind=='EMPTY':
             circular_text(p, 234 if left else 114, 252 if left else 135, '+', size=20)
         else:
-            circular_text(p, 230 if left else 112, 252 if left else 138, '%s', '[COMPLICATION.TEXT]', size=16)
+            circular_text(p, 232 if left else 112, 252 if left else 136, '%s', '[COMPLICATION.TEXT]', size=16)
 
 
 def shortcut(parent):
