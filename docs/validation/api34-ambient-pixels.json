@@ -6,7 +6,7 @@
   ],
   "display_state": "DOZE",
   "round_screen_pixels": 161892,
-  "lit_pixels_including_system_overlays": 6821,
-  "lit_percent": 4.2133,
+  "lit_pixels_including_system_overlays": 4756,
+  "lit_percent": 2.9378,
   "limit_percent": 15
 }

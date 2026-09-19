@@ -25,7 +25,7 @@ Lint advisories include newer available tool versions, raw-WFF resource referenc
 
 The local Wear OS API 34 emulator was launched with software CPU emulation because this host has no `/dev/kvm`. It reached Android startup, but `system_server` repeatedly exceeded its 61-second watchdog timeout before package installation was available. These are operating-system boot failures; **no successful local install, watch-face rendering, complication interaction or ambient screenshot is claimed**.
 
-Hardware-accelerated [GitHub run 35466025285](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466025285), commit `b82c94f`, passed builds/validation and both emulator jobs. The actual captures were downloaded and visually reviewed:
+Hardware-accelerated [GitHub run 35466914072](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466914072), commit `e8709fc`, passed builds/validation and both emulator jobs. The actual captures were downloaded and visually reviewed:
 
 | Check | API 34, 454 × 454 round | API 35-ext15, 384 × 384 round |
 | --- | --- | --- |
@@ -35,7 +35,7 @@ Hardware-accelerated [GitHub run 35466025285](https://github.com/DylanMc25/ultra
 | Missing weather | `Weather —`, four dashes, future-hour labels | Same |
 | Default providers | Heart rate, steps, battery; unavailable sunrise/sunset | Same |
 | Black always-on with time/date only | Pass, display state `DOZE` | Pass, display state `DOZE` |
-| Ambient illuminated area at captured time | 4.2133% | 4.6721% |
+| Ambient illuminated area at captured time | 2.9378% | 2.1914% |
 
 Illumination counts every non-black pixel within the round screen, including system overlays, with no brightness cutoff. Both captures are below the documented [15% limit](https://developer.android.com/training/wearables/wff/ambient). These measurements establish the captured date/time only, not every possible date, font or device. These captures emulate an unplugged battery so the charging overlay does not cover the shortcut; API 35 still shows the system unread-status dot.
 
@@ -45,7 +45,15 @@ Runtime testing also caught a battery tap being dispatched from the steps circle
 
 Runtime testing found a color-setting parse failure that the official schema validator did not detect. The single blue palette now renders directly from centralized source colors; it does not expose an unnecessary one-option color editor. CI rejects a startup/default face or a runtime theme parse failure, rather than accepting installation alone.
 
-The automated editor/provider interaction check is not yet verified; the rendering/ambient run above stopped that optional probe at a diagnostic log-filter error. The corrected probe is running separately, and no editor success is inferred from the green rendering job.
+### Editor and tap verification
+
+Both emulators opened the native editor and independently opened the provider chooser for **all six slots**. The JSON reports in `validation/api34-editor-results.json` and `validation/api35-editor-results.json` record six visible chooser results each, no tap mismatches and no automation errors. Full per-slot PNG/XML/activity captures are in the linked workflow artifacts. The probe cancels each chooser; changing providers and retaining a saved selection across updates remain physical-device checks.
+
+Native tap logs identify the correct steps, sunrise/sunset and battery slots (2, 3, 4). Battery opens the system Battery settings page on both emulators. Steps and sunrise/sunset dispatch to their slots but do not open another foreground app in these images. The emulator placeholder heart-rate provider produces no launch event and leaves the face visible; its real-watch action is unverified. No unsupported launch is reported as successful.
+
+The native editor supplies sample data: September 28 at 09:30, populated weather, heart rate, steps and sunset. Its captures verify the native populated-weather glyphs and spacing, including compact sunset text. These are **Wear OS editor sample readings**, not live weather or health. The actual face continues to display dashes when live weather is unavailable.
+
+The final ambient captures show stippled text. Earlier captures of the same rendering code were also reviewed with continuous thin text and remained below 5% illumination. The measurement applies to each captured state; brightness and readability still need physical Galaxy Watch review.
 
 ### Coverage boundaries
 
@@ -58,8 +66,8 @@ The automated editor/provider interaction check is not yet verified; the renderi
 | Empty right/bottom complications | Setup placeholders rendered |
 | Unavailable weather and sunrise/sunset | Observed in native captures |
 | Health permission denial | Physical provider consent flow pending |
-| Six separate touch targets | Arc/oval geometry and rectangular runtime bounds pass regression checks; editor captures recorded separately |
-| Provider selection and tap launches | Requires reviewed editor/provider interaction evidence; Samsung app targets require physical hardware |
+| Six separate touch targets | Arc/oval geometry and rectangular runtime bounds pass regression checks; all six provider choosers opened independently on both emulators |
+| Provider selection and tap launches | Correct slot dispatch observed for steps/sunrise/battery; Battery settings opens. Real heart-rate/app destinations and saved-provider persistence require physical hardware |
 
 ## Preview status
 

@@ -1,0 +1,59 @@
+{
+  "editor_opened": true,
+  "slot_captures": [
+    {
+      "name": "upper",
+      "provider_chooser_visible": true
+    },
+    {
+      "name": "middle",
+      "provider_chooser_visible": true
+    },
+    {
+      "name": "lower",
+      "provider_chooser_visible": true
+    },
+    {
+      "name": "left",
+      "provider_chooser_visible": true
+    },
+    {
+      "name": "right",
+      "provider_chooser_visible": true
+    },
+    {
+      "name": "bottom",
+      "provider_chooser_visible": true
+    }
+  ],
+  "tap_captures": [
+    {
+      "name": "heart-rate",
+      "expected_slot": 1,
+      "observed_launch_slots": []
+    },
+    {
+      "name": "steps",
+      "expected_slot": 2,
+      "observed_launch_slots": [
+        2
+      ]
+    },
+    {
+      "name": "sunrise-sunset",
+      "expected_slot": 3,
+      "observed_launch_slots": [
+        3
+      ]
+    },
+    {
+      "name": "battery",
+      "expected_slot": 4,
+      "observed_launch_slots": [
+        4
+      ]
+    }
+  ],
+  "tap_mismatches": [],
+  "notes": []
+}

@@ -13,4 +13,6 @@ Validation evidence and platform-test limitations are tracked in [docs/VALIDATIO
 
 Both API 34 (454 px round) and API 35 (384 px round) render the face, follow 12/24-hour settings and enter the black ambient display. Reviewed ambient captures illuminate under 5% of the round screen, including system indicators. Complete evidence and untested cases are documented rather than inferred from build success.
 
+All six slots independently open their native provider chooser on both emulators. Steps, sunrise/sunset and battery taps dispatch to the correct slots, and battery opens system Battery settings. The native editor also renders the populated weather layout using its own sample data. Real health-provider launches, live weather and saved-provider persistence remain physical-device checks. [Passing build, validation and emulator run](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466914072).
+
 This is a development milestone. Physical Galaxy Watch testing, live weather and Samsung provider/permission flows, final store identity, release signing and Play listing preparation remain required before sale.

@@ -1,9 +1,9 @@
 {
-  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466025285",
-  "commit": "b82c94f5bf4ca7b029e405f78e146ab0c1e177f8",
+  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466914072",
+  "commit": "e8709fca98048acbeeddd8144c92906600d89536",
   "captures": {
     "api34": {
-      "artifact_id": 10591746014,
+      "artifact_id": 10591980371,
       "round_display": [
         454,
         454
@@ -11,7 +11,7 @@
       "ambient_state": "DOZE"
     },
     "api35": {
-      "artifact_id": 10590904035,
+      "artifact_id": 10591233284,
       "round_display": [
         384,
         384
@@ -21,7 +21,10 @@
   },
   "source_files": {
     "active": "24-hour.png",
-    "ambient": "after-idle.png"
+    "ambient": "after-idle.png",
+    "editor": "editor-slots.png",
+    "shortcut-picker": "editor-slot-bottom.png",
+    "battery-action": "tap-battery.png"
   },
-  "notes": "Unmodified emulator captures. Battery emulates unplugged state. Weather service unavailable. System status indicators remain visible."
+  "notes": "Unmodified emulator captures. Active data comes from installed emulator providers; weather service unavailable. Editor uses Wear OS sample weather/health/time. Ambient text is stippled in these captures. Battery emulates unplugged state; system status indicators remain visible."
 }
