@@ -33,20 +33,37 @@ def tap(x, y):
     time.sleep(3)
 
 
-results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'notes': []}
+def ensure_face():
+    # BACK/HOME can open the launcher when already on the face. Inspect before
+    # navigating so a later coordinate never accidentally targets another app.
+    adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
+    for attempt in range(4):
+        time.sleep(2)
+        path=out / 'interaction-face.png'
+        path.write_bytes(adb('exec-out', 'screencap', '-p'))
+        if subprocess.run(['python3','tools/check_capture.py',str(path)],capture_output=True).returncode==0:
+            return
+        adb('shell','input','keyevent','KEYCODE_HOME')
+    raise RuntimeError('Cannot confirm watch face before interaction; stopped coordinate taps.')
+
+
+results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'tap_mismatches': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for name, x, y in [('heart-rate', 284, 143), ('steps', 362, 212),
-                       ('sunrise-sunset', 284, 272), ('battery', 16, 225)]:
+    for sid, name, x, y in [(1, 'heart-rate', 270, 141), (2, 'steps', 354, 212),
+                            (3, 'sunrise-sunset', 270, 270), (4, 'battery', 16, 225)]:
+        ensure_face()
+        before=set(adb('logcat','-d','-s','DWF:Launch').decode().splitlines())
         tap(x*w/450, y*h/450)
         capture(f'tap-{name}')
-        results['tap_captures'].append(name)
-        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
-        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
-        time.sleep(2)
+        after=set(adb('logcat','-d','-s','DWF:Launch').decode().splitlines())-before
+        ids=[int(m.group(1)) for line in after if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
+        results['tap_captures'].append({'name':name,'expected_slot':sid,'observed_launch_slots':ids})
+        if any(actual!=sid for actual in ids):results['tap_mismatches'].append(name)
+    ensure_face()
     adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
     time.sleep(3)
     tree = capture('editor-entry')
@@ -58,13 +75,18 @@ try:
     else:
         x1, y1, x2, y2 = map(int, re.findall(r'\d+', edit.get('bounds')))
         tap((x1+x2)/2, (y1+y2)/2)
-        capture('editor-slots')
+        slot_tree=capture('editor-slots')
         results['editor_opened'] = True
         # Coordinates come from the six WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 284, 143), ('middle', 362, 212),
-                           ('lower', 284, 272), ('left', 16, 225),
+        for name, x, y in [('upper', 270, 141), ('middle', 354, 212),
+                           ('lower', 270, 270), ('left', 16, 225),
                            ('right', 434, 225), ('bottom', 225, 418)]:
-            tap(x*w/450, y*h/450)
+            label='Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
+            node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
+            if node is not None:
+                x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
+                tap((x1+x2)/2,(y1+y2)/2)
+            else:tap(x*w/450,y*h/450)
             capture(f'editor-slot-{name}')
             results['slot_captures'].append(name)
             adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
@@ -74,3 +96,5 @@ except Exception as exc:
 finally:
     (out / 'editor-results.json').write_text(json.dumps(results, indent=2) + '\n')
     adb('shell', 'input', 'keyevent', 'KEYCODE_HOME')
+if results['tap_mismatches']:
+    raise SystemExit('Wrong complication received taps: '+', '.join(results['tap_mismatches']))

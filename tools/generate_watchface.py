@@ -59,8 +59,8 @@ def condition(parent, name, expression):
     return c, el(c, 'Compare', expression=name)
 
 
-def arc(parent, cx, cy, diameter, start, end, color, thickness, expression=None, weighted=False):
-    p = box(parent, 'PartDraw', 0, 0, 450, 450)
+def arc(parent, cx, cy, diameter, start, end, color, thickness, expression=None, weighted=False, viewport=(450, 450)):
+    p = box(parent, 'PartDraw', 0, 0, *viewport)
     a = el(p, 'Arc', centerX=cx, centerY=cy, width=diameter, height=diameter, startAngle=start, endAngle=end)
     if weighted:
         el(a, 'WeightedStroke', colors='[COMPLICATION.WEIGHTED_ELEMENTS_COLORS]',
@@ -70,9 +70,9 @@ def arc(parent, cx, cy, diameter, start, end, color, thickness, expression=None,
     return p
 
 
-def circular_text(parent, start, end, value, *params, size=18):
-    p = box(parent, 'PartText', 0, 0, 450, 450)
-    t = el(p, 'TextCircular', centerX=225, centerY=225, width=416, height=416,
+def circular_text(parent, start, end, value, *params, size=18, center=(225,225), viewport=(450,450)):
+    p = box(parent, 'PartText', 0, 0, *viewport)
+    t = el(p, 'TextCircular', centerX=center[0], centerY=center[1], width=416, height=416,
            startAngle=start, endAngle=end, direction='CLOCKWISE', align='CENTER', ellipsis='TRUE')
     f = el(t, 'Font', family='sans-serif', size=size, color=C[2], weight='MEDIUM')
     if params:
@@ -94,8 +94,8 @@ def clock(parent, ambient=False):
     text(g, 94, 23, 262, 35, 27, '%s', '[MONTH_F]', color=color, weight='LIGHT' if ambient else 'BOLD')
     text(g, 235, 60, 132, 31, 24, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]', color=color)
     if not ambient:
-        seconds = box(g, 'DigitalClock', 206, 245, 33, 30)
-        t = box(seconds, 'TimeText', 0, 0, 33, 30, format='ss', align='CENTER')
+        seconds = box(g, 'DigitalClock', 199, 245, 29, 30)
+        t = box(seconds, 'TimeText', 0, 0, 29, 30, format='ss', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=25, color=C[3], weight='MEDIUM')
 
 
@@ -166,34 +166,38 @@ def circle_slot(parent, sid, name, x, y, size, provider):
             image(p, 16, 16, size-32, size-32, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
             continue
         if kind in ['RANGED_VALUE', 'GOAL_PROGRESS', 'WEIGHTED_ELEMENTS']:
-            arc(p, size/2, size/2, size-6, 0, 360, C[5], 3)
+            arc(p, size/2, size/2, size-6, 0, 360, C[5], 3, viewport=(size,size))
             ratio = RANGE if kind=='RANGED_VALUE' else GOAL
             arc(p, size/2, size/2, size-6, 0, 360, C[6], 3,
-                None if kind=='WEIGHTED_ELEMENTS' else f'360 * {ratio}', weighted=kind=='WEIGHTED_ELEMENTS')
+                None if kind=='WEIGHTED_ELEMENTS' else f'360 * {ratio}', weighted=kind=='WEIGHTED_ELEMENTS', viewport=(size,size))
         complication_label(p, size, size, kind, f'slot_{sid}_{kind.lower()}')
 
 
 def edge_slot(parent, sid, name, left=False):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'EMPTY']
-    s = box(parent, 'ComplicationSlot', 0, 0, 450, 450, slotId=sid, name=name,
+    # The runtime uses rectangular element bounds for tap dispatch even when the
+    # editor outline is an arc. Keep slots AND all rendering parts disjoint.
+    x,y,w,h = (0,115,90,254) if left else (396,116,54,225)
+    center = (225-x,225-y)
+    s = box(parent, 'ComplicationSlot', x, y, w, h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
-    start,end = (232,298) if left else (62,136)
-    el(s, 'BoundingArc', centerX=225, centerY=225, width=420, height=420,
+    start,end = (232,298) if left else (62,118)
+    el(s, 'BoundingArc', centerX=center[0], centerY=center[1], width=420, height=420,
        thickness=28, startAngle=start, endAngle=end)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='WATCH_BATTERY' if left else 'EMPTY',
        defaultSystemProviderType='RANGED_VALUE' if left else 'EMPTY')
     ambient_hide(s)
     for kind in kinds:
         p = el(s, 'Complication', type=kind)
-        a,b = (252,292) if left else (68,110)
-        arc(p, 225, 225, 420, a,b, C[5], 7)
+        a,b = (252,292) if left else (68,104)
+        arc(p, *center, 420, a,b, C[5], 7, viewport=(w,h))
         if kind in ['RANGED_VALUE','GOAL_PROGRESS']:
             ratio = RANGE if kind=='RANGED_VALUE' else GOAL
-            arc(p,225,225,420,a,b,C[6],7,f'{a} + {b-a} * {ratio}')
+            arc(p,*center,420,a,b,C[6],7,f'{a} + {b-a} * {ratio}',viewport=(w,h))
         if kind=='EMPTY':
-            circular_text(p, 234 if left else 114, 252 if left else 135, '+', size=20)
+            circular_text(p, 234 if left else 108, 252 if left else 118, '+', size=20, center=center, viewport=(w,h))
         else:
-            circular_text(p, 232 if left else 112, 252 if left else 136, '%s', '[COMPLICATION.TEXT]', size=16)
+            circular_text(p, 232 if left else 106, 252 if left else 118, '%s', '[COMPLICATION.TEXT]', size=16, center=center, viewport=(w,h))
 
 
 def shortcut(parent):
@@ -227,9 +231,9 @@ def build():
     clock(scene); clock(scene, ambient=True)
     weather(scene)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',240,99,88,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',322,172,80,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',240,228,88,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',228,99,84,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',314,172,80,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',228,228,84,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     ET.indent(root, space='    ')

@@ -37,6 +37,21 @@ class WatchFaceTests(unittest.TestCase):
                 self.assertLessEqual(len(touched),1,f'Overlapping tap areas at {x},{y}: {touched}')
                 if touched:self.assertLessEqual(math.hypot(x-225,y-225),225.6)
 
+    def test_runtime_rectangles_and_rendering_parts_do_not_steal_taps(self):
+        slots=self.face.findall('.//ComplicationSlot')
+        for i,a in enumerate(slots):
+            ax,ay,aw,ah=map(float,(a.get(k) for k in ['x','y','width','height']))
+            for b in slots[i+1:]:
+                bx,by,bw,bh=map(float,(b.get(k) for k in ['x','y','width','height']))
+                self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
+                                f'Runtime tap rectangles overlap: {a.get("slotId")}, {b.get("slotId")}')
+            for part in a.iter():
+                if part.tag in ['PartDraw','PartText','PartImage']:
+                    self.assertGreaterEqual(float(part.get('x')),0)
+                    self.assertGreaterEqual(float(part.get('y')),0)
+                    self.assertLessEqual(float(part.get('x'))+float(part.get('width')),aw)
+                    self.assertLessEqual(float(part.get('y'))+float(part.get('height')),ah)
+
     def test_all_weather_codes_and_future_hours_have_fallbacks(self):
         for font in self.face.findall('./BitmapFonts/BitmapFont'):
             self.assertEqual({n.get('name') for n in font},set(map(str,range(16))))
