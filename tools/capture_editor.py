@@ -93,7 +93,7 @@ try:
     # The stock emulator does not bundle Samsung Weather. Record the requested
     # package separately from a successful real-app launch; never conflate them.
     weather_package='com.samsung.android.watch.weather'
-    results['weather_target_installed']=bool(adb('shell','pm','path',weather_package).strip())
+    results['weather_target_installed']=('package:'+weather_package) in adb('shell','pm','list','packages',weather_package).decode().splitlines()
     results['weather_taps']=[]
     for name,x,y in [('current',150,300),('forecast',260,360)]:
         ensure_face()
