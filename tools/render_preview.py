@@ -143,7 +143,7 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 b=ft.getbbox(value);tile=Image.new('RGBA',(b[2]-b[0]+12*SCALE,b[3]-b[1]+12*SCALE));td=ImageDraw.Draw(tile)
                 td.text((6*SCALE-b[0],6*SCALE-b[1]),value,font=ft,fill=color(f.get('color')))
                 tile=tile.rotate(-angle,resample=Image.Resampling.BICUBIC,expand=True)
-                a=math.radians(angle);cx=(x+225+r*math.sin(a))*SCALE;cy=(y+225-r*math.cos(a))*SCALE
+                a=math.radians(angle);cx=(x+float(t.get('centerX'))+r*math.sin(a))*SCALE;cy=(y+float(t.get('centerY'))-r*math.cos(a))*SCALE
                 im.alpha_composite(tile,(round(cx-tile.width/2),round(cy-tile.height/2)));return
             f=t.find('Font')
             if f is None:
