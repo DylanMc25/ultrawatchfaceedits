@@ -182,9 +182,8 @@ def edge_slot(parent, sid, name, left=False):
     s = box(parent, 'ComplicationSlot', x, y, w, h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
     start,end = (232,298) if left else (62,118)
-    # The bounding arc clips pixels, not just editor outlines. Give curved text
-    # room for its full ascent/descent inside the rim; the previous inner radius
-    # of 196 sliced through glyphs drawn on the radius-208 text baseline.
+    # The bounding arc clips pixels, not just editor outlines. Its inward space
+    # contains the complete horizontal caption below the curved progress bar.
     el(s, 'BoundingArc', centerX=center[0], centerY=center[1], width=400, height=400,
        thickness=44, startAngle=start, endAngle=end)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='WATCH_BATTERY' if left else 'EMPTY',
@@ -197,10 +196,15 @@ def edge_slot(parent, sid, name, left=False):
         if kind in ['RANGED_VALUE','GOAL_PROGRESS']:
             ratio = RANGE if kind=='RANGED_VALUE' else GOAL
             arc(p,*center,420,a,b,C[6],7,f'{a} + {b-a} * {ratio}',viewport=(w,h))
+        # Keep the entire text rectangle inside both clip masks. Horizontal
+        # labels are easier to read than tiny rotated glyphs along the rim.
+        tx,ty,tw,th = (37,207,37,20) if left else (0,170,34,22)
         if kind=='EMPTY':
-            circular_text(p, 234 if left else 108, 252 if left else 118, '+', size=20, center=center, viewport=(w,h))
+            text(p,tx,ty,tw,th,18,'+',color=C[3])
         else:
-            circular_text(p, 232 if left else 106, 252 if left else 118, '%s', '[COMPLICATION.TEXT]', size=16, center=center, viewport=(w,h))
+            c, compact = condition(p,f'slot_{sid}_{kind.lower()}_edge_compact','textLength([COMPLICATION.TEXT]) > 3')
+            text(compact,tx,ty,tw,th,12,'%s','[COMPLICATION.TEXT]',weight='MEDIUM')
+            text(el(c,'Default'),tx,ty,tw,th,16,'%s','[COMPLICATION.TEXT]',weight='MEDIUM')
 
 
 def shortcut(parent):

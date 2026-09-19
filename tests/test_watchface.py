@@ -52,19 +52,27 @@ class WatchFaceTests(unittest.TestCase):
                     self.assertLessEqual(float(part.get('x'))+float(part.get('width')),aw)
                     self.assertLessEqual(float(part.get('y'))+float(part.get('height')),ah)
 
-    def test_edge_clip_masks_leave_room_for_complete_glyphs(self):
-        # A curved baseline fitting inside the arc is insufficient: its glyph
-        # ascent extends toward the dial center, and descenders extend outward.
+    def test_edge_clip_masks_contain_entire_label_rectangles(self):
+        # Rendering masks crop the text independently of the slot's tap bounds.
+        # Every point of each caption box must fit, not just its baseline.
         for sid in ['4','5']:
             slot=self.face.find(f'.//ComplicationSlot[@slotId="{sid}"]')
             bounds=slot.find('BoundingArc')
             radius=float(bounds.get('width'))/2
             half_thickness=float(bounds.get('thickness'))/2
-            for label in slot.findall('.//TextCircular'):
-                baseline=float(label.get('width'))/2
-                size=float(label.find('Font').get('size'))
-                self.assertLessEqual(radius-half_thickness,baseline-size-2)
-                self.assertGreaterEqual(radius+half_thickness,baseline+size/4+2)
+            self.assertFalse(slot.findall('.//TextCircular'))
+            labels=slot.findall('.//PartText')
+            self.assertTrue(labels)
+            for label in labels:
+                x,y,w,h=map(float,(label.get(k) for k in ['x','y','width','height']))
+                for row in range(int(h)+1):
+                    for col in range(int(w)+1):
+                        dx=x+col-float(bounds.get('centerX'));dy=y+row-float(bounds.get('centerY'))
+                        r=math.hypot(dx,dy);a=math.degrees(math.atan2(dx,-dy))%360
+                        self.assertLessEqual(radius-half_thickness,r)
+                        self.assertGreaterEqual(radius+half_thickness,r)
+                        self.assertLessEqual(float(bounds.get('startAngle')),a)
+                        self.assertGreaterEqual(float(bounds.get('endAngle')),a)
 
     def test_all_weather_codes_and_future_hours_have_fallbacks(self):
         for font in self.face.findall('./BitmapFonts/BitmapFont'):
