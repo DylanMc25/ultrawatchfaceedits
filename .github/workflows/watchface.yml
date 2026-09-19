@@ -1,0 +1,76 @@
+name: Watch face build and validation
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: watchface-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install build platform
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Validate and build
+        run: bash tools/validate.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: watchface-build-and-reports
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/bundle/release/*.aab
+            app/build/reports/
+            build/reports/wff/
+  emulator:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - api: '34'
+            device: wearos_large_round
+          - api: '35-ext15'
+            device: wearos_small_round
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: watchface-build-and-reports
+          path: artifacts
+      - name: Install emulator
+        run: |
+          sdkmanager 'emulator' 'platform-tools' 'system-images;android-${{ matrix.api }};android-wear;x86_64'
+          echo no | avdmanager create avd -n watchface -k 'system-images;android-${{ matrix.api }};android-wear;x86_64' -d '${{ matrix.device }}'
+          sed -i 's/hw.lcd.circular = false/hw.lcd.circular = true/' "$HOME/.android/avd/watchface.avd/config.ini"
+          sudo chmod 666 /dev/kvm
+      - name: Boot and capture
+        env:
+          APK: artifacts/app/build/outputs/apk/debug/app-debug.apk
+        run: |
+          mkdir -p build/emulator
+          "$ANDROID_HOME/emulator/emulator" -avd watchface -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > build/emulator/emulator.log 2>&1 &
+          bash tools/emulator_smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: emulator-${{ matrix.api }}-${{ matrix.device }}
+          path: build/emulator/

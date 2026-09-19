@@ -14,3 +14,10 @@
 .cxx
 local.properties
 app/build/
+.cache/
+__pycache__/
+*.pyc
+*.jks
+*.keystore
+keystore.properties
+core

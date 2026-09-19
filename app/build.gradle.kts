@@ -12,8 +12,9 @@ android {
         versionCode = 1
         versionName = "0.1.0"
     }
-    // WFF contains resources only; there is no bytecode to shrink.
+    // Strip AGP's generated R classes: WFF packages must contain no DEX files.
     buildTypes {
-        release { isMinifyEnabled = false }
+        debug { isMinifyEnabled = true }
+        release { isMinifyEnabled = true }
     }
 }
