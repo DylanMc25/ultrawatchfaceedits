@@ -1,0 +1,27 @@
+{
+  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35466025285",
+  "commit": "b82c94f5bf4ca7b029e405f78e146ab0c1e177f8",
+  "captures": {
+    "api34": {
+      "artifact_id": 10591746014,
+      "round_display": [
+        454,
+        454
+      ],
+      "ambient_state": "DOZE"
+    },
+    "api35": {
+      "artifact_id": 10590904035,
+      "round_display": [
+        384,
+        384
+      ],
+      "ambient_state": "DOZE"
+    }
+  },
+  "source_files": {
+    "active": "24-hour.png",
+    "ambient": "after-idle.png"
+  },
+  "notes": "Unmodified emulator captures. Battery emulates unplugged state. Weather service unavailable. System status indicators remain visible."
+}

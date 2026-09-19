@@ -1,0 +1,2 @@
+INFO: WFF Validation Application Version 1.7.0. Maximum Supported Format Version #5
+INFO: ✅  PASSED : app/src/main/res/raw/watchface.xml is valid against watch face format version #2

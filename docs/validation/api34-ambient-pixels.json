@@ -1,0 +1,12 @@
+{
+  "capture": "after-idle.png",
+  "dimensions": [
+    454,
+    454
+  ],
+  "display_state": "DOZE",
+  "round_screen_pixels": 161892,
+  "lit_pixels_including_system_overlays": 6821,
+  "lit_percent": 4.2133,
+  "limit_percent": 15
+}

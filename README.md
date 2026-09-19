@@ -4,6 +4,10 @@ A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked 
 
 **Development milestone, not a store release.** Requires Wear OS 5 (API 34) or later. The working package is `com.example.ultrainfoboard`; choose the permanent publisher/package identity before the first store upload.
 
+![API 34 active watch face](docs/previews/emulator-api34-active.png)
+
+*Actual Wear OS emulator capture. Weather is unavailable on the emulator; readings come from its installed providers. See [captures and layout proofs](docs/previews/README.md) for always-on and illustrative weather views.*
+
 ## Layout
 
 - Month and day/date above large hours/minutes; seconds in interactive mode.
@@ -28,6 +32,10 @@ adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
 
 The debug APK is installable and signed with the development key. The release AAB is **unsigned**, for later release preparation. Both builds remove generated Android resource bytecode so no DEX is packaged. Do not enable resource shrinking: resources referenced in raw WFF XML must remain available.
 
+CI runners generate temporary debug signing keys. If an update from a different runner fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, uninstall the earlier development build before installing the new one; this resets that build's watch-face settings. Stable release signing is a later milestone.
+
+For a physical Galaxy Watch, enable developer options and wireless debugging, then use `adb pair WATCH_IP:PAIRING_PORT` and `adb connect WATCH_IP:DEBUG_PORT` with the addresses shown on the watch. After installation, open the watch-face picker and add **Ultra Info Board**. The debug selection broadcast above is used by the emulator tests; use the picker if the watch does not honor it. All physical Galaxy Watch results remain pending.
+
 ## Edit and validate
 
 `tools/generate_watchface.py` is the source of truth for the XML, geometry and five-color palette. It uses only Python's standard library. After editing:
@@ -43,6 +51,6 @@ Weather icons are committed PNG resources. To redraw them, install Pillow and ru
 
 ## CI and emulator checks
 
-GitHub Actions uploads `watchface-build-and-reports` with APK, AAB and validation reports. Separate jobs attempt large round API 34 and small round API 35 (Wear OS 5.1 uses the `android-35-ext15` image) captures. Emulator artifacts contain installation/activation logs, 12/24-hour captures, and an after-idle capture. These require visual review: an after-idle capture is not proof of ambient mode without matching DOZE state.
+GitHub Actions uploads `watchface-build-and-reports` with APK, AAB and validation reports. Separate jobs install and render on large round API 34 and small round API 35 (Wear OS 5.1 uses the `android-35-ext15` image). Emulator artifacts contain installation/activation logs, 12/24-hour captures, ambient captures with DOZE/illumination checks, and editor/provider interaction diagnostics. These require visual review: a successful install alone is not visual validation, and editor automation records inconclusive results explicitly.
 
 See [validation evidence](docs/VALIDATION.md) and the [release checklist](docs/RELEASE.md) for completed checks and remaining work.
