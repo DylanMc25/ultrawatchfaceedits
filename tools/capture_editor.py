@@ -33,11 +33,20 @@ def tap(x, y):
     time.sleep(3)
 
 
-results = {'editor_opened': False, 'slot_captures': [], 'notes': []}
+results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
+    # Observe the installed providers' own tap actions without changing settings.
+    for name, x, y in [('heart-rate', 284, 143), ('steps', 362, 212),
+                       ('sunrise-sunset', 284, 272), ('battery', 16, 225)]:
+        tap(x*w/450, y*h/450)
+        capture(f'tap-{name}')
+        results['tap_captures'].append(name)
+        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+        time.sleep(2)
     adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
     time.sleep(3)
     tree = capture('editor-entry')
