@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Ultra Info Board</string>
-    <string name="config_theme">Theme Color</string>
-    <string name="color_ultra_orange">Ultra Orange</string>
-    <string name="color_neon_green">Neon Green</string>
-    <string name="color_cyber_blue">Cyber Blue</string>
-    <string name="color_pure_white">Pure White</string>
-    <string name="color_night_red">Night Mode Red</string>
+    <string name="config_theme">Color palette</string>
+    <string name="color_blue">Glacier Blue</string>
+    <string name="slot_upper_circle">Upper circle</string>
+    <string name="slot_middle_circle">Middle circle</string>
+    <string name="slot_lower_circle">Lower circle</string>
+    <string name="slot_left_edge">Left edge</string>
+    <string name="slot_right_edge">Right edge</string>
+    <string name="slot_shortcut">Bottom shortcut</string>
 </resources>
