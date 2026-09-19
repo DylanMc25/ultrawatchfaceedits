@@ -56,10 +56,10 @@ try:
     for sid, name, x, y in [(1, 'heart-rate', 270, 141), (2, 'steps', 354, 212),
                             (3, 'sunrise-sunset', 270, 270), (4, 'battery', 16, 225)]:
         ensure_face()
-        before=set(adb('logcat','-d','-s','DWF:Launch').decode().splitlines())
+        before=set(adb('logcat','-d').decode().splitlines())
         tap(x*w/450, y*h/450)
         capture(f'tap-{name}')
-        after=set(adb('logcat','-d','-s','DWF:Launch').decode().splitlines())-before
+        after=set(adb('logcat','-d').decode().splitlines())-before
         ids=[int(m.group(1)) for line in after if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
         results['tap_captures'].append({'name':name,'expected_slot':sid,'observed_launch_slots':ids})
         if any(actual!=sid for actual in ids):results['tap_mismatches'].append(name)
