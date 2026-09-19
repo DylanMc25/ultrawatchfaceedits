@@ -16,7 +16,7 @@ out = Path('build/emulator')
 
 
 def adb(*args):
-    return subprocess.run(['adb', *args], check=True, capture_output=True).stdout
+    return subprocess.run(['adb', *args], check=True, capture_output=True, timeout=30).stdout
 
 
 def capture(name):

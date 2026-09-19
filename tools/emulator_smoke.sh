@@ -37,10 +37,15 @@ sleep 10
 adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
     --es operation set-watchface --es watchFaceId "$pkg" > "$report/activation.txt"
 sleep 20
-adb shell input keyevent KEYCODE_HOME
+# HOME toggles the app launcher on these Wear images when already on the face.
+# BACK dismisses setup/launcher surfaces without opening a new one.
+adb shell input keyevent KEYCODE_BACK
+adb shell input keyevent KEYCODE_BACK
 rendered=false
 for attempt in $(seq 1 6); do
     adb shell input keyevent KEYCODE_WAKEUP
+    adb shell input keyevent KEYCODE_BACK
+    sleep 3
     adb exec-out screencap -p > "$report/active.png"
     if python3 tools/check_capture.py "$report/active.png"; then
         rendered=true
