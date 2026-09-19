@@ -165,3 +165,6 @@ if len(results['slot_captures']) != 6 or not all(s['provider_chooser_visible'] f
     raise SystemExit('Not all six native provider choosers were verified; inspect editor-results.json.')
 if not results.get('edge_alarm_capture'):
     raise SystemExit('Assigned edge text was not captured; inspect editor-results.json.')
+
+if len(results.get('weather_taps',[])) != 2 or not all(t['package_launch_evidence'] for t in results['weather_taps']):
+    raise SystemExit('Both weather launch requests were not verified; inspect weather tap logs.')

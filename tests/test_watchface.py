@@ -80,6 +80,23 @@ class WatchFaceTests(unittest.TestCase):
                         self.assertLess(math.hypot(px+float(slot.get('x'))-225,
                                                    py+float(slot.get('y'))-225),225)
 
+    def test_edge_gauges_leave_space_above_rotated_captions(self):
+        for sid in ['4','5']:
+            slot=self.face.find(f'.//ComplicationSlot[@slotId="{sid}"]')
+            lowest_drawn_pixel=0
+            for line in slot.findall('.//Line'):
+                lowest_drawn_pixel=max(lowest_drawn_pixel,
+                    max(float(line.get('startY')),float(line.get('endY')))+float(line.find('Stroke').get('thickness'))/2)
+            for arc in slot.findall('.//Arc'):
+                lowest_drawn_pixel=max(lowest_drawn_pixel,float(arc.get('centerY'))-
+                    float(arc.get('height'))/2*math.cos(math.radians(float(arc.get('endAngle'))))+
+                    float(arc.find('Stroke').get('thickness'))/2)
+            for label in slot.findall('.//PartText'):
+                y,w,h=map(float,(label.get(k) for k in ['y','width','height']))
+                a=math.radians(float(label.get('angle')))
+                highest_text_pixel=y+h/2-abs(math.sin(a))*w/2-abs(math.cos(a))*h/2
+                self.assertGreaterEqual(highest_text_pixel-lowest_drawn_pixel,2)
+
     def test_weather_taps_do_not_cover_complications(self):
         weather=self.face.find(".//Group[@name='weather']")
         targets=[p for p in weather.findall('PartDraw') if p.find('Launch') is not None]

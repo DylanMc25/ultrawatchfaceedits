@@ -208,27 +208,27 @@ def edge_slot(parent, sid, name, left=False):
         if left:
             # Twelve separate rounded ticks, filled from the bottom upward.
             for i in range(12):
-                a=256+i*3
+                a=260+i*2.8
                 edge_tick(p,center,a,C[5],(w,h))
                 if ratio:
                     _, lit=condition(p,f'slot_{sid}_{kind.lower()}_tick_{i}',f'{ratio} >= {(i+1)/12:.8f}')
                     edge_tick(lit,center,a,C[6],(w,h))
         else:
-            arc(p,*center,416,68,104,C[5],18,viewport=(w,h))
+            arc(p,*center,416,68,98,C[5],18,viewport=(w,h))
             if ratio:
                 # Hide the foreground at zero, avoiding a misleading round-cap dot.
                 _, positive=condition(p,f'slot_{sid}_{kind.lower()}_positive',f'{ratio} > 0')
-                arc(positive,*center,416,68,104,C[6],18,f'68 + 36 * {ratio}',viewport=(w,h))
+                arc(positive,*center,416,68,98,C[6],18,f'68 + 30 * {ratio}',viewport=(w,h))
             elif kind=='SHORT_TEXT':
                 # Decorative accent for a text-only provider, not a progress value.
-                arc(p,*center,416,68,104,C[6],18,viewport=(w,h))
+                arc(p,*center,416,68,98,C[6],18,viewport=(w,h))
         ix,iy=(34,8) if left else (0,8)
         if kind=='EMPTY':
             ellipse(p,ix+3,iy+3,18,18,C[3])
         else:
             image(p,ix,iy,24,24,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
         # The short rotated captions follow the reference without arc clip masks.
-        tx,ty=(10,176) if left else (3,176)
+        tx,ty=(10,177) if left else (3,176)
         angle=65 if left else -65
         expr='[COMPLICATION.TEXT]'
         if kind=='RANGED_VALUE':
