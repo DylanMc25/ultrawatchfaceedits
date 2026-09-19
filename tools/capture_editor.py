@@ -47,6 +47,20 @@ def ensure_face():
     raise RuntimeError('Cannot confirm watch face before interaction; stopped coordinate taps.')
 
 
+def return_to_editor():
+    # Provider chooser dismissal may leave a transitional blank activity. Wait
+    # for the actual editor before the next tap, instead of assuming one BACK
+    # always returns there on both Wear OS versions.
+    for attempt in range(4):
+        adb('shell','uiautomator','dump','/sdcard/window.xml')
+        tree=ET.fromstring(adb('shell','cat','/sdcard/window.xml'))
+        if any(n.get('resource-id','').endswith(':id/layout_editor') for n in tree.iter('node')):
+            return tree
+        adb('shell','input','keyevent','KEYCODE_BACK')
+        time.sleep(3)
+    raise RuntimeError('Editor did not return after provider chooser; stopped coordinate taps.')
+
+
 results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'tap_mismatches': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
@@ -81,16 +95,17 @@ try:
         for name, x, y in [('upper', 270, 141), ('middle', 354, 212),
                            ('lower', 270, 270), ('left', 16, 225),
                            ('right', 434, 225), ('bottom', 225, 418)]:
+            slot_tree=return_to_editor()
             label='Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
             if node is not None:
                 x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
                 tap((x1+x2)/2,(y1+y2)/2)
             else:tap(x*w/450,y*h/450)
-            capture(f'editor-slot-{name}')
-            results['slot_captures'].append(name)
-            adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
-            time.sleep(2)
+            chooser=capture(f'editor-slot-{name}')
+            activity=(out / f'editor-slot-{name}-activity.txt').read_text()
+            visible=any(n.get('text') for n in chooser.iter('node'))
+            results['slot_captures'].append({'name':name,'provider_chooser_visible':visible and 'ProviderChooserActivity' in activity})
 except Exception as exc:
     results['notes'].append(f'Editor automation inconclusive: {exc}')
 finally:
