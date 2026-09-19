@@ -1,31 +1,19 @@
-﻿plugins {
+plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.example.ultrainfoboard"
-    compileSdk = 34
-
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.example.ultrainfoboard"
-        minSdk = 33
-        targetSdk = 34
+        minSdk = 34
+        targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.0"
     }
-
+    // WFF contains resources only; there is no bytecode to shrink.
     buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+        release { isMinifyEnabled = false }
     }
-}
-
-dependencies {
-    // No code dependencies needed for pure Watch Face Format (WFF)
 }

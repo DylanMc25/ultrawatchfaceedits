@@ -1,47 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ultrainfoboard">
-
-    <uses-feature android:name="android.hardware.type.watch" />
-
-    <application
-        android:allowBackup="true"
-        android:hasCode="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault">
-
-        <property
-            android:name="com.google.wear.watchface.format.version"
-            android:value="2" />
-
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />
-
-        <service
-            android:name="androidx.wear.watchface.WatchFaceService"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_WALLPAPER">
-            <intent-filter>
-                <action android:name="android.service.wallpaper.WallpaperService" />
-                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
-            </intent-filter>
-
-            <!-- Metadata for Watch Face Format XML -->
-            <meta-data
-                android:name="com.google.wear.watchface.drawable"
-                android:resource="@raw/watchface" />
-            <meta-data
-                android:name="com.google.wear.watchface.format.drawable"
-                android:resource="@raw/watchface" />
-
-            <meta-data
-                android:name="android.service.wallpaper"
-                android:resource="@xml/watch_face_info" />
-        </service>
-
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
+    <application android:allowBackup="false" android:hasCode="false"
+        android:icon="@mipmap/ic_launcher" android:label="@string/app_name">
+        <property android:name="com.google.wear.watchface.format.version" android:value="2" />
+        <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
     </application>
 </manifest>
