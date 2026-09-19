@@ -33,7 +33,7 @@ def render(font_path, ambient=False, size=450, hour=14, minute=26):
         '1':dict(TEXT='71',TITLE='',MONOCHROMATIC_IMAGE='fixture_heart'),
         '2':dict(TEXT='8,420',TITLE='',MONOCHROMATIC_IMAGE='fixture_steps'),
         '3':dict(TEXT='6:48',TITLE='SUNSET',MONOCHROMATIC_IMAGE='fixture_sunset'),
-        '4':dict(TEXT='62%',TITLE='',RANGED_VALUE_MIN=0,RANGED_VALUE_MAX=100,RANGED_VALUE_VALUE=62),
+        '4':dict(TEXT='62%',TITLE='',MONOCHROMATIC_IMAGE='fixture_battery',RANGED_VALUE_MIN=0,RANGED_VALUE_MAX=100,RANGED_VALUE_VALUE=62),
         '5':{},'6':{}}
     expressions=set()
     for n in root.iter():
@@ -106,7 +106,9 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
             for child in node.find(f"Complication[@type='{kind}']"):paint(child,x,y,int(sid))
             return
         if tag=='Rectangle' or tag=='Ellipse':
-            fill=node.find('Fill');c=color(fill.get('color'));gradient=fill.find('LinearGradient')
+            fill=node.find('Fill')
+            if fill.get('color','').startswith('#00'):return
+            c=color(fill.get('color'));gradient=fill.find('LinearGradient')
             if gradient is not None:
                 cs=[color(v) for v in gradient.get('colors').split()]
                 rgb=[tuple(int(v[j:j+2],16) for j in (1,3,5)) for v in cs]
@@ -117,6 +119,13 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 bounds=(x*SCALE,y*SCALE,(x+w)*SCALE,(y+h)*SCALE)
                 (draw.ellipse if tag=='Ellipse' else draw.rectangle)(bounds,fill=c)
             return
+        if tag=='Line':
+            stroke=node.find('Stroke');c=color(stroke.get('color'));thick=float(stroke.get('thickness'))
+            points=[((ox+float(attrs[k+'X']))*SCALE,(oy+float(attrs[k+'Y']))*SCALE) for k in ['start','end']]
+            draw.line(points,fill=c,width=round(thick*SCALE))
+            for px,py in points:
+                rr=thick*SCALE/2;draw.ellipse((px-rr,py-rr,px+rr,py+rr),fill=c)
+            return
         if tag=='Arc':
             cx=ox+float(attrs['centerX']);cy=oy+float(attrs['centerY']);start=float(attrs['startAngle']);end=float(attrs['endAngle'])
             t=node.find('Transform')
@@ -124,7 +133,10 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
             stroke=node.find('Stroke')
             if stroke is None:return
             thick=float(stroke.get('thickness'));c=color(stroke.get('color'));r=w/2
-            draw.arc(((cx-r)*SCALE,(cy-h/2)*SCALE,(cx+r)*SCALE,(cy+h/2)*SCALE),start-90,end-90,fill=c,width=round(thick*SCALE))
+            if end>start:
+                outer=r+thick/2
+                draw.arc(((cx-outer)*SCALE,(cy-outer)*SCALE,(cx+outer)*SCALE,(cy+outer)*SCALE),
+                         start-90,end-90,fill=c,width=round(thick*SCALE))
             if end>start:
                 for angle in (start,end):
                     a=math.radians(angle);xx=cx+r*math.sin(a);yy=cy-r*math.cos(a);rr=thick/2
@@ -151,7 +163,15 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 glyph=Image.open(RES/f'{family}_{code}.png').convert('RGBA').resize((round(w*SCALE),round(h*SCALE)),Image.Resampling.LANCZOS)
                 tint=Image.new('RGBA',glyph.size,color(f.get('color')));tint.putalpha(glyph.getchannel('A'));im.alpha_composite(tint,(round(x*SCALE),round(y*SCALE)));return
             ft=font(f.get('size'),f.get('weight','NORMAL'));value=textvalue(f,ctx)
-            xx,yy,value=drawtext(x,y,w,h,value,ft,t.get('align','CENTER'));draw.text((xx,yy),value,font=ft,fill=color(f.get('color')));return
+            if float(node.get('angle','0')):
+                tile=Image.new('RGBA',(round(w*SCALE),round(h*SCALE)))
+                xx,yy,value=drawtext(0,0,w,h,value,ft,t.get('align','CENTER'))
+                ImageDraw.Draw(tile).text((xx,yy),value,font=ft,fill=color(f.get('color')))
+                tile=tile.rotate(-float(node.get('angle')),resample=Image.Resampling.BICUBIC,expand=True)
+                im.alpha_composite(tile,(round((x+w/2)*SCALE-tile.width/2),round((y+h/2)*SCALE-tile.height/2)))
+            else:
+                xx,yy,value=drawtext(x,y,w,h,value,ft,t.get('align','CENTER'));draw.text((xx,yy),value,font=ft,fill=color(f.get('color')))
+            return
         if tag=='PartImage':
             resource=node.find('Image').get('resource');value=fixtures.get(str(ctx),{}).get(resource.strip('[]').split('.')[-1],'')
             c=color(node.get('tintColor',colors[2]));cx=(x+w/2)*SCALE;cy=(y+h/2)*SCALE
@@ -160,6 +180,9 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 for i in range(100):
                     a=i*math.tau/100;points.append((cx+(16*math.sin(a)**3)*w*SCALE/36,cy-(13*math.cos(a)-5*math.cos(2*a)-2*math.cos(3*a)-math.cos(4*a))*h*SCALE/36))
                 draw.polygon(points,fill=c)
+            elif value=='fixture_battery':
+                draw.rounded_rectangle((cx-7*SCALE,cy-9*SCALE,cx+7*SCALE,cy+10*SCALE),radius=2*SCALE,fill=c)
+                draw.rectangle((cx-3*SCALE,cy-12*SCALE,cx+3*SCALE,cy-8*SCALE),fill=c)
             elif value=='fixture_steps':
                 draw.ellipse((cx-7*SCALE,cy-9*SCALE,cx-1*SCALE,cy+3*SCALE),fill=c);draw.ellipse((cx+2*SCALE,cy-2*SCALE,cx+8*SCALE,cy+10*SCALE),fill=c)
             elif value=='fixture_sunset':

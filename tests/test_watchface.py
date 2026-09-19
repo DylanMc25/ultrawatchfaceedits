@@ -69,13 +69,37 @@ class WatchFaceTests(unittest.TestCase):
                 x,y,w,h=map(float,(label.get(k) for k in ['x','y','width','height']))
                 for row in range(int(h)+1):
                     for col in range(int(w)+1):
-                        px,py=x+col,y+row
+                        angle=math.radians(float(label.get('angle','0')))
+                        dx,dy=col-w/2,row-h/2
+                        px=x+w/2+dx*math.cos(angle)-dy*math.sin(angle)
+                        py=y+h/2+dx*math.sin(angle)+dy*math.cos(angle)
                         self.assertTrue(0<=px<=width and 0<=py<=height)
                         dx=max(radius-px,0,px-(width-radius))
                         dy=max(radius-py,0,py-(height-radius))
                         self.assertLessEqual(math.hypot(dx,dy),radius)
                         self.assertLess(math.hypot(px+float(slot.get('x'))-225,
                                                    py+float(slot.get('y'))-225),225)
+
+    def test_weather_taps_do_not_cover_complications(self):
+        weather=self.face.find(".//Group[@name='weather']")
+        targets=[p for p in weather.findall('PartDraw') if p.find('Launch') is not None]
+        self.assertEqual(len(targets),2)
+        for target in targets:
+            self.assertEqual(target.find('Launch').get('target'),'com.samsung.android.watch.weather')
+            ax,ay,aw,ah=map(float,(target.get(k) for k in ['x','y','width','height']))
+            for slot in self.face.findall('.//ComplicationSlot'):
+                bx,by,bw,bh=map(float,(slot.get(k) for k in ['x','y','width','height']))
+                self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
+                                f'Weather tap covers complication {slot.get("slotId")}')
+
+    def test_minutes_and_seconds_have_separate_space(self):
+        g=self.face.find(".//Group[@name='interactive_time']")
+        clocks=g.findall('DigitalClock')
+        minutes=clocks[0].find("TimeText[@format='mm']")
+        seconds=clocks[1]
+        minute_right=float(clocks[0].get('x'))+float(minutes.get('x'))+float(minutes.get('width'))
+        self.assertGreaterEqual(float(seconds.get('x'))-minute_right,2)
+        self.assertGreaterEqual(float(seconds.find('TimeText/Font').get('size')),32)
 
     def test_all_weather_codes_and_future_hours_have_fallbacks(self):
         for font in self.face.findall('./BitmapFonts/BitmapFont'):
