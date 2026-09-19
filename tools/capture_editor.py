@@ -20,6 +20,18 @@ def adb(*args):
     return subprocess.run(['adb', *args], check=True, capture_output=True, timeout=30).stdout
 
 
+def launch_log():
+    # Startup emits enough unrelated logs to interrupt unfiltered dumps on
+    # small Wear emulators. Read only launch events, retrying read failures.
+    for attempt in range(3):
+        try:
+            return set(adb('logcat', '-d', '-s', 'DWF:Launch:I', '*:S').decode().splitlines())
+        except subprocess.CalledProcessError:
+            if attempt == 2:
+                raise
+            time.sleep(1)
+
+
 def capture(name):
     (out / f'{name}.png').write_bytes(adb('exec-out', 'screencap', '-p'))
     adb('shell', 'uiautomator', 'dump', '/sdcard/window.xml')
@@ -71,10 +83,10 @@ try:
     for sid, name, x, y in [(1, 'heart-rate', 270, 141), (2, 'steps', 354, 212),
                             (3, 'sunrise-sunset', 270, 270), (4, 'battery', 16, 225)]:
         ensure_face()
-        before=set(adb('logcat','-d').decode().splitlines())
+        before=launch_log()
         tap(x*w/450, y*h/450)
         capture(f'tap-{name}')
-        after=set(adb('logcat','-d').decode().splitlines())-before
+        after=launch_log()-before
         ids=[int(m.group(1)) for line in after if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
         results['tap_captures'].append({'name':name,'expected_slot':sid,'observed_launch_slots':ids})
         if any(actual!=sid for actual in ids):results['tap_mismatches'].append(name)
