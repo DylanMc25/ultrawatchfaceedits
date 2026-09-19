@@ -20,7 +20,8 @@ SCALE=3
 
 def render(font_path, ambient=False, size=450, hour=14, minute=26):
     root=ET.parse(XML).getroot()
-    colors=root.find('.//ColorOption').get('colors').split()
+    from generate_watchface import PALETTE
+    colors=PALETTE
     palette={f'CONFIGURATION.theme_color.{i}':c for i,c in enumerate(colors)}
     global_data={'HOUR_0_23':hour,'MINUTE':minute,'SECOND':38,'IS_24_HOUR_MODE':False,
                  'MONTH_F':'September','DAY_OF_WEEK_S':'Sat','DAY':19,

@@ -7,7 +7,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'app/src/main/res/raw/watchface.xml'
 # Five WFF 2 palette entries: gradient top/bottom, primary, secondary, surface.
 PALETTE = ['#FF234A77', '#FF4A96ED', '#FFDAF1FF', '#FFB4DAF6', '#FF509EFA']
-C = [f'[CONFIGURATION.theme_color.{i}]' for i in range(len(PALETTE))]
+# A single fixed palette needs no editor setting. Keep these values centralized
+# for future multi-option themes; WFF runtimes reject a one-option color setting.
+C = list(PALETTE)
 C += [C[0], C[3]]  # Tracks and highlights reuse the five WFF 2 palette entries.
 
 
@@ -217,9 +219,6 @@ def build():
         font = el(fonts, 'BitmapFont', name='weather_'+mode)
         for i in range(16):
             el(font, 'Character' if i<10 else 'Word', name=i, resource=f'weather_{mode}_{i}', width=96, height=96)
-    configs = el(root, 'UserConfigurations')
-    palette = el(configs, 'ColorConfiguration', id='theme_color', displayName='config_theme', screenReaderText='config_theme', defaultValue='blue')
-    el(palette, 'ColorOption', id='blue', displayName='color_blue', screenReaderText='color_blue', colors=' '.join(PALETTE))
     scene = el(root, 'Scene', backgroundColor='#FF000000')
     bg = box(scene, 'PartDraw', 0, 0, 450, 450, name='blue_background'); ambient_hide(bg)
     r = box(bg, 'Rectangle', 0, 0, 450, 450); fill = el(r, 'Fill', color=C[0])
