@@ -1199,7 +1199,7 @@
             </Complication>
         </ComplicationSlot>
         <ComplicationSlot x="0" y="115" width="90" height="254" slotId="4" name="left_edge" displayName="slot_left_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
-            <BoundingArc centerX="225" centerY="110" width="420" height="420" thickness="28" startAngle="232" endAngle="298" />
+            <BoundingArc centerX="225" centerY="110" width="400" height="400" thickness="44" startAngle="232" endAngle="298" />
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY" defaultSystemProviderType="RANGED_VALUE" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Complication type="SHORT_TEXT">
@@ -1273,7 +1273,7 @@
             </Complication>
         </ComplicationSlot>
         <ComplicationSlot x="396" y="116" width="54" height="225" slotId="5" name="right_edge" displayName="slot_right_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
-            <BoundingArc centerX="-171" centerY="109" width="420" height="420" thickness="28" startAngle="62" endAngle="118" />
+            <BoundingArc centerX="-171" centerY="109" width="400" height="400" thickness="44" startAngle="62" endAngle="118" />
             <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Complication type="SHORT_TEXT">

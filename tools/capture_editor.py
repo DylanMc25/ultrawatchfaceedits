@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Capture actual editor/provider screens; retain inconclusive results for review.
 
-No selections are saved. UI labels vary between Wear OS images, so these captures
-are supporting evidence rather than an assertion that every provider works.
+Choosers are cancelled individually, then the right edge is assigned Alarm on the
+disposable emulator to check its text clipping. UI labels vary between Wear OS
+images, so these captures require review rather than proving every provider works.
 """
 import json
 from pathlib import Path
@@ -106,6 +107,22 @@ try:
             activity=(out / f'editor-slot-{name}-activity.txt').read_text()
             visible=any(n.get('text') for n in chooser.iter('node'))
             results['slot_captures'].append({'name':name,'provider_chooser_visible':visible and 'ProviderChooserActivity' in activity})
+        # Reproduce the reported edge-label clipping with real provider text.
+        return_to_editor()
+        tap(434*w/450,225*h/450)
+        chooser=capture('edge-alarm-chooser')
+        alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
+        if alarm is None:
+            results['notes'].append('Alarm provider unavailable for edge-label capture.')
+        else:
+            x1,y1,x2,y2=map(int,re.findall(r'\d+',alarm.get('bounds')))
+            tap((x1+x2)/2,(y1+y2)/2)
+            return_to_editor()
+            capture('editor-edge-alarm')
+            adb('shell','input','keyevent','KEYCODE_HOME')
+            ensure_face()
+            capture('active-edge-alarm')
+            results['edge_alarm_capture']=True
 except Exception as exc:
     results['notes'].append(f'Editor automation inconclusive: {exc}')
 finally:

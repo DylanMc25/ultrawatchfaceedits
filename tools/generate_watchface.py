@@ -182,8 +182,11 @@ def edge_slot(parent, sid, name, left=False):
     s = box(parent, 'ComplicationSlot', x, y, w, h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
     start,end = (232,298) if left else (62,118)
-    el(s, 'BoundingArc', centerX=center[0], centerY=center[1], width=420, height=420,
-       thickness=28, startAngle=start, endAngle=end)
+    # The bounding arc clips pixels, not just editor outlines. Give curved text
+    # room for its full ascent/descent inside the rim; the previous inner radius
+    # of 196 sliced through glyphs drawn on the radius-208 text baseline.
+    el(s, 'BoundingArc', centerX=center[0], centerY=center[1], width=400, height=400,
+       thickness=44, startAngle=start, endAngle=end)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='WATCH_BATTERY' if left else 'EMPTY',
        defaultSystemProviderType='RANGED_VALUE' if left else 'EMPTY')
     ambient_hide(s)
