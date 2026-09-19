@@ -25,7 +25,7 @@ def launch_log():
     # small Wear emulators. Read only launch events, retrying read failures.
     for attempt in range(3):
         try:
-            return set(adb('logcat', '-d', '-s', 'DWF:Launch:I', '*:S').decode().splitlines())
+            return set(adb('logcat', '-d', '-e', 'Launch::onTap').decode().splitlines())
         except subprocess.CalledProcessError:
             if attempt == 2:
                 raise
@@ -136,7 +136,8 @@ try:
             capture('active-edge-alarm')
             results['edge_alarm_capture']=True
 except Exception as exc:
-    results['notes'].append(f'Editor automation inconclusive: {exc}')
+    detail = (getattr(exc, 'stderr', None) or b'').decode(errors='replace').strip()
+    results['notes'].append(f'Editor automation inconclusive: {exc}; {detail}')
 finally:
     (out / 'editor-results.json').write_text(json.dumps(results, indent=2) + '\n')
     adb('shell', 'input', 'keyevent', 'KEYCODE_HOME')
