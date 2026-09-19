@@ -40,9 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      ANDROID_USER_HOME: ${{ runner.temp }}/android
-      ANDROID_EMULATOR_HOME: ${{ runner.temp }}/android
-      ANDROID_AVD_HOME: ${{ runner.temp }}/android/avd
+      ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android
+      ANDROID_EMULATOR_HOME: ${{ github.workspace }}/.cache/android
+      ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android/avd
     strategy:
       fail-fast: false
       matrix:
