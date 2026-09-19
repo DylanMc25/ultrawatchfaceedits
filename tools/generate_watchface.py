@@ -181,11 +181,10 @@ def edge_slot(parent, sid, name, left=False):
     center = (225-x,225-y)
     s = box(parent, 'ComplicationSlot', x, y, w, h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
-    start,end = (232,298) if left else (62,118)
-    # The bounding arc clips pixels, not just editor outlines. Its inward space
-    # contains the complete horizontal caption below the curved progress bar.
-    el(s, 'BoundingArc', centerX=center[0], centerY=center[1], width=400, height=400,
-       thickness=44, startAngle=start, endAngle=end)
+    # Arc bounds clip differently across Wear OS versions/display scales.
+    # Rounded rectangular bounds preserve the curved drawing and keep editor
+    # selection aligned with the disjoint runtime slot rectangles.
+    box(s, 'BoundingRoundBox', 0, 0, w, h, cornerRadius=20)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='WATCH_BATTERY' if left else 'EMPTY',
        defaultSystemProviderType='RANGED_VALUE' if left else 'EMPTY')
     ambient_hide(s)
@@ -224,7 +223,7 @@ def shortcut(parent):
 
 
 def build():
-    root = ET.Element('WatchFace', width='450', height='450')
+    root = ET.Element('WatchFace', width='450', height='450', clipShape='CIRCLE')
     el(root, 'Metadata', key='CLOCK_TYPE', value='DIGITAL')
     fonts = el(root, 'BitmapFonts')
     for mode in ['day','night']:

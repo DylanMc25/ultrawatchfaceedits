@@ -95,7 +95,7 @@ try:
         # Coordinates come from the six WFF touch regions, scaled to the display.
         for name, x, y in [('upper', 270, 141), ('middle', 354, 212),
                            ('lower', 270, 270), ('left', 16, 225),
-                           ('right', 434, 225), ('bottom', 225, 418)]:
+                           ('right', 420, 225), ('bottom', 225, 418)]:
             slot_tree=return_to_editor()
             label='Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
@@ -109,7 +109,7 @@ try:
             results['slot_captures'].append({'name':name,'provider_chooser_visible':visible and 'ProviderChooserActivity' in activity})
         # Reproduce the reported edge-label clipping with real provider text.
         return_to_editor()
-        tap(434*w/450,225*h/450)
+        tap(420*w/450,225*h/450)
         chooser=capture('edge-alarm-chooser')
         alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
         if alarm is None:
@@ -130,3 +130,8 @@ finally:
     adb('shell', 'input', 'keyevent', 'KEYCODE_HOME')
 if results['tap_mismatches']:
     raise SystemExit('Wrong complication received taps: '+', '.join(results['tap_mismatches']))
+
+if len(results['slot_captures']) != 6 or not all(s['provider_chooser_visible'] for s in results['slot_captures']):
+    raise SystemExit('Not all six native provider choosers were verified; inspect editor-results.json.')
+if not results.get('edge_alarm_capture'):
+    raise SystemExit('Assigned edge text was not captured; inspect editor-results.json.')

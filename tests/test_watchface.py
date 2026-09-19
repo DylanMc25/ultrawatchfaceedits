@@ -19,7 +19,7 @@ class WatchFaceTests(unittest.TestCase):
             self.assertEqual(slot.get('isCustomizable'),'TRUE')
             self.assertIsNotNone(slot.find("Variant[@mode='AMBIENT'][@value='0']"))
 
-    def test_touch_regions_do_not_overlap_and_fit_round_screen(self):
+    def test_visible_touch_regions_do_not_overlap(self):
         def contains(slot,x,y):
             x-=float(slot.get('x'));y-=float(slot.get('y'))
             b=next(n for n in slot if n.tag.startswith('Bounding'))
@@ -30,12 +30,13 @@ class WatchFaceTests(unittest.TestCase):
             w=float(b.get('width'));h=float(b.get('height'))
             if b.tag=='BoundingOval':return ((x-w/2)/(w/2))**2+((y-h/2)/(h/2))**2<=1
             return 0<=x<=w and 0<=y<=h
+        self.assertEqual(self.face.get('clipShape'),'CIRCLE')
         slots=self.face.findall('.//ComplicationSlot')
         for y in range(450):
             for x in range(450):
+                if math.hypot(x-225,y-225)>225:continue
                 touched=[s.get('slotId') for s in slots if contains(s,x,y)]
                 self.assertLessEqual(len(touched),1,f'Overlapping tap areas at {x},{y}: {touched}')
-                if touched:self.assertLessEqual(math.hypot(x-225,y-225),225.6)
 
     def test_runtime_rectangles_and_rendering_parts_do_not_steal_taps(self):
         slots=self.face.findall('.//ComplicationSlot')
@@ -57,9 +58,10 @@ class WatchFaceTests(unittest.TestCase):
         # Every point of each caption box must fit, not just its baseline.
         for sid in ['4','5']:
             slot=self.face.find(f'.//ComplicationSlot[@slotId="{sid}"]')
-            bounds=slot.find('BoundingArc')
-            radius=float(bounds.get('width'))/2
-            half_thickness=float(bounds.get('thickness'))/2
+            bounds=slot.find('BoundingRoundBox')
+            self.assertIsNotNone(bounds)
+            width,height=map(float,(bounds.get(k) for k in ['width','height']))
+            radius=float(bounds.get('cornerRadius'))
             self.assertFalse(slot.findall('.//TextCircular'))
             labels=slot.findall('.//PartText')
             self.assertTrue(labels)
@@ -67,12 +69,13 @@ class WatchFaceTests(unittest.TestCase):
                 x,y,w,h=map(float,(label.get(k) for k in ['x','y','width','height']))
                 for row in range(int(h)+1):
                     for col in range(int(w)+1):
-                        dx=x+col-float(bounds.get('centerX'));dy=y+row-float(bounds.get('centerY'))
-                        r=math.hypot(dx,dy);a=math.degrees(math.atan2(dx,-dy))%360
-                        self.assertLessEqual(radius-half_thickness,r)
-                        self.assertGreaterEqual(radius+half_thickness,r)
-                        self.assertLessEqual(float(bounds.get('startAngle')),a)
-                        self.assertGreaterEqual(float(bounds.get('endAngle')),a)
+                        px,py=x+col,y+row
+                        self.assertTrue(0<=px<=width and 0<=py<=height)
+                        dx=max(radius-px,0,px-(width-radius))
+                        dy=max(radius-py,0,py-(height-radius))
+                        self.assertLessEqual(math.hypot(dx,dy),radius)
+                        self.assertLess(math.hypot(px+float(slot.get('x'))-225,
+                                                   py+float(slot.get('y'))-225),225)
 
     def test_all_weather_codes_and_future_hours_have_fallbacks(self):
         for font in self.face.findall('./BitmapFonts/BitmapFont'):
