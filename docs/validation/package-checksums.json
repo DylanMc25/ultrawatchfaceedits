@@ -1,10 +1,10 @@
 {
   "app/build/outputs/apk/debug/app-debug.apk": {
-    "sha256": "56fba6e953673295e583fabefcf1d5d76318d09bf2fc61800f4f093d3756ad80",
-    "bytes": 179545
+    "sha256": "66a76e99758ad2dd770349dcd449012a8f2fa14f45960239640afaf417717793",
+    "bytes": 199070
   },
   "app/build/outputs/bundle/release/app-release.aab": {
-    "sha256": "1444da98912d34a3c21bb513b069f084cc13a9b6b319084f9e1758461f749b4a",
-    "bytes": 157334
+    "sha256": "09cfed0c2d5a90514fc9546717b0eae39259b6ede96b2410239bd63fd2848267",
+    "bytes": 172671
   }
 }

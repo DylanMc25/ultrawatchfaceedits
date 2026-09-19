@@ -1,9 +1,9 @@
 {
-  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35470002909",
-  "commit": "d6832f38e7f4be70ff532e074a7563b6220ae38d",
+  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35473692442",
+  "commit": "38ca2876b3a6a5ff3bcd48c413fc7eb8fe640451",
   "captures": {
     "api34": {
-      "artifact_id": 10592043403,
+      "artifact_id": 10593417015,
       "round_display": [
         454,
         454
@@ -11,7 +11,7 @@
       "ambient_state": "DOZE"
     },
     "api35": {
-      "artifact_id": 10592927097,
+      "artifact_id": 10594092419,
       "round_display": [
         384,
         384
@@ -27,5 +27,5 @@
     "edge-alarm": "active-edge-alarm.png",
     "battery-action": "tap-battery.png"
   },
-  "notes": "Unmodified emulator captures. Active data comes from installed emulator providers; weather service unavailable. Editor uses Wear OS sample weather/health/time. API 34 ambient text is stippled; API 35 has continuous thin text. Edge-alarm captures assign Alarm only on the disposable emulator; the APK default remains EMPTY. Battery emulates unplugged state; system status indicators remain visible."
+  "notes": "Unmodified emulator captures. Active readings come from installed emulator providers; live weather is unavailable. Editor uses Wear OS sample weather/health/time. API 34 ambient text is continuous; API 35 is stippled. Edge-alarm captures assign Alarm only on disposable emulators; the APK default remains EMPTY. Samsung Weather is absent: weather tap logs show the correct package request and market fallback, not a successful Samsung app launch. Battery emulates unplugged state; system status indicators remain visible."
 }

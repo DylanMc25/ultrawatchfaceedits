@@ -10,13 +10,15 @@ A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked 
 
 ## Layout
 
-- Month and day/date above large hours/minutes; seconds in interactive mode.
+- Month and day/date above large hours/minutes; minutes shifted left with a larger separate seconds column.
 - Three staggered circles on the right: heart rate, steps, sunrise/sunset by default.
-- Left edge defaults to battery; right edge and bottom shortcut start unassigned.
-- Current weather and forecasts for +2, +4, +6, +8 hours, with icons, temperatures and local times.
+- Segmented left battery gauge, thick right-edge arc, provider icons and angled edge labels. Right edge and bottom shortcut start unassigned.
+- Larger current weather and four forecasts (+2, +4, +6, +8 hours), with icons, temperatures and local times. Tap the current reading or forecasts to open Samsung Weather on Galaxy Watch.
 - Black always-on display with thin time and date; all other content is hidden.
 
 Long-press the face and choose **Customize** to assign each slot. Providers available on a particular watch determine which data/apps can be selected. Samsung activity, stress, media and Gemini are not bundled or guaranteed providers. A `+` marks an unassigned area; assign it through the editor. Weather and health readings are never hard-coded; unavailable readings remain empty or show a dash. The face uses the system's weather data and temperature unit and follows 12/24-hour time preferences.
+
+The weather shortcut targets the preinstalled Samsung Weather app (`com.samsung.android.watch.weather`). It is separate from the native weather data source. Other Wear OS brands and the stock emulator may not have this app; opening the actual Samsung app requires a physical Galaxy Watch check.
 
 ## Build and install
 
