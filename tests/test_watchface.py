@@ -72,7 +72,9 @@ class WatchFaceTests(unittest.TestCase):
         names=[n.get('name') for n in self.face.iter('Expression')]
         self.assertEqual(len(names),len(set(names)))
         strings={s.get('name') for s in ET.parse(ROOT/'app/src/main/res/values/strings.xml').getroot()}
-        for slot in self.face.iter('ComplicationSlot'):
-            self.assertIn(slot.get('displayName').split('/')[-1],strings)
+        for node in self.face.iter():
+            if node.get('displayName'):
+                self.assertIn(node.get('displayName'),strings)
+                self.assertFalse(node.get('displayName').startswith('@'))
 
 if __name__=='__main__':unittest.main()

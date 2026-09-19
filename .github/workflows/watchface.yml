@@ -71,12 +71,15 @@ jobs:
           echo no | avdmanager create avd -n watchface -k 'system-images;android-${{ matrix.api }};android-wear;x86_64' -d '${{ matrix.device }}'
           sed -i 's/hw.lcd.circular = false/hw.lcd.circular = true/' "$ANDROID_AVD_HOME/watchface.avd/config.ini"
           sudo chmod 666 /dev/kvm
+      - name: Install screenshot checker
+        run: python3 -m pip install Pillow==12.3.0
       - name: Boot and capture
         env:
           APK: artifacts/app/build/outputs/apk/debug/app-debug.apk
         run: |
           mkdir -p build/emulator
           "$ANDROID_HOME/emulator/emulator" -avd watchface -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > build/emulator/emulator.log 2>&1 &
+          export EMULATOR_PID=$!
           bash tools/emulator_smoke.sh
       - uses: actions/upload-artifact@v4
         if: always()

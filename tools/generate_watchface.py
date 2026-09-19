@@ -134,21 +134,23 @@ RANGE = '([COMPLICATION.RANGED_VALUE_MAX] > [COMPLICATION.RANGED_VALUE_MIN] ? cl
 GOAL = '([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] > 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0)'
 
 
-def complication_label(parent, w, h, kind):
+def complication_label(parent, w, h, kind, label_id):
     # Providers may send an icon, a title, both, or neither. Reserve both bands;
     # absent optional fields render empty, leaving the primary reading centered.
     image(parent, (w-22)/2, 10, 22, 22, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
     expr = '[COMPLICATION.TEXT]'
     if kind == 'RANGED_VALUE': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
     if kind == 'GOAL_PROGRESS': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
-    text(parent, 7, 33, w-14, 29, 23 if w>80 else 21, '%s', expr, weight='BOLD')
+    c, compact = condition(parent, label_id + '_compact', f'textLength({expr}) > 5')
+    text(compact, 7, 33, w-14, 29, 16, '%s', expr, weight='BOLD')
+    text(el(c, 'Default'), 7, 33, w-14, 29, 23 if w>80 else 21, '%s', expr, weight='BOLD')
     text(parent, 9, 62, w-18, 16, 11, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
 def circle_slot(parent, sid, name, x, y, size, provider):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'WEIGHTED_ELEMENTS', 'MONOCHROMATIC_IMAGE', 'SMALL_IMAGE', 'EMPTY']
     s = box(parent, 'ComplicationSlot', x, y, size, size, slotId=sid, name=name,
-            displayName='@string/slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
+            displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
     box(s, 'BoundingOval', 0, 0, size, size)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider=provider, defaultSystemProviderType='SHORT_TEXT')
     ambient_hide(s)
@@ -165,13 +167,13 @@ def circle_slot(parent, sid, name, x, y, size, provider):
             ratio = RANGE if kind=='RANGED_VALUE' else GOAL
             arc(p, size/2, size/2, size-6, 0, 360, C[6], 3,
                 None if kind=='WEIGHTED_ELEMENTS' else f'360 * {ratio}', weighted=kind=='WEIGHTED_ELEMENTS')
-        complication_label(p, size, size, kind)
+        complication_label(p, size, size, kind, f'slot_{sid}_{kind.lower()}')
 
 
 def edge_slot(parent, sid, name, left=False):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'EMPTY']
     s = box(parent, 'ComplicationSlot', 0, 0, 450, 450, slotId=sid, name=name,
-            displayName='@string/slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
+            displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
     start,end = (232,298) if left else (62,136)
     el(s, 'BoundingArc', centerX=225, centerY=225, width=420, height=420,
        thickness=28, startAngle=start, endAngle=end)
@@ -193,7 +195,7 @@ def edge_slot(parent, sid, name, left=False):
 
 def shortcut(parent):
     s = box(parent, 'ComplicationSlot', 165, 403, 120, 30, slotId=6, name='shortcut',
-            displayName='@string/slot_shortcut', supportedTypes='SHORT_TEXT MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY', isCustomizable='TRUE')
+            displayName='slot_shortcut', supportedTypes='SHORT_TEXT MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY', isCustomizable='TRUE')
     box(s, 'BoundingRoundBox', 0, 0, 120, 30, cornerRadius=15)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
     ambient_hide(s)
@@ -216,8 +218,8 @@ def build():
         for i in range(16):
             el(font, 'Character' if i<10 else 'Word', name=i, resource=f'weather_{mode}_{i}', width=96, height=96)
     configs = el(root, 'UserConfigurations')
-    palette = el(configs, 'ColorConfiguration', id='theme_color', displayName='@string/config_theme', defaultValue='blue')
-    el(palette, 'ColorOption', id='blue', displayName='@string/color_blue', colors=' '.join(PALETTE))
+    palette = el(configs, 'ColorConfiguration', id='theme_color', displayName='config_theme', screenReaderText='config_theme', defaultValue='blue')
+    el(palette, 'ColorOption', id='blue', displayName='color_blue', screenReaderText='color_blue', colors=' '.join(PALETTE))
     scene = el(root, 'Scene', backgroundColor='#FF000000')
     bg = box(scene, 'PartDraw', 0, 0, 450, 450, name='blue_background'); ambient_hide(bg)
     r = box(bg, 'Rectangle', 0, 0, 450, 450); fill = el(r, 'Fill', color=C[0])
