@@ -24,23 +24,19 @@ def render(font_path, ambient=False, size=450, hour=14, minute=26):
     colors=PALETTE
     palette={f'CONFIGURATION.theme_color.{i}':c for i,c in enumerate(colors)}
     global_data={'HOUR_0_23':hour,'MINUTE':minute,'SECOND':38,'IS_24_HOUR_MODE':False,
-                 'MONTH_F':'September','DAY_OF_WEEK_S':'Sat','DAY':19,
-                 'WEATHER.IS_AVAILABLE':True,'WEATHER.CONDITION':14,'WEATHER.IS_DAY':True,'WEATHER.TEMPERATURE':90}
-    for i in (2,4,6,8):
-        for key,val in dict(IS_AVAILABLE=True,IS_DAY=(hour+i)%24<19,CONDITION={2:14,4:2,6:8,8:1}[i],TEMPERATURE={2:90,4:88,6:86,8:82}[i]).items():
-            global_data[f'WEATHER.HOURS.{i}.{key}']=val
+                 'MONTH_F':'September','DAY_OF_WEEK_S':'Sat','DAY':19}
     fixtures={
         '1':dict(TEXT='71',TITLE='',MONOCHROMATIC_IMAGE='fixture_heart'),
         '2':dict(TEXT='8,420',TITLE='',MONOCHROMATIC_IMAGE='fixture_steps'),
         '3':dict(TEXT='6:48',TITLE='SUNSET',MONOCHROMATIC_IMAGE='fixture_sunset'),
         '4':dict(TEXT='62%',TITLE='',MONOCHROMATIC_IMAGE='fixture_battery',RANGED_VALUE_MIN=0,RANGED_VALUE_MAX=100,RANGED_VALUE_VALUE=62),
-        '5':{},'6':{}}
+        '5':{},'6':{},'7':dict(TEXT='24°',TITLE='Sunny',MONOCHROMATIC_IMAGE='fixture_sun')}
     expressions=set()
     for n in root.iter():
         if n.tag=='Expression':expressions.add(n.text)
         if n.tag=='Parameter':expressions.add(n.get('expression'))
         if n.tag=='Transform':expressions.add(n.get('value'))
-    data=[global_data]+[global_data|{f'COMPLICATION.{k}':v for k,v in fixtures[str(i)].items()} for i in range(1,7)]
+    data=[global_data]+[global_data|{f'COMPLICATION.{k}':v for k,v in fixtures[str(i)].items()} for i in range(1,8)]
     # Evaluate this repository's WFF arithmetic using matching JavaScript operators.
     # No file/network access is provided to the expression function.
     js=r'''
@@ -105,7 +101,7 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
             sid=node.get('slotId');kind='EMPTY' if sid in ['5','6'] else 'RANGED_VALUE' if sid=='4' else 'SHORT_TEXT'
             for child in node.find(f"Complication[@type='{kind}']"):paint(child,x,y,int(sid))
             return
-        if tag=='Rectangle' or tag=='Ellipse':
+        if tag in ['Rectangle','Ellipse','RoundRectangle']:
             fill=node.find('Fill')
             if fill.get('color','').startswith('#00'):return
             c=color(fill.get('color'));gradient=fill.find('LinearGradient')
@@ -117,7 +113,8 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                     draw.line([(x*SCALE,y*SCALE+row),((x+w)*SCALE,y*SCALE+row)],fill=c)
             else:
                 bounds=(x*SCALE,y*SCALE,(x+w)*SCALE,(y+h)*SCALE)
-                (draw.ellipse if tag=='Ellipse' else draw.rectangle)(bounds,fill=c)
+                if tag=='RoundRectangle':draw.rounded_rectangle(bounds,radius=float(attrs['cornerRadiusX'])*SCALE,fill=c)
+                else:(draw.ellipse if tag=='Ellipse' else draw.rectangle)(bounds,fill=c)
             return
         if tag=='Line':
             stroke=node.find('Stroke');c=color(stroke.get('color'));thick=float(stroke.get('thickness'))
@@ -185,6 +182,10 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 draw.rectangle((cx-3*SCALE,cy-12*SCALE,cx+3*SCALE,cy-8*SCALE),fill=c)
             elif value=='fixture_steps':
                 draw.ellipse((cx-7*SCALE,cy-9*SCALE,cx-1*SCALE,cy+3*SCALE),fill=c);draw.ellipse((cx+2*SCALE,cy-2*SCALE,cx+8*SCALE,cy+10*SCALE),fill=c)
+            elif value=='fixture_sun':
+                draw.ellipse((cx-7*SCALE,cy-7*SCALE,cx+7*SCALE,cy+7*SCALE),fill=c)
+                for a in range(0,360,45):
+                    r=math.radians(a);draw.line([(cx+10*SCALE*math.cos(r),cy+10*SCALE*math.sin(r)),(cx+13*SCALE*math.cos(r),cy+13*SCALE*math.sin(r))],fill=c,width=2*SCALE)
             elif value=='fixture_sunset':
                 draw.arc((cx-8*SCALE,cy-5*SCALE,cx+8*SCALE,cy+11*SCALE),180,360,fill=c,width=2*SCALE);draw.line([(cx-12*SCALE,cy+3*SCALE),(cx+12*SCALE,cy+3*SCALE)],fill=c,width=2*SCALE)
             return

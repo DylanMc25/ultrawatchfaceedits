@@ -80,8 +80,8 @@ try:
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for sid, name, x, y in [(1, 'heart-rate', 260, 143), (2, 'steps', 348, 222),
-                            (3, 'sunrise-sunset', 260, 268), (4, 'battery', 16, 225)]:
+    for sid, name, x, y in [(1, 'heart-rate', 304, 146), (2, 'steps', 334, 259),
+                            (3, 'sunrise-sunset', 138, 361), (4, 'battery', 16, 225)]:
         ensure_face()
         before=launch_log()
         tap(x*w/450, y*h/450)
@@ -90,23 +90,6 @@ try:
         ids=[int(m.group(1)) for line in after if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
         results['tap_captures'].append({'name':name,'expected_slot':sid,'observed_launch_slots':ids})
         if any(actual!=sid for actual in ids):results['tap_mismatches'].append(name)
-    # The stock emulator does not bundle Samsung Weather. Record the requested
-    # package separately from a successful real-app launch; never conflate them.
-    weather_package='com.samsung.android.watch.weather'
-    results['weather_target_installed']=('package:'+weather_package) in adb('shell','pm','list','packages',weather_package).decode().splitlines()
-    results['weather_taps']=[]
-    for name,x,y in [('current',150,300),('forecast',260,360)]:
-        ensure_face()
-        before=launch_log(weather_package)
-        launches_before=launch_log()
-        tap(x*w/450,y*h/450)
-        capture(f'tap-weather-{name}')
-        evidence=sorted(launch_log(weather_package)-before)
-        (out / f'tap-weather-{name}-launch.txt').write_text('\n'.join(evidence)+'\n')
-        wrong=[line for line in launch_log()-launches_before if 'complication: COMPLICATION.' in line]
-        results['weather_taps'].append({'area':name,'requested_package':weather_package,
-                                       'package_launch_evidence':bool(evidence),'wrong_complication_launch':bool(wrong)})
-        if wrong:results['tap_mismatches'].append('weather-'+name)
     ensure_face()
     adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
     time.sleep(3)
@@ -121,12 +104,12 @@ try:
         tap((x1+x2)/2, (y1+y2)/2)
         slot_tree=capture('editor-slots')
         results['editor_opened'] = True
-        # Coordinates come from the six WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 260, 143), ('middle', 348, 222),
-                           ('lower', 260, 268), ('left', 16, 225),
-                           ('right', 420, 225), ('bottom', 225, 425)]:
+        # Coordinates come from the seven WFF touch regions, scaled to the display.
+        for name, x, y in [('upper', 304, 146), ('middle', 334, 259),
+                           ('lower', 138, 361), ('left', 16, 225),
+                           ('right', 420, 225), ('bottom', 225, 428), ('weather', 278, 373)]:
             slot_tree=return_to_editor()
-            label='Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
+            label='Weather' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
             if node is not None:
                 x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
@@ -152,6 +135,40 @@ try:
             ensure_face()
             capture('active-edge-alarm')
             results['edge_alarm_capture']=True
+        # A stock emulator lacks Samsung Weather. Select its Alarm provider in
+        # the weather slot to verify actual assignment and provider-owned taps.
+        # This does not claim Samsung Weather integration on physical hardware.
+        if results.get('edge_alarm_capture'):
+            # Reopen the editor, since the preceding check returned to the face.
+            adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
+            time.sleep(3)
+            tree=capture('weather-editor-entry')
+            edit=next(n for n in tree.iter('node') if re.search(r'edit|customi[sz]e', ' '.join(n.get(k,'') for k in ['text','content-desc','resource-id']), re.I))
+            x1,y1,x2,y2=map(int,re.findall(r'\d+',edit.get('bounds')))
+            tap((x1+x2)/2,(y1+y2)/2)
+            return_to_editor()
+            tap(278*w/450,373*h/450)
+            chooser=capture('weather-provider-chooser')
+            alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
+            if alarm is None:
+                results['notes'].append('Alarm test provider unavailable in weather slot.')
+            else:
+                x1,y1,x2,y2=map(int,re.findall(r'\d+',alarm.get('bounds')))
+                tap((x1+x2)/2,(y1+y2)/2)
+                return_to_editor()
+                capture('editor-weather-assigned')
+                adb('shell','input','keyevent','KEYCODE_HOME')
+                ensure_face()
+                capture('active-weather-assigned')
+                before=launch_log()
+                tap(278*w/450,373*h/450)
+                capture('tap-weather-provider')
+                evidence=sorted(launch_log()-before)
+                (out/'tap-weather-provider-launch.txt').write_text('\n'.join(evidence)+'\n')
+                ids=[int(m.group(1)) for line in evidence if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
+                results['weather_provider_test']={'assigned_provider':'Alarm', 'expected_slot':7, 'observed_launch_slots':ids,
+                                                  'samsung_weather_verified':False}
+                if any(sid!=7 for sid in ids):results['tap_mismatches'].append('weather-provider')
 except Exception as exc:
     detail = (getattr(exc, 'stderr', None) or b'').decode(errors='replace').strip()
     results['notes'].append(f'Editor automation inconclusive: {exc}; {detail}')
@@ -161,10 +178,10 @@ finally:
 if results['tap_mismatches']:
     raise SystemExit('Wrong complication received taps: '+', '.join(results['tap_mismatches']))
 
-if len(results['slot_captures']) != 6 or not all(s['provider_chooser_visible'] for s in results['slot_captures']):
-    raise SystemExit('Not all six native provider choosers were verified; inspect editor-results.json.')
+if len(results['slot_captures']) != 7 or not all(s['provider_chooser_visible'] for s in results['slot_captures']):
+    raise SystemExit('Not all seven native provider choosers were verified; inspect editor-results.json.')
 if not results.get('edge_alarm_capture'):
     raise SystemExit('Assigned edge text was not captured; inspect editor-results.json.')
 
-if len(results.get('weather_taps',[])) != 2 or not all(t['package_launch_evidence'] for t in results['weather_taps']):
-    raise SystemExit('Both weather launch requests were not verified; inspect weather tap logs.')
+if 7 not in results.get('weather_provider_test',{}).get('observed_launch_slots',[]):
+    raise SystemExit('Weather slot provider tap was not verified; inspect weather tap logs.')

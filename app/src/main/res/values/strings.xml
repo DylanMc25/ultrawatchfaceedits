@@ -7,4 +7,5 @@
     <string name="slot_left_edge">Left edge</string>
     <string name="slot_right_edge">Right edge</string>
     <string name="slot_shortcut">Bottom shortcut</string>
+    <string name="slot_weather">Weather</string>
 </resources>

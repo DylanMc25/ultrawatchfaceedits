@@ -11,9 +11,9 @@ class WatchFaceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.face=ET.parse(ROOT/'app/src/main/res/raw/watchface.xml').getroot()
 
-    def test_six_slots_have_complete_renderers(self):
+    def test_seven_slots_have_complete_renderers(self):
         slots=self.face.findall('.//ComplicationSlot')
-        self.assertEqual([s.get('slotId') for s in slots],['1','2','3','4','5','6'])
+        self.assertEqual([s.get('slotId') for s in slots],['1','2','3','4','5','6','7'])
         for slot in slots:
             self.assertEqual(set(slot.get('supportedTypes').split()),{c.get('type') for c in slot.findall('Complication')})
             self.assertEqual(slot.get('isCustomizable'),'TRUE')
@@ -97,17 +97,18 @@ class WatchFaceTests(unittest.TestCase):
                 highest_text_pixel=y+h/2-abs(math.sin(a))*w/2-abs(math.cos(a))*h/2
                 self.assertGreaterEqual(highest_text_pixel-lowest_drawn_pixel,2)
 
-    def test_weather_taps_do_not_cover_complications(self):
-        weather=self.face.find(".//Group[@name='weather']")
-        targets=[p for p in weather.findall('PartDraw') if p.find('Launch') is not None]
-        self.assertEqual(len(targets),2)
-        for target in targets:
-            self.assertEqual(target.find('Launch').get('target'),'com.samsung.android.watch.weather')
-            ax,ay,aw,ah=map(float,(target.get(k) for k in ['x','y','width','height']))
-            for slot in self.face.findall('.//ComplicationSlot'):
-                bx,by,bw,bh=map(float,(slot.get(k) for k in ['x','y','width','height']))
-                self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
-                                f'Weather tap covers complication {slot.get("slotId")}')
+    def test_weather_is_one_native_editable_slot(self):
+        slot=self.face.find(".//ComplicationSlot[@slotId='7']")
+        self.assertEqual(slot.get('name'),'weather')
+        self.assertEqual(slot.get('displayName'),'slot_weather')
+        self.assertIn('SHORT_TEXT',slot.get('supportedTypes').split())
+        self.assertIn('LONG_TEXT',slot.get('supportedTypes').split())
+        self.assertEqual(slot.find('DefaultProviderPolicy').get('defaultSystemProvider'),'EMPTY')
+        self.assertFalse(self.face.findall('.//Launch'), 'Provider must own the tap action')
+        xml=ET.tostring(self.face,encoding='unicode')
+        self.assertNotIn('[WEATHER.',xml)
+        self.assertNotIn('com.samsung.android.watch.weather',xml)
+        self.assertLessEqual(float(slot.get('height')),60)
 
     def test_minutes_and_seconds_have_separate_space(self):
         g=self.face.find(".//Group[@name='interactive_time']")
@@ -118,26 +119,27 @@ class WatchFaceTests(unittest.TestCase):
         self.assertGreaterEqual(float(seconds.get('x'))-minute_right,2)
         self.assertGreaterEqual(float(seconds.find('TimeText/Font').get('size')),32)
 
-    def test_all_weather_codes_and_future_hours_have_fallbacks(self):
-        for font in self.face.findall('./BitmapFonts/BitmapFont'):
-            self.assertEqual({n.get('name') for n in font},set(map(str,range(16))))
-        for offset in (2,4,6,8):
-            g=self.face.find(f".//Group[@name='forecast_{offset}']")
-            e=g.find('./Condition/Expressions/Expression').text
-            self.assertIn(f'WEATHER.HOURS.{offset}.IS_AVAILABLE',e)
-            self.assertIsNotNone(g.find('./Condition/Default'))
-
-    def test_forecast_labels_cover_midnight_noon_and_rollover(self):
-        # Read and evaluate the actual generated arithmetic, not a second formula.
-        for offset in (2,4,6,8):
-            g=self.face.find(f".//Group[@name='forecast_{offset}']")
-            # First Condition is weather fallback; select the 12-hour branch explicitly.
-            c=g.findall('Condition')[1]
-            expr=c.find('./Default/PartText/Text/Font/Template/Parameter').get('expression')
-            for hour in range(24):
-                actual=eval(expr.replace('[HOUR_0_23]',str(hour)),{'__builtins__':{}})
-                expected=(hour+offset)%24%12 or 12
-                self.assertEqual(actual,expected)
+    def test_larger_clock_and_circles_fit_the_available_space(self):
+        slots=self.face.findall('.//ComplicationSlot')
+        for sid in ['1','2','3']:
+            slot=self.face.find(f".//ComplicationSlot[@slotId='{sid}']")
+            x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
+            self.assertGreaterEqual(w,104)
+            self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
+        g=self.face.find(".//Group[@name='interactive_time']")
+        for clock in g.findall('DigitalClock'):
+            for t in clock.findall('TimeText'):
+                x=float(clock.get('x'))+float(t.get('x'));y=float(clock.get('y'))+float(t.get('y'))
+                w=float(t.get('width'));h=float(t.get('height'))
+                if t.get('format') in ['hh','mm']:
+                    self.assertGreaterEqual(float(t.find('Font').get('size')),140)
+                for slot in slots:
+                    sx,sy,sw,sh=map(float,(slot.get(k) for k in ['x','y','width','height']))
+                    self.assertTrue(x+w<=sx or sx+sw<=x or y+h<=sy or sy+sh<=y,
+                                    f'Clock overlaps slot {slot.get("slotId")}')
+        for clock in self.face.findall('.//DigitalClock'):
+            hour=clock.find("TimeText[@format='hh']")
+            if hour is not None:self.assertEqual(hour.get('hourFormat'),'SYNC_TO_DEVICE')
 
     def test_only_time_and_date_remain_in_ambient(self):
         scene=self.face.find('Scene')
