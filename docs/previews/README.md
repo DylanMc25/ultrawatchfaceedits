@@ -9,7 +9,7 @@
 
 The `*-editor.png` images show the real Wear OS editor and its **system sample time/health readings**. All seven outlined areas must independently open their provider chooser. `*-shortcut-picker.png` shows the bottom shortcut chooser; `*-weather-picker.png` shows the new interchangeable weather slot. Battery action captures record the native Battery settings page.
 
-`*-edge-alarm.png` assigns Alarm to the right edge on disposable emulators to verify the angled “Set” label. `*-weather-assigned.png` assigns Alarm to the weather slot to verify it accepts another provider. These assignments are test fixtures; the APK leaves both slots unassigned. Samsung Weather and third-party chart providers require physical-watch checks. The final API 34 assigned-provider active capture has a partial background redraw anomaly after leaving the editor; it is preserved unmodified and described in the validation report.
+`*-edge-alarm.png` assigns Alarm to the right edge on disposable emulators to verify the angled “Set” label. `*-weather-assigned.png` assigns Alarm to the weather slot to verify it accepts another provider. These assignments are test fixtures; the APK leaves both slots unassigned. Samsung Weather and third-party chart providers require physical-watch checks. The prior API 34 partial-background redraw anomaly was not reproduced in the latest run. API 35 system status overlays can cover the bottom shortcut. Both limitations remain in the validation report.
 
 ![Native editor](emulator-api34-editor.png)
 

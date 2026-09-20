@@ -56,6 +56,32 @@
       "observed_launch_slots": [
         4
       ]
+    },
+    {
+      "name": "upper-boundary",
+      "expected_slot": 1,
+      "observed_launch_slots": []
+    },
+    {
+      "name": "middle-upper-boundary",
+      "expected_slot": 2,
+      "observed_launch_slots": [
+        2
+      ]
+    },
+    {
+      "name": "middle-lower-boundary",
+      "expected_slot": 2,
+      "observed_launch_slots": [
+        2
+      ]
+    },
+    {
+      "name": "lower-boundary",
+      "expected_slot": 3,
+      "observed_launch_slots": [
+        3
+      ]
     }
   ],
   "tap_mismatches": [],

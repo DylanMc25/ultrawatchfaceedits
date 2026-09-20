@@ -1,9 +1,9 @@
 {
-  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35479553609",
-  "commit": "1fa08cfeb271e69ff516afba839be9b0d77bf7c4",
+  "workflow_run": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35481758095",
+  "commit": "eea5ffb241919f94792fdf1d8e1cdde91ce00fc5",
   "captures": {
     "api34": {
-      "artifact_id": 10595731062,
+      "artifact_id": 10596290726,
       "round_display": [
         454,
         454
@@ -11,7 +11,7 @@
       "ambient_state": "DOZE"
     },
     "api35": {
-      "artifact_id": 10595970639,
+      "artifact_id": 10595624562,
       "round_display": [
         384,
         384
@@ -30,5 +30,5 @@
     "weather-editor-assigned": "editor-weather-assigned.png",
     "battery-action": "tap-battery.png"
   },
-  "notes": "Unmodified native emulator captures. All seven choosers opened. Weather and right-edge Alarm assignments are disposable test fixtures; the APK defaults are EMPTY. Tapping the assigned weather area dispatches slot 7. Samsung Weather and third-party image/chart providers are not verified by these stock emulators. Editor time/health values are system samples. API 35 system status overlay covers part of the bottom shortcut. API 34 final active-weather-assigned capture has a partial lower-background redraw anomaly after exiting the editor; initial active/editor captures and API 35 are clean. Cause unresolved; requires physical reproduction."
+  "notes": "Unmodified native emulator captures. All seven choosers opened. Circle-boundary taps verify dispatch along the adjacent circles; both visual bounds and enclosing runtime rectangles are separate. Weather and right-edge Alarm assignments are disposable test fixtures; the APK defaults are EMPTY. Tapping the assigned weather area dispatches slot 7. Samsung Weather and third-party image/chart providers are not verified by these stock emulators. Editor time/health values are system samples. API 35 system status overlay covers part of the bottom shortcut."
 }
