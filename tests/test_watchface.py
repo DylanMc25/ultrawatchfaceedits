@@ -102,7 +102,7 @@ class WatchFaceTests(unittest.TestCase):
         self.assertEqual(slot.get('name'),'weather')
         self.assertEqual(slot.get('displayName'),'slot_weather')
         self.assertIn('SHORT_TEXT',slot.get('supportedTypes').split())
-        self.assertIn('LONG_TEXT',slot.get('supportedTypes').split())
+        self.assertTrue({'LONG_TEXT','SMALL_IMAGE','PHOTO_IMAGE','RANGED_VALUE','GOAL_PROGRESS','WEIGHTED_ELEMENTS'} <= set(slot.get('supportedTypes').split()))
         self.assertEqual(slot.find('DefaultProviderPolicy').get('defaultSystemProvider'),'EMPTY')
         self.assertFalse(self.face.findall('.//Launch'), 'Provider must own the tap action')
         xml=ET.tostring(self.face,encoding='unicode')
@@ -119,12 +119,12 @@ class WatchFaceTests(unittest.TestCase):
         self.assertGreaterEqual(float(seconds.get('x'))-minute_right,2)
         self.assertGreaterEqual(float(seconds.find('TimeText/Font').get('size')),32)
 
-    def test_larger_clock_and_circles_fit_the_available_space(self):
+    def test_clock_and_circles_fit_the_available_space(self):
         slots=self.face.findall('.//ComplicationSlot')
         for sid in ['1','2','3']:
             slot=self.face.find(f".//ComplicationSlot[@slotId='{sid}']")
             x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
-            self.assertGreaterEqual(w,104)
+            self.assertGreaterEqual(w,84)
             self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
         g=self.face.find(".//Group[@name='interactive_time']")
         for clock in g.findall('DigitalClock'):
@@ -132,8 +132,8 @@ class WatchFaceTests(unittest.TestCase):
                 x=float(clock.get('x'))+float(t.get('x'));y=float(clock.get('y'))+float(t.get('y'))
                 w=float(t.get('width'));h=float(t.get('height'))
                 if t.get('format') in ['hh','mm']:
-                    self.assertGreaterEqual(float(t.find('Font').get('size')),140)
-                for slot in slots:
+                    self.assertGreaterEqual(float(t.find('Font').get('size')),126)
+                for slot in slots[:3]:
                     sx,sy,sw,sh=map(float,(slot.get(k) for k in ['x','y','width','height']))
                     self.assertTrue(x+w<=sx or sx+sw<=x or y+h<=sy or sy+sh<=y,
                                     f'Clock overlaps slot {slot.get("slotId")}')

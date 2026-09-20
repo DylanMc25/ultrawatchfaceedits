@@ -80,8 +80,8 @@ try:
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for sid, name, x, y in [(1, 'heart-rate', 304, 146), (2, 'steps', 334, 259),
-                            (3, 'sunrise-sunset', 138, 361), (4, 'battery', 16, 225)]:
+    for sid, name, x, y in [(1, 'heart-rate', 260, 143), (2, 'steps', 348, 222),
+                            (3, 'sunrise-sunset', 260, 268), (4, 'battery', 16, 225)]:
         ensure_face()
         before=launch_log()
         tap(x*w/450, y*h/450)
@@ -105,9 +105,9 @@ try:
         slot_tree=capture('editor-slots')
         results['editor_opened'] = True
         # Coordinates come from the seven WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 304, 146), ('middle', 334, 259),
-                           ('lower', 138, 361), ('left', 16, 225),
-                           ('right', 420, 225), ('bottom', 225, 428), ('weather', 278, 373)]:
+        for name, x, y in [('upper', 260, 143), ('middle', 348, 222),
+                           ('lower', 260, 268), ('left', 16, 225),
+                           ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 369)]:
             slot_tree=return_to_editor()
             label='Weather' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
@@ -147,7 +147,7 @@ try:
             x1,y1,x2,y2=map(int,re.findall(r'\d+',edit.get('bounds')))
             tap((x1+x2)/2,(y1+y2)/2)
             return_to_editor()
-            tap(278*w/450,373*h/450)
+            tap(225*w/450,369*h/450)
             chooser=capture('weather-provider-chooser')
             alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
             if alarm is None:
@@ -161,7 +161,7 @@ try:
                 ensure_face()
                 capture('active-weather-assigned')
                 before=launch_log()
-                tap(278*w/450,373*h/450)
+                tap(225*w/450,369*h/450)
                 capture('tap-weather-provider')
                 evidence=sorted(launch_log()-before)
                 (out/'tap-weather-provider-launch.txt').write_text('\n'.join(evidence)+'\n')
