@@ -24,6 +24,10 @@
     {
       "name": "bottom",
       "provider_chooser_visible": true
+    },
+    {
+      "name": "weather",
+      "provider_chooser_visible": true
     }
   ],
   "tap_captures": [
@@ -56,20 +60,13 @@
   ],
   "tap_mismatches": [],
   "notes": [],
-  "weather_target_installed": false,
-  "weather_taps": [
-    {
-      "area": "current",
-      "requested_package": "com.samsung.android.watch.weather",
-      "package_launch_evidence": true,
-      "wrong_complication_launch": false
-    },
-    {
-      "area": "forecast",
-      "requested_package": "com.samsung.android.watch.weather",
-      "package_launch_evidence": true,
-      "wrong_complication_launch": false
-    }
-  ],
-  "edge_alarm_capture": true
+  "edge_alarm_capture": true,
+  "weather_provider_test": {
+    "assigned_provider": "Alarm",
+    "expected_slot": 7,
+    "observed_launch_slots": [
+      7
+    ],
+    "samsung_weather_verified": false
+  }
 }

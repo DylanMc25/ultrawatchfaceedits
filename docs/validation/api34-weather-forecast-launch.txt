@@ -1,2 +1,0 @@
-09-19 22:39:46.173  3584  3584 I DWF:Launch: no package: com.samsung.android.watch.weather
-09-19 22:39:46.180  3584  3584 I DWF:Launch: [Launch::onTap] market: com.samsung.android.watch.weather

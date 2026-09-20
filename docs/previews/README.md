@@ -1,26 +1,22 @@
 # Emulator captures and layout proofs
 
-`emulator-api34-active.png` / `emulator-api34-ambient.png` are actual 454 × 454 large-round captures. The API 35 pair is the 384 × 384 small-round Wear OS 5.1 emulator. See [validation evidence](../VALIDATION.md) for their source run, measured ambient illumination and limitations. Provider values are emulator data; weather is unavailable. System status indicators belong to Wear OS.
+`emulator-api34-active.png` / `emulator-api34-ambient.png` are native 454 × 454 large-round captures. The API 35 pair is the 384 × 384 small-round Wear OS 5.1 emulator. See [validation evidence](../VALIDATION.md) for the source run, ambient illumination and limitations.
 
 ![Actual API 34 active face](emulator-api34-active.png)
 ![Actual API 35 ambient face](emulator-api35-ambient.png)
 
-## Native editor and interactions
+## Editor and provider interactions
 
-The `*-editor.png` images are the real Wear OS editor, using **system sample readings** for time, health and weather. All six outlined areas independently opened the provider chooser on both emulators. The `*-shortcut-picker.png` images show the bottom shortcut's chooser. `emulator-api34-battery-action.png` records the battery tap opening system Battery settings. The complete per-slot captures and logs are downloadable from the workflow linked in the validation report.
+The `*-editor.png` images show the real Wear OS editor and its **system sample time/health readings**. All seven outlined areas must independently open their provider chooser. `*-shortcut-picker.png` shows the bottom shortcut chooser; `*-weather-picker.png` shows the new interchangeable weather slot. Battery action captures record the native Battery settings page.
 
-![Native editor with system sample data](emulator-api34-editor.png)
+`*-edge-alarm.png` assigns Alarm to the right edge on disposable emulators to verify the angled “Set” label. `*-weather-assigned.png` assigns Alarm to the weather slot to verify it accepts another provider. These assignments are test fixtures; the APK leaves both slots unassigned. Samsung Weather and third-party chart providers require physical-watch checks. The final API 34 assigned-provider active capture has a partial background redraw anomaly after leaving the editor; it is preserved unmodified and described in the validation report.
 
-## Edge-caption regression
+![Native editor](emulator-api34-editor.png)
 
-The `*-edge-alarm.png` images assign the system Alarm provider to the right edge on the disposable emulator. They verify that its “Set” text and the left battery label are fully visible. The default APK still leaves the right edge unassigned.
+## Illustrative layout
 
-Weather-tap diagnostics distinguish a request to launch Samsung Weather from a successful app launch. The stock emulators lack the Samsung app; verify the actual destination on Galaxy Watch.
+`active-illustrative.png` and `ambient-illustrative.png` are **illustrations, not emulator screenshots**. They use the committed WFF geometry and explicit sample data: September 19, 02:26, 71 bpm, 8,420 steps, 62% battery and sunny 24° weather. Actual readings always come from selected providers.
 
-## Illustrative populated-weather layout
+Generate with `tools/render_preview.py --font /path/to/Roboto-Regular.ttf` (Pillow and Node required). Text placement approximates WFF. The active illustration also serves as the temporary picker preview.
 
-`active-illustrative.png` and `ambient-illustrative.png` are **illustrative renders**, not emulator screenshots. They read the committed WFF geometry/colors and use explicit sample data (September 19, 02:26, 71 bpm, 8,420 steps, 62% battery, sample weather). Actual readings always come from Wear OS/providers.
-
-Generated with `tools/render_preview.py --font /path/to/Roboto-Regular.ttf` (Pillow and Node required). Text placement approximates WFF and does not establish platform font metrics, provider behavior, accessibility, or battery use. The active image also serves as the system picker preview. Replace with a verified on-device capture before publishing.
-
-![Illustrative populated weather](active-illustrative.png)
+![Illustrative layout with sample data](active-illustrative.png)

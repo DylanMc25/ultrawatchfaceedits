@@ -3,6 +3,7 @@
 This repository produces a development build, not a signed production submission.
 
 - Choose the permanent application ID, publisher identity, store name and versioning; remove `com.example` before first publication.
+- Reproduce/investigate the API 34 post-editor partial-background redraw captured in the latest validation run; confirm stable repainting after provider changes and minute transitions on Galaxy Watch.
 - Test on physical Galaxy Watch hardware, including a smaller round model: readable digits, every tap area, complication editor, health consent, provider launch actions, weather/location setup, and background/always-on transitions.
 - Exercise real providers for short text (with and without icons/titles), images, ranged values, goals exceeded, and weighted elements. Check unavailable/no-permission and empty states. Samsung-specific data availability must be verified on-device.
 - Select Samsung Weather in the new Weather slot on each supported Galaxy Watch firmware. Verify live short/long text, optional icons/titles, missing-data states and the provider-owned tap destination. Test other providers and the empty state.
