@@ -89,50 +89,145 @@ def clock(parent, ambient=False):
         el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
 
-def weather_slot(parent):
-    # One wide native slot owns selection, data and taps. Providers can supply
-    # weather, text, progress or an image/chart; no hard-coded application launch.
-    kinds = ['SHORT_TEXT', 'LONG_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS',
-             'WEIGHTED_ELEMENTS', 'MONOCHROMATIC_IMAGE', 'SMALL_IMAGE', 'PHOTO_IMAGE', 'EMPTY']
-    s = box(parent, 'ComplicationSlot', 94, 339, 262, 60, slotId=7, name='weather',
-            displayName='slot_weather', supportedTypes=' '.join(kinds), isCustomizable='TRUE')
-    box(s, 'BoundingRoundBox', 0, 0, 262, 60, cornerRadius=16)
-    # There is no portable system WEATHER provider. Choose an installed source
-    # in Customize; do not rely on undocumented Samsung component names.
-    el(s, 'DefaultProviderPolicy', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
-    ambient_hide(s)
-    for kind in kinds:
-        p = el(s, 'Complication', type=kind)
-        surface = box(p, 'PartDraw', 0, 0, 262, 60)
-        r = box(surface, 'RoundRectangle', 0, 0, 262, 60, cornerRadiusX=16, cornerRadiusY=16)
-        el(r, 'Fill', color=C[0])
-        if kind == 'EMPTY':
-            text(p, 8, 14, 246, 32, 23, '+ Weather', color=C[3])
-        elif kind in ['MONOCHROMATIC_IMAGE', 'SMALL_IMAGE', 'PHOTO_IMAGE']:
-            # Wide image providers can use this area for their own chart.
-            image(p, 12, 6, 238, 48, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
-        else:
-            image(p, 13, 15, 28, 28, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-            expr='[COMPLICATION.TEXT]'
-            if kind=='RANGED_VALUE':expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
-            if kind=='GOAL_PROGRESS':expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
-            c, titled = condition(p, 'weather_'+kind.lower()+'_title', '[COMPLICATION.TITLE] != ""')
-            for target, y in [(titled, 2), (el(c, 'Default'), 13)]:
-                text(target, 50, y, 198, 32, 24 if kind!='LONG_TEXT' else 20,
-                     '%s', expr, align='START', weight='MEDIUM')
-            text(titled, 50, 32, 198, 20, 16, '%s', '[COMPLICATION.TITLE]', align='START', color=C[3])
-            if kind=='WEIGHTED_ELEMENTS':
-                arc(p, 27, 29, 42, 0, 360, C[6], 3, weighted=True, viewport=(262,60))
-            elif kind in ['RANGED_VALUE', 'GOAL_PROGRESS']:
-                track=box(p, 'PartDraw', 16, 55, 230, 3)
-                line=el(track, 'Line', startX=0, startY=1.5, endX=230, endY=1.5)
-                el(line, 'Stroke', color=C[5], thickness=3, cap='ROUND')
-                ratio=RANGE if kind=='RANGED_VALUE' else GOAL
-                _, positive=condition(p, 'weather_'+kind.lower()+'_positive', f'{ratio} > 0')
-                foreground=box(positive, 'PartDraw', 16, 55, 230, 3)
-                line=el(foreground, 'Line', startX=0, startY=1.5, endX=230, endY=1.5)
-                el(line, 'Stroke', color=C[6], thickness=3, cap='ROUND')
-                el(line, 'Transform', target='endX', value=f'230 * {ratio}')
+PANEL_OPTIONS = ('weather', 'detailed_weather', 'temperature', 'rain', 'steps', 'heart_rate', 'none')
+PANEL_BOUNDS = (94, 339, 262, 60)
+
+
+def forecast_time(index):
+    # Format an actual instant so midnight, DST, locale and half-hour zones work.
+    stamp = f'([UTC_TIMESTAMP] + {index * 3600000})'
+    return f'[IS_24_HOUR_MODE] ? icuText("HH", {stamp}) : icuText("h a", {stamp})'
+
+
+def line(parent, x1, y1, x2, y2, color=None, thickness=1.5):
+    n = el(parent, 'Line', startX=x1, startY=y1, endX=x2, endY=y2)
+    el(n, 'Stroke', color=color or C[3], thickness=thickness, cap='ROUND')
+    return n
+
+
+def weather_icon(parent, x, y, size, source, name):
+    """Original vector symbols covering all WFF condition values and unknowns."""
+    g = group(parent, name, x, y, size, size)
+    c = el(g, 'Condition'); expressions = el(c, 'Expressions')
+    for codes, symbol in [((1, 8), 'clear'), ((2,), 'cloud'), ((3, 13), 'fog'),
+                          ((4, 6, 12), 'rain'), ((5, 7, 11), 'snow'),
+                          ((9,), 'storm'), ((10,), 'sleet'), ((14,), 'partly'), ((15,), 'wind')]:
+        key = name + '_' + symbol
+        el(expressions, 'Expression', name=key).text = ' || '.join(f'[{source}.CONDITION] == {i}' for i in codes)
+        branch = el(c, 'Compare', expression=key)
+        draw = box(branch, 'PartDraw', 0, 0, size, size)
+        def ln(a, b, cc, d): return line(draw, a*size, b*size, cc*size, d*size, thickness=max(1, size*.065))
+        def oval(a, b, w, h):
+            el(box(draw, 'Ellipse', a*size, b*size, w*size, h*size), 'Fill', color=C[3])
+        if symbol in ('clear', 'partly'):
+            day, sun = condition(branch, key+'_day', f'[{source}.IS_DAY]')
+            sun_draw = box(sun, 'PartDraw', 0, 0, size, size)
+            el(box(sun_draw, 'Ellipse', size*.3, size*.3, size*.4, size*.4), 'Fill', color=C[3])
+            for angle in range(0, 360, 45):
+                a = math.radians(angle)
+                line(sun_draw, size*(.5+.32*math.cos(a)), size*(.5+.32*math.sin(a)),
+                     size*(.5+.44*math.cos(a)), size*(.5+.44*math.sin(a)), thickness=max(1,size*.06))
+            moon = box(el(day,'Default'), 'PartDraw', 0, 0, size, size)
+            a = el(moon, 'Arc', centerX=size*.5, centerY=size*.42, width=size*.63,
+                   height=size*.63, startAngle=90, endAngle=280)
+            el(a, 'Stroke', color=C[3], thickness=size*.18, cap='ROUND')
+        if symbol in ('cloud','rain','snow','storm','sleet','partly'):
+            # Put cloud above the partly-cloudy sun/moon layers.
+            if symbol == 'partly': draw = box(branch,'PartDraw',0,0,size,size)
+            oval(.1,.42,.8,.3); oval(.23,.27,.45,.45); oval(.53,.36,.32,.34)
+        if symbol in ('rain','sleet'):
+            for xx in (.25,.5,.75): ln(xx,.79,xx-.07,.94)
+        if symbol in ('snow','sleet'):
+            for xx in (.3,.7):
+                ln(xx-.07,.87,xx+.07,.87); ln(xx,.8,xx,.94)
+        if symbol == 'storm': ln(.55,.68,.4,.82); ln(.4,.82,.6,.82); ln(.6,.82,.44,.97)
+        if symbol in ('fog','wind'):
+            for yy, xx in ((.3,.15),(.5,.25),(.7,.1)): ln(xx,yy,.85,yy)
+    for branch in c.findall('Compare'):
+        for part in branch.findall('PartDraw'):
+            if len(part) == 0: branch.remove(part)
+    text(el(c,'Default'),0,0,size,size,size*.8,'—',color=C[3])
+
+
+def weather_header(parent, name, title='Now'):
+    weather_icon(parent,0,0,20,'WEATHER',name+'_icon')
+    text(parent,25,0,205,21,19,title+' %s°%s','[WEATHER.TEMPERATURE]',
+         '[WEATHER.TEMPERATURE_UNIT] == 1 ? "C" : "F"',align='START',weight='MEDIUM')
+
+
+def progress_bar(parent, name, ratio):
+    draw = box(parent,'PartDraw',4,50,254,6)
+    line(draw,2,3,252,3,C[0],4)
+    _, visible = condition(parent,name+'_positive',f'{ratio} > 0')
+    draw = box(visible,'PartDraw',4,50,254,6)
+    n = line(draw,2,3,252,3,C[3],4)
+    el(n,'Transform',target='endX',value=f'2 + 250 * {ratio}')
+
+
+def bottom_panel(parent):
+    container = group(parent,'bottom_panel',*PANEL_BOUNDS); ambient_hide(container)
+    choices = el(container,'ListConfiguration',id='bottom_panel')
+    for option in PANEL_OPTIONS:
+        g = group(el(choices,'ListOption',id=option),'panel_'+option,0,0,262,60)
+        if option == 'none': continue
+        target = 'HEALTH_HEART_RATE' if option=='heart_rate' else 'com.samsung.android.wear.shealth' if option=='steps' else 'com.samsung.android.watch.weather'
+        el(g,'Launch',target=target)
+        if option in ('steps','heart_rate'):
+            if option=='steps':
+                # WFF exposes no separate step-permission/availability flag.
+                # Empty/sentinel data stays unavailable; a supplied zero is a valid count.
+                c, data = condition(g,'panel_steps_available','[STEP_COUNT] != "" && [STEP_COUNT] >= 0')
+                text(data,0,0,262,27,24,'%s steps','numberFormat("#,###", [STEP_COUNT])',weight='MEDIUM')
+                goal, valid = condition(data,'panel_steps_goal','[STEP_GOAL] > 0')
+                text(valid,0,28,262,19,16,'Goal %s','numberFormat("#,###", [STEP_GOAL])',color=C[3])
+                progress_bar(valid,'panel_steps','clamp([STEP_COUNT] / [STEP_GOAL], 0, 1)')
+                text(el(goal,'Default'),0,29,262,20,16,'Goal unavailable',color=C[3])
+            else:
+                c, data = condition(g,'panel_heart_available','[HEART_RATE] != "" && [HEART_RATE] > 0 && [HEART_RATE] <= 240')
+                text(data,0,2,262,32,29,'%s bpm','numberFormat("#", [HEART_RATE])',weight='MEDIUM')
+                text(data,0,36,262,21,17,'Heart rate',color=C[3])
+            text(el(c,'Default'),0,15,262,30,21,'Steps —' if option=='steps' else 'Heart rate —',color=C[3])
+            continue
+        c, data = condition(g,'panel_'+option+'_available','[WEATHER.IS_AVAILABLE]')
+        text(el(c,'Default'),0,5,262,28,23,'Weather —',color=C[3])
+        text(c.find('Default'),0,35,262,20,16,'Tap to open Weather',color=C[3])
+        _, error = condition(data,'panel_'+option+'_error','[WEATHER.IS_ERROR]')
+        text(error,238,0,24,21,18,'!',weight='BOLD')
+        if option in ('weather','temperature'):
+            weather_header(data,'panel_'+option)
+            for i in range(4):
+                x = i*66
+                hour, available = condition(data,f'{option}_hour_{i}',f'[WEATHER.HOURS.{i}.IS_AVAILABLE]')
+                if option=='weather':
+                    weather_icon(available,x,22,20,f'WEATHER.HOURS.{i}',f'forecast_{i}_icon')
+                    text(available,x+20,22,44,21,18,'%s°',f'[WEATHER.HOURS.{i}.TEMPERATURE]')
+                else:
+                    text(available,x,20,64,21,18,'%s°',f'[WEATHER.HOURS.{i}.TEMPERATURE]')
+                text(el(hour,'Default'),x,22,64,21,18,'—',color=C[3])
+                text(data,x,44,64,16,14,'%s',forecast_time(i),color=C[3])
+            if option=='temperature':
+                # Scale against available points only; never bridge a missing hour.
+                temps=[f'[WEATHER.HOURS.{i}.TEMPERATURE]' for i in range(4)]
+                valid=[f'[WEATHER.HOURS.{i}.IS_AVAILABLE]' for i in range(4)]
+                def extrema(fn, fallback):
+                    values=[f'({v} ? {t} : {fallback})' for v,t in zip(valid,temps)]
+                    return f'{fn}({fn}({values[0]}, {values[1]}), {fn}({values[2]}, {values[3]}))'
+                lo,hi=extrema('min',10000),extrema('max',-10000)
+                def ypos(i): return f'({hi} > {lo} ? 42 - 5 * ({temps[i]} - {lo}) / ({hi} - {lo}) : 39.5)'
+                for i in range(3):
+                    _, segment = condition(data,f'temperature_segment_{i}',f'{valid[i]} && {valid[i+1]}')
+                    draw=box(segment,'PartDraw',0,0,262,60)
+                    n=line(draw,32+66*i,40,32+66*(i+1),40,thickness=1.5)
+                    el(n,'Transform',target='startY',value=ypos(i));el(n,'Transform',target='endY',value=ypos(i+1))
+        elif option=='detailed_weather':
+            weather_header(data,'panel_detail')
+            text(data,0,22,262,18,16,'%s','[WEATHER.CONDITION_NAME]',align='START',color=C[3])
+            text(data,0,42,262,18,16,'H %s°  L %s°  Rain %s%%','[WEATHER.DAY_TEMPERATURE_HIGH]',
+                 '[WEATHER.DAY_TEMPERATURE_LOW]','[WEATHER.CHANCE_OF_PRECIPITATION]',align='START',color=C[3])
+        elif option=='rain':
+            text(data,0,0,232,27,24,'%s%%','[WEATHER.CHANCE_OF_PRECIPITATION]',weight='MEDIUM')
+            text(data,0,28,262,20,17,'Chance of rain now',color=C[3])
+            progress_bar(data,'panel_rain','clamp([WEATHER.CHANCE_OF_PRECIPITATION] / 100, 0, 1)')
 
 
 
@@ -261,6 +356,10 @@ def shortcut(parent):
 def build():
     root = ET.Element('WatchFace', width='450', height='450', clipShape='CIRCLE')
     el(root, 'Metadata', key='CLOCK_TYPE', value='DIGITAL')
+    configs = el(root, 'UserConfigurations')
+    menu = el(configs, 'ListConfiguration', id='bottom_panel', displayName='bottom_panel', defaultValue='weather')
+    for option in PANEL_OPTIONS:
+        el(menu, 'ListOption', id=option, displayName='panel_'+option)
     scene = el(root, 'Scene', backgroundColor='#FF000000')
     bg = box(scene, 'PartDraw', 0, 0, 450, 450, name='blue_background'); ambient_hide(bg)
     r = box(bg, 'Rectangle', 0, 0, 450, 450); fill = el(r, 'Fill', color=C[0])
@@ -272,7 +371,7 @@ def build():
     circle_slot(scene,3,'lower_circle',210,245,90,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
-    weather_slot(scene)
+    bottom_panel(scene)
     ET.indent(root, space='    ')
     return '<?xml version="1.0" encoding="utf-8"?>\n<!-- Generated by tools/generate_watchface.py. Edit the generator, then regenerate. -->\n'+ET.tostring(root,encoding='unicode')+'\n'
 

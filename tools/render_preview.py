@@ -18,32 +18,42 @@ RES=ROOT/'app/src/main/res/drawable-nodpi'
 SCALE=3
 
 
-def render(font_path, ambient=False, size=450, hour=14, minute=26):
+def render(font_path, ambient=False, size=450, hour=14, minute=26, panel="weather", overrides=None, is24=False):
     root=ET.parse(XML).getroot()
     from generate_watchface import PALETTE
     colors=PALETTE
     palette={f'CONFIGURATION.theme_color.{i}':c for i,c in enumerate(colors)}
-    global_data={'HOUR_0_23':hour,'MINUTE':minute,'SECOND':38,'IS_24_HOUR_MODE':False,
+    global_data={'HOUR_0_23':hour,'MINUTE':minute,'SECOND':38,'IS_24_HOUR_MODE':is24,
                  'MONTH_F':'September','DAY_OF_WEEK_S':'Sat','DAY':19}
+    from datetime import datetime, timezone
+    global_data.update({'UTC_TIMESTAMP':int(datetime(2026,9,19,hour,minute,tzinfo=timezone.utc).timestamp()*1000),
+        'WEATHER.IS_AVAILABLE':True,'WEATHER.IS_ERROR':False,'WEATHER.CONDITION':14,'WEATHER.IS_DAY':True,
+        'WEATHER.CONDITION_NAME':'Partly cloudy','WEATHER.TEMPERATURE':24,'WEATHER.TEMPERATURE_UNIT':1,
+        'WEATHER.DAY_TEMPERATURE_HIGH':26,'WEATHER.DAY_TEMPERATURE_LOW':18,'WEATHER.CHANCE_OF_PRECIPITATION':20,
+        'STEP_COUNT':8420,'STEP_GOAL':10000,'HEART_RATE':71})
+    for i,temperature in enumerate([24,23,21,20]):
+        global_data.update({f'WEATHER.HOURS.{i}.IS_AVAILABLE':True,f'WEATHER.HOURS.{i}.TEMPERATURE':temperature,
+                           f'WEATHER.HOURS.{i}.CONDITION':[14,2,6,12][i],f'WEATHER.HOURS.{i}.IS_DAY':True})
+    global_data.update(overrides or {})
     fixtures={
         '1':dict(TEXT='71',TITLE='',MONOCHROMATIC_IMAGE='fixture_heart'),
         '2':dict(TEXT='8,420',TITLE='',MONOCHROMATIC_IMAGE='fixture_steps'),
         '3':dict(TEXT='6:48',TITLE='SUNSET',MONOCHROMATIC_IMAGE='fixture_sunset'),
         '4':dict(TEXT='62%',TITLE='',MONOCHROMATIC_IMAGE='fixture_battery',RANGED_VALUE_MIN=0,RANGED_VALUE_MAX=100,RANGED_VALUE_VALUE=62),
-        '5':{},'6':{},'7':dict(TEXT='24°',TITLE='Sunny',MONOCHROMATIC_IMAGE='fixture_sun')}
+        '5':{},'6':{}}
     expressions=set()
     for n in root.iter():
         if n.tag=='Expression':expressions.add(n.text)
         if n.tag=='Parameter':expressions.add(n.get('expression'))
         if n.tag=='Transform':expressions.add(n.get('value'))
-    data=[global_data]+[global_data|{f'COMPLICATION.{k}':v for k,v in fixtures[str(i)].items()} for i in range(1,8)]
+    data=[global_data]+[global_data|{f'COMPLICATION.{k}':v for k,v in fixtures[str(i)].items()} for i in range(1,7)]
     # Evaluate this repository's WFF arithmetic using matching JavaScript operators.
     # No file/network access is provided to the expression function.
     js=r'''
 let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{
 const {expressions,data}=JSON.parse(s); const result=data.map(values=>Object.fromEntries(expressions.map(e=>{
 const code=e.replace(/\[([^\]]+)\]/g,(_,k)=>JSON.stringify(values[k]??''));
-try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')((n,a,b)=>Math.max(a,Math.min(n,b)),(_,n)=>Number(n).toLocaleString('en-US'),s=>String(s).length)];}catch{return [e,null];}
+try {return [e,Function('clamp','numberFormat','textLength','min','max','icuText','return ('+code+')')((n,a,b)=>Math.max(a,Math.min(n,b)),(_,n)=>Number(n).toLocaleString('en-US'),s=>String(s).length,Math.min,Math.max,(fmt,stamp)=>{const h=new Date(Number(stamp)).getUTCHours();return fmt==='HH'?String(h).padStart(2,'0'):`${h%12||12} ${h<12?'AM':'PM'}`;})];}catch{return [e,null];}
 })));process.stdout.write(JSON.stringify(result));});'''
     results=json.loads(subprocess.run(['node','-e',js],input=json.dumps({'expressions':list(expressions),'data':data}),text=True,capture_output=True,check=True).stdout)
     def evaluate(expr,ctx):return results[ctx].get(expr)
@@ -87,6 +97,11 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
         tag=node.tag
         if tag in ['Metadata','BitmapFonts','UserConfigurations','Variant','ScreenReader','DefaultProviderPolicy'] or tag.startswith('Bounding'):return
         x=ox+float(attrs.get('x',0));y=oy+float(attrs.get('y',0));w=float(attrs.get('width',0));h=float(attrs.get('height',0))
+        if tag=='ListConfiguration':
+            selected=node.find(f"ListOption[@id='{panel}']")
+            if selected is not None:
+                for child in selected:paint(child,ox,oy,ctx)
+            return
         if tag=='Condition':
             for compare in node.findall('Compare'):
                 expression=node.find(f"./Expressions/Expression[@name='{compare.get('expression')}']").text
@@ -117,6 +132,9 @@ try {return [e,Function('clamp','numberFormat','textLength','return ('+code+')')
                 else:(draw.ellipse if tag=='Ellipse' else draw.rectangle)(bounds,fill=c)
             return
         if tag=='Line':
+            attrs=dict(attrs)
+            for transform in node.findall('Transform'):
+                attrs[transform.get('target')]=str(evaluate(transform.get('value'),ctx))
             stroke=node.find('Stroke');c=color(stroke.get('color'));thick=float(stroke.get('thickness'))
             points=[((ox+float(attrs[k+'X']))*SCALE,(oy+float(attrs[k+'Y']))*SCALE) for k in ['start','end']]
             draw.line(points,fill=c,width=round(thick*SCALE))
@@ -200,4 +218,6 @@ if __name__=='__main__':
     for mode in ['active','ambient']:
         im=render(args.font,mode=='ambient');im.save(out/f'{mode}-illustrative.png')
         if mode=='active':im.save(RES/'preview.png')
+    for panel in ['weather','detailed_weather','temperature','rain','steps','heart_rate','none']:
+        render(args.font,panel=panel).save(out/f'panel-{panel}-illustrative.png')
     print('Wrote illustrative previews. These are not emulator evidence.')

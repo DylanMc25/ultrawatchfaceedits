@@ -1,26 +1,28 @@
 # Ultra Info Board
 
-A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, seven editable complication areas, including a compact weather panel. The layout prioritizes large time and provider readings on round displays.
+A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, six editable complication areas and a compact, selectable bottom panel. The layout prioritizes large time and provider readings on round displays.
 
 **Development milestone, not a store release.** Requires Wear OS 5 (API 34) or later. The working package is `com.example.ultrainfoboard`; choose the permanent publisher/package identity before the first store upload.
 
-![API 34 active watch face](docs/previews/emulator-api34-active.png)
+![Illustrative Weather panel](docs/previews/panel-weather-illustrative.png)
 
-*Actual Wear OS emulator capture. Weather starts unassigned; readings come from installed providers. See [captures and layout proofs](docs/previews/README.md) for always-on and illustrative weather views.*
+*Illustrative layout with explicit sample data, not an emulator capture. Native captures and their tested versions are recorded in [validation evidence](docs/VALIDATION.md).*
 
 ## Layout
 
 - Month and day/date above larger stacked hours/minutes (142-unit type); seconds have a separate column.
 - The familiar three staggered circles on the right: heart rate, steps and sunrise/sunset. Larger 90-unit circles use up to 38-unit type, with smaller sizes for longer readings.
 - Segmented left battery gauge, thick right-edge arc, provider icons and angled edge labels. Right edge and bottom shortcut start unassigned.
-- One compact weather complication below the main readings replaces the current/forecast grid. It supports provider text, icons, images/charts and progress, with a single provider-owned tap action. It starts unassigned.
+- One compact **Bottom panel** with Weather, Detailed weather, Temperature, Chance of rain, Steps, Heart rate and None. Weather is the default. The whole panel has one tap action; forecasts are not individual buttons.
 - Black always-on display with thin time and date; all other content is hidden.
 
-Long-press the face and choose **Customize** to assign each slot. Providers available on a particular watch determine which data/apps can be selected. Samsung activity, stress, media and Gemini are not bundled or guaranteed providers. A `+` marks an unassigned area; assign it through the editor. Weather and health readings are never hard-coded; unavailable readings remain empty or show a dash. Time follows the device’s 12/24-hour preference. The chosen weather provider owns its readings, units, refreshes and tap destination.
+Long-press the face and choose **Customize → Bottom panel** to select a panel. Swipe to **Complications** to assign the six normal areas. Available providers determine the choices in those areas; a `+` marks an unassigned slot. Time follows the device’s 12/24-hour preference.
 
-To set up weather: **long-press the face → Customize → Weather → select your installed Weather provider**. You can select another compatible provider in the same slot; charts require a provider that supplies an image. The `+ Weather` panel is a native editable complication, not an app shortcut. The rich hourly forecast shown by Samsung Info Brick is still under investigation; the current basic Weather card does not yet match it. See [Samsung Weather findings](docs/SAMSUNG_WEATHER.md). This face does not draw separate forecast buttons. If Weather is not listed, check that the watch has a compatible complication provider installed. The stock emulator has no Samsung Weather provider, so its interaction test uses Alarm as a substitute and does not verify Samsung Weather itself.
+Weather uses Wear OS native weather data and its temperature-unit preference. **Weather** shows current conditions and the current hour plus three following hours. **Detailed weather** shows conditions, high/low and precipitation chance. **Temperature** shows the same four hours as a compact trend; gaps stay disconnected. **Chance of rain** shows the current probability, not an invented hourly forecast. A dash means unavailable data; `!` indicates a failed refresh of otherwise available weather. Tap any weather panel to open Samsung Weather on a Galaxy Watch. Weather data requires the device to obtain a location (normally through its connected phone/network).
 
-Existing slot IDs 1–6 are unchanged; Weather adds slot 7. Weather has no portable system-provider default in [WFF 2’s provider policy](https://developer.android.com/reference/wear-os/wff/complication/default-provider-policy?version=2), so the face deliberately asks you to select your installed provider once.
+Steps shows today's native count/goal, and Heart rate shows the current available native reading. Zero/empty heart rate displays a dash. WFF has no separate step-permission flag: a supplied zero is shown as zero; empty or negative data shows a dash. These are not Samsung Health history charts, and native steps/heart readings may differ from Samsung's synced history. Tap Steps to open Samsung Health, or Heart rate for the system heart-rate destination. **None** removes the panel and its tap action.
+
+**Updating from 0.1.4:** slot IDs 1–6 remain unchanged. The former generic rectangle (slot 7) is removed; its assignment does not carry over. Select the replacement in **Bottom panel**, which defaults to Weather. No extra app is needed. Samsung's restricted rectangle menu and internal forecast rendering informed this design; this is an independent implementation using supported WFF data, not Samsung's private panel picker. See [APK research and compatibility](docs/SAMSUNG_WEATHER.md).
 
 ## Build and install
 
