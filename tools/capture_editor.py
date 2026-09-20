@@ -80,8 +80,10 @@ try:
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for sid, name, x, y in [(1, 'heart-rate', 260, 143), (2, 'steps', 348, 222),
-                            (3, 'sunrise-sunset', 260, 268), (4, 'battery', 16, 225)]:
+    for sid, name, x, y in [(1, 'heart-rate', 268, 143), (2, 'steps', 341, 216),
+                            (3, 'sunrise-sunset', 264, 283), (4, 'battery', 16, 225),
+                            (1, 'upper-boundary', 302, 173), (2, 'middle-upper-boundary', 307, 184),
+                            (2, 'middle-lower-boundary', 307, 247), (3, 'lower-boundary', 296, 250)]:
         ensure_face()
         before=launch_log()
         tap(x*w/450, y*h/450)
@@ -89,7 +91,8 @@ try:
         after=launch_log()-before
         ids=[int(m.group(1)) for line in after if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
         results['tap_captures'].append({'name':name,'expected_slot':sid,'observed_launch_slots':ids})
-        if any(actual!=sid for actual in ids):results['tap_mismatches'].append(name)
+        if any(actual!=sid for actual in ids) or (sid in [2,3,4] and sid not in ids):
+            results['tap_mismatches'].append(name)
     ensure_face()
     adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
     time.sleep(3)
@@ -105,8 +108,8 @@ try:
         slot_tree=capture('editor-slots')
         results['editor_opened'] = True
         # Coordinates come from the seven WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 260, 143), ('middle', 348, 222),
-                           ('lower', 260, 268), ('left', 16, 225),
+        for name, x, y in [('upper', 268, 143), ('middle', 341, 216),
+                           ('lower', 264, 283), ('left', 16, 225),
                            ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 369)]:
             slot_tree=return_to_editor()
             label='Weather' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')

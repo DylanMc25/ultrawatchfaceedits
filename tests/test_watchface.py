@@ -38,14 +38,20 @@ class WatchFaceTests(unittest.TestCase):
                 touched=[s.get('slotId') for s in slots if contains(s,x,y)]
                 self.assertLessEqual(len(touched),1,f'Overlapping tap areas at {x},{y}: {touched}')
 
-    def test_runtime_rectangles_and_rendering_parts_do_not_steal_taps(self):
+    def test_slot_bounds_and_rendering_parts_do_not_steal_taps(self):
         slots=self.face.findall('.//ComplicationSlot')
         for i,a in enumerate(slots):
             ax,ay,aw,ah=map(float,(a.get(k) for k in ['x','y','width','height']))
             for b in slots[i+1:]:
                 bx,by,bw,bh=map(float,(b.get(k) for k in ['x','y','width','height']))
-                self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
-                                f'Runtime tap rectangles overlap: {a.get("slotId")}, {b.get("slotId")}')
+                if a.find('BoundingOval') is not None and b.find('BoundingOval') is not None:
+                    # Round regions can pack diagonally. Their unused rectangular
+                    # corners overlap, but the selectable circles must not.
+                    self.assertEqual(aw,ah);self.assertEqual(bw,bh)
+                    self.assertGreaterEqual(math.hypot(ax+aw/2-bx-bw/2,ay+ah/2-by-bh/2),aw/2+bw/2+1)
+                else:
+                    self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
+                                    f'Non-circular tap rectangles overlap: {a.get("slotId")}, {b.get("slotId")}')
             for part in a.iter():
                 if part.tag in ['PartDraw','PartText','PartImage']:
                     self.assertGreaterEqual(float(part.get('x')),0)
@@ -108,7 +114,7 @@ class WatchFaceTests(unittest.TestCase):
         xml=ET.tostring(self.face,encoding='unicode')
         self.assertNotIn('[WEATHER.',xml)
         self.assertNotIn('com.samsung.android.watch.weather',xml)
-        self.assertLessEqual(float(slot.get('height')),60)
+        self.assertEqual(tuple(float(slot.get(k)) for k in ['x','y','width','height']),(94,339,262,60))
 
     def test_minutes_and_seconds_have_separate_space(self):
         g=self.face.find(".//Group[@name='interactive_time']")
@@ -124,7 +130,7 @@ class WatchFaceTests(unittest.TestCase):
         for sid in ['1','2','3']:
             slot=self.face.find(f".//ComplicationSlot[@slotId='{sid}']")
             x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
-            self.assertGreaterEqual(w,84)
+            self.assertGreaterEqual(w,100)
             self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
         g=self.face.find(".//Group[@name='interactive_time']")
         for clock in g.findall('DigitalClock'):
@@ -132,7 +138,7 @@ class WatchFaceTests(unittest.TestCase):
                 x=float(clock.get('x'))+float(t.get('x'));y=float(clock.get('y'))+float(t.get('y'))
                 w=float(t.get('width'));h=float(t.get('height'))
                 if t.get('format') in ['hh','mm']:
-                    self.assertGreaterEqual(float(t.find('Font').get('size')),126)
+                    self.assertGreaterEqual(float(t.find('Font').get('size')),142)
                 for slot in slots[:3]:
                     sx,sy,sw,sh=map(float,(slot.get(k) for k in ['x','y','width','height']))
                     self.assertTrue(x+w<=sx or sx+sw<=x or y+h<=sy or sy+sh<=y,

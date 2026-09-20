@@ -76,17 +76,17 @@ def clock(parent, ambient=False):
     el(g, 'Variant', mode='AMBIENT', target='alpha', value=255 if ambient else 0)
     color = '#FF8FA9BC' if ambient else C[2]
     # Move minutes left to reserve a separate, larger seconds column.
-    d = box(g, 'DigitalClock', 40, 61, 176, 222)
-    for fmt, x, y, width in [('hh', 16, 0, 156), ('mm', 0, 103, 140)]:
-        t = box(d, 'TimeText', x, y, width, 119, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
-        el(t, 'Font', family='sans-serif-condensed', size=112 if ambient else 126,
+    d = box(g, 'DigitalClock', 18, 67, 194, 269)
+    for fmt, x, y, width in [('hh', 26, 0, 168), ('mm', 0, 130, 158)]:
+        t = box(d, 'TimeText', x, y, width, 139, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
+        el(t, 'Font', family='sans-serif-condensed', size=126 if ambient else 142,
            color=color, weight='THIN' if ambient else 'MEDIUM')
-    text(g, 82, 21, 286, 38, 29, '%s', '[MONTH_F]', color=color, weight='LIGHT' if ambient else 'BOLD')
-    text(g, 230, 60, 142, 33, 26, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]', color=color)
+    text(g, 82, 17, 286, 40, 32, '%s', '[MONTH_F]', color=color, weight='LIGHT' if ambient else 'BOLD')
+    text(g, 230, 55, 142, 34, 28, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]', color=color)
     if not ambient:
-        seconds = box(g, 'DigitalClock', 182, 241, 32, 38)
-        t = box(seconds, 'TimeText', 0, 0, 32, 38, format='ss', align='CENTER')
-        el(t, 'Font', family='sans-serif-condensed', size=32, color=C[3], weight='MEDIUM')
+        seconds = box(g, 'DigitalClock', 178, 292, 36, 44)
+        t = box(seconds, 'TimeText', 0, 0, 36, 44, format='ss', align='CENTER')
+        el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
 
 def weather_slot(parent):
@@ -143,18 +143,18 @@ GOAL = '([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] > 0 ? clamp([COMPLICATION.GOA
 def complication_label(parent, w, h, kind, label_id):
     # Providers may send an icon, a title, both, or neither. Reserve both bands;
     # absent optional fields render empty, leaving the primary reading centered.
-    image(parent, (w-26)/2, 6, 26, 26, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    image(parent, (w-30)/2, 8, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
     expr = '[COMPLICATION.TEXT]'
     if kind == 'RANGED_VALUE': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
     if kind == 'GOAL_PROGRESS': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
     c, compact = condition(parent, label_id + '_compact', f'textLength({expr}) > 5')
-    text(compact, 6, 31, w-12, 34, 20, '%s', expr, weight='BOLD')
+    text(compact, 6, 37, w-12, 42, 22, '%s', expr, weight='BOLD')
     dc, five = condition(el(c,'Default'), label_id + '_five', f'textLength({expr}) > 4')
-    text(five, 6, 31, w-12, 34, 26, '%s', expr, weight='BOLD')
+    text(five, 6, 37, w-12, 42, 30, '%s', expr, weight='BOLD')
     fc, four = condition(el(dc,'Default'), label_id + '_four', f'textLength({expr}) > 3')
-    text(four, 6, 31, w-12, 34, 30, '%s', expr, weight='BOLD')
-    text(el(fc,'Default'), 6, 31, w-12, 34, 34, '%s', expr, weight='BOLD')
-    text(parent, 9, 64, w-18, 20, 15, '%s', '[COMPLICATION.TITLE]', color=C[3])
+    text(four, 6, 37, w-12, 42, 34, '%s', expr, weight='BOLD')
+    text(el(fc,'Default'), 6, 37, w-12, 42, 38, '%s', expr, weight='BOLD')
+    text(parent, 9, 77, w-18, 22, 17, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
 def circle_slot(parent, sid, name, x, y, size, provider):
@@ -187,12 +187,12 @@ def edge_tick(parent, center, angle, color, viewport):
             startY=round(center[1]-202*math.cos(a),3),
             endX=round(center[0]+214*math.sin(a),3),
             endY=round(center[1]-214*math.cos(a),3))
-    el(line,'Stroke',color=color,thickness=5,cap='ROUND')
+    el(line,'Stroke',color=color,thickness=6,cap='ROUND')
 
 
 def edge_slot(parent, sid, name, left=False):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'EMPTY']
-    x,y,w,h = (0,105,70,244) if left else (392,105,58,244)
+    x,y,w,h = (0,105,90,260) if left else (392,105,58,244)
     center = (225-x,225-y)
     s = box(parent, 'ComplicationSlot', x,y,w,h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
@@ -213,33 +213,33 @@ def edge_slot(parent, sid, name, left=False):
                     _, lit=condition(p,f'slot_{sid}_{kind.lower()}_tick_{i}',f'{ratio} >= {(i+1)/12:.8f}')
                     edge_tick(lit,center,a,C[6],(w,h))
         else:
-            arc(p,*center,416,68,98,C[5],18,viewport=(w,h))
+            arc(p,*center,416,68,98,C[5],20,viewport=(w,h))
             if ratio:
                 # Hide the foreground at zero, avoiding a misleading round-cap dot.
                 _, positive=condition(p,f'slot_{sid}_{kind.lower()}_positive',f'{ratio} > 0')
-                arc(positive,*center,416,68,98,C[6],18,f'68 + 30 * {ratio}',viewport=(w,h))
+                arc(positive,*center,416,68,98,C[6],20,f'68 + 30 * {ratio}',viewport=(w,h))
             elif kind=='SHORT_TEXT':
                 # Decorative accent for a text-only provider, not a progress value.
-                arc(p,*center,416,68,98,C[6],18,viewport=(w,h))
+                arc(p,*center,416,68,98,C[6],20,viewport=(w,h))
         ix,iy=(34,8) if left else (0,8)
         if kind=='EMPTY':
-            ellipse(p,ix+3,iy+3,18,18,C[3])
+            ellipse(p,ix+3,iy+3,20,20,C[3])
         else:
-            image(p,ix,iy,24,24,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
+            image(p,ix,iy,28,28,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
         # The short rotated captions follow the reference without arc clip masks.
-        tx,ty=(10,177) if left else (3,176)
-        angle=65 if left else -65
+        tx,ty=(27,218) if left else (3,178)
+        angle=50 if left else -65
         expr='[COMPLICATION.TEXT]'
         if kind=='RANGED_VALUE':
             expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
         if kind=='GOAL_PROGRESS':
             expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
         if kind=='EMPTY':
-            text(p,tx,ty,50,26,22,'+',color=C[3],angle=angle)
+            text(p,tx,ty,50,26,24,'+',color=C[3],angle=angle)
         else:
             c, compact=condition(p,f'slot_{sid}_{kind.lower()}_edge_compact',f'textLength({expr}) > 3')
-            text(compact,tx,ty,50,26,18,'%s',expr,weight='MEDIUM',angle=angle)
-            text(el(c,'Default'),tx,ty,50,26,22,'%s',expr,weight='MEDIUM',angle=angle)
+            text(compact,tx,ty,50,26,20,'%s',expr,weight='MEDIUM',angle=angle)
+            text(el(c,'Default'),tx,ty,50,26,24,'%s',expr,weight='MEDIUM',angle=angle)
 
 
 def shortcut(parent):
@@ -249,13 +249,13 @@ def shortcut(parent):
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
     ambient_hide(s)
     p = el(s, 'Complication', type='SHORT_TEXT')
-    image(p, 3, 4, 22, 22, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-    text(p, 29, 1, 108, 28, 20, '%s', '[COMPLICATION.TEXT]', color=C[2], align='START')
+    image(p, 3, 3, 24, 24, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    text(p, 31, 1, 106, 28, 22, '%s', '[COMPLICATION.TEXT]', color=C[2], align='START')
     for kind in ['MONOCHROMATIC_IMAGE','SMALL_IMAGE']:
         p = el(s, 'Complication', type=kind)
-        image(p, 56, 1, 28, 28, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
+        image(p, 55, 0, 30, 30, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
     p = el(s, 'Complication', type='EMPTY')
-    text(p, 0, 1, 140, 28, 20, '+  Shortcut', color=C[3])
+    text(p, 0, 1, 140, 28, 22, '+  Shortcut', color=C[3])
 
 
 def build():
@@ -267,9 +267,9 @@ def build():
     el(fill, 'LinearGradient', startX=0, startY=0, endX=0, endY=450, colors=C[0]+' '+C[1], positions='0 1')
     clock(scene); clock(scene, ambient=True)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',216,99,88,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',306,180,84,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',216,224,88,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',216,91,104,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',291,166,100,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',214,233,100,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     weather_slot(scene)
