@@ -41,7 +41,7 @@ jobs:
   emulator:
     needs: validate
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     env:
       ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android
       ANDROID_EMULATOR_HOME: ${{ github.workspace }}/.cache/android

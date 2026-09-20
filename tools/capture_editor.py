@@ -74,6 +74,89 @@ def return_to_editor():
     raise RuntimeError('Editor did not return after provider chooser; stopped coordinate taps.')
 
 
+def tap_node(node):
+    x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
+    tap((x1+x2)/2,(y1+y2)/2)
+
+
+def panel_chip(tree):
+    return next((n for n in tree.iter('node') if n.get('resource-id','').endswith(':id/editor_list_current_option_chip')),None)
+
+
+def open_panel_editor(name):
+    ensure_face()
+    adb('shell','input','swipe',str(w//2),str(h//2),str(w//2),str(h//2),'1200')
+    time.sleep(3)
+    tree=capture(name+'-entry')
+    edit=next(n for n in tree.iter('node') if re.search(r'edit|customi[sz]e',' '.join(n.get(k,'') for k in ['text','content-desc','resource-id']),re.I))
+    tap_node(edit)
+    tree=capture(name+'-page')
+    for attempt in range(3):
+        if panel_chip(tree) is not None:return tree
+        adb('shell','input','swipe',str(round(w*.18)),str(h//2),str(round(w*.82)),str(h//2),'350')
+        time.sleep(2)
+        tree=capture(name+f'-page-{attempt}')
+    raise RuntimeError('Bottom panel editor page was not found')
+
+
+def select_panel(tree, label, name):
+    chip=panel_chip(tree)
+    if chip.get('text')==label:return tree
+    tap_node(chip)
+    for attempt in range(18):
+        choices=capture(name+f'-choices-{attempt}')
+        node=next((n for n in choices.iter('node') if n.get('text')==label and n.get('enabled')=='true'),None)
+        if node is not None:
+            tap_node(node)
+            return_to_editor()
+            selected=capture(name+'-selected')
+            if panel_chip(selected) is None or panel_chip(selected).get('text')!=label:
+                raise RuntimeError(f'Panel selection did not become {label}')
+            return selected
+        # Walk down the short list, then back up (for restoring Weather).
+        start,end=(.75,.25) if attempt<6 else (.25,.75)
+        adb('shell','input','swipe',str(w//2),str(round(h*start)),str(w//2),str(round(h*end)),'350')
+        time.sleep(1)
+    raise RuntimeError(f'Panel option {label} was not found')
+
+
+def check_panels():
+    results['panel_captures']=[]
+    for option,label in [('weather','Weather'),('detailed_weather','Detailed weather'),
+                         ('temperature','Temperature'),('rain','Chance of rain'),
+                         ('steps','Steps'),('heart_rate','Heart rate'),('none','None')]:
+        name='panel-'+option
+        tree=open_panel_editor(name)
+        select_panel(tree,label,name)
+        adb('shell','input','keyevent','KEYCODE_HOME')
+        ensure_face()
+        capture(name+'-active')
+        # Check all three parts of the full rectangle, not individual weather cells.
+        attempts=[]
+        for point,x in [('left',100),('center',225),('right',350)]:
+            ensure_face()
+            before=launch_log()
+            tap(x*w/450,369*h/450)
+            events=sorted(launch_log()-before)
+            (out/f'{name}-tap-{point}.txt').write_text('\n'.join(events)+'\n')
+            capture(f'{name}-tap-{point}')
+            attempts.append({'point':point,'launch_events':events})
+            if any('complication: COMPLICATION.' in e for e in events):
+                results['tap_mismatches'].append(name+'-'+point)
+            if option=='none' and events:results['tap_mismatches'].append(name+'-'+point)
+        tree=open_panel_editor(name+'-persisted')
+        if panel_chip(tree).get('text')!=label:
+            raise RuntimeError(f'Panel {label} did not persist after leaving editor')
+        results['panel_captures'].append({'option':option,'label':label,'selection_persisted':True,
+                                          'tap_attempts':attempts,'samsung_app_launch_verified':False})
+        adb('shell','input','keyevent','KEYCODE_HOME')
+    tree=open_panel_editor('panel-restore')
+    select_panel(tree,'Weather','panel-restore-weather')
+    adb('shell','input','keyevent','KEYCODE_HOME')
+    ensure_face()
+    capture('active-panel-restored')
+
+
 results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'tap_mismatches': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
@@ -109,7 +192,7 @@ try:
         # WFF list settings add an editor page before Complications.
         for page in range(6):
             labels=' '.join(n.get('text','')+' '+n.get('content-desc','') for n in slot_tree.iter('node'))
-            if 'Upper circle' in labels: break
+            if 'Swipe back to return to Bottom panel' in labels or 'Upper circle' in labels: break
             adb('shell','input','swipe',str(round(w*.82)),str(round(h*.5)),str(round(w*.18)),str(round(h*.5)),'350')
             time.sleep(2)
             slot_tree=capture(f'editor-page-{page}')
@@ -146,6 +229,7 @@ try:
             ensure_face()
             capture('active-edge-alarm')
             results['edge_alarm_capture']=True
+        check_panels()
 except Exception as exc:
     detail = (getattr(exc, 'stderr', None) or b'').decode(errors='replace').strip()
     results['notes'].append(f'Editor automation inconclusive: {exc}; {detail}')
@@ -159,3 +243,6 @@ if len(results['slot_captures']) != 6 or not all(s['provider_chooser_visible'] f
     raise SystemExit('Not all six native provider choosers were verified; inspect editor-results.json.')
 if not results.get('edge_alarm_capture'):
     raise SystemExit('Assigned edge text was not captured; inspect editor-results.json.')
+
+if len(results.get('panel_captures',[])) != 7:
+    raise SystemExit('Not all seven panel selections/persistence checks completed; inspect editor-results.json.')

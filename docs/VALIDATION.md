@@ -6,7 +6,14 @@ The new menu, missing/stale data, partial forecasts, Celsius/Fahrenheit extremes
 
 The six pre-existing complication XML definitions were compared against 0.1.4 and are unchanged. Slot 7 is removed and replaced with the Bottom panel editor setting. Physical-watch upgrade persistence of slots 1–6 still requires checking with a consistently signed update; uninstall/reinstall resets settings by design.
 
-Native emulator results for this milestone will be recorded below; older results in the historical section apply only to their named revisions.
+Initial native run [35483336158](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35483336158), source `2137a84997f853733081945b89a35abc6f38904f`: API 34 large round (454 px) and API 35 small round (384 px) passed install/render, 12/24-hour, six provider choosers, edge Alarm assignment and boundary-tap dispatch checks. The Bottom panel page displays Weather. This run predates the zero-step availability fix and does not yet establish switching/persistence for all seven panels.
+
+Both ambient captures have confirmed DOZE state: API 34 **4.6235%**, API 35 **4.9846%** lit pixels including system overlays. Neither has panel/gradient content in ambient. Native active screens honestly show weather unavailable on these unpaired emulators. The editor supplies its own illustrative weather values; those are not live weather verification. The API 35 system status indicator still overlaps the bottom shortcut, an existing physical-device review item.
+
+![API 34 active](previews/panel-api34-active.png)
+![API 35 active](previews/panel-api35-active.png)
+
+The old provider heart-rate sample emits no tap launch event; other expected provider dispatches were observed, with no wrong-slot launches. Do not interpret absence of a wrong launch as a successful heart-rate app launch. Older results in the historical section apply only to their named revisions.
 
 ## Physical Galaxy Watch acceptance checklist — pending
 
