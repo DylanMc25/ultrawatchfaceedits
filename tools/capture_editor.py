@@ -80,10 +80,10 @@ try:
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for sid, name, x, y in [(1, 'heart-rate', 268, 143), (2, 'steps', 341, 216),
-                            (3, 'sunrise-sunset', 264, 283), (4, 'battery', 16, 225),
-                            (1, 'upper-boundary', 302, 173), (2, 'middle-upper-boundary', 307, 184),
-                            (2, 'middle-lower-boundary', 307, 247), (3, 'lower-boundary', 296, 250)]:
+    for sid, name, x, y in [(1, 'heart-rate', 255, 136), (2, 'steps', 346, 211),
+                            (3, 'sunrise-sunset', 255, 290), (4, 'battery', 16, 225),
+                            (1, 'upper-boundary', 294, 150), (2, 'middle-upper-boundary', 305, 195),
+                            (2, 'middle-lower-boundary', 305, 227), (3, 'lower-boundary', 294, 275)]:
         ensure_face()
         before=launch_log()
         tap(x*w/450, y*h/450)
@@ -108,8 +108,8 @@ try:
         slot_tree=capture('editor-slots')
         results['editor_opened'] = True
         # Coordinates come from the seven WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 268, 143), ('middle', 341, 216),
-                           ('lower', 264, 283), ('left', 16, 225),
+        for name, x, y in [('upper', 255, 136), ('middle', 346, 211),
+                           ('lower', 255, 290), ('left', 16, 225),
                            ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 369)]:
             slot_tree=return_to_editor()
             label='Weather' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')

@@ -44,14 +44,10 @@ class WatchFaceTests(unittest.TestCase):
             ax,ay,aw,ah=map(float,(a.get(k) for k in ['x','y','width','height']))
             for b in slots[i+1:]:
                 bx,by,bw,bh=map(float,(b.get(k) for k in ['x','y','width','height']))
-                if a.find('BoundingOval') is not None and b.find('BoundingOval') is not None:
-                    # Round regions can pack diagonally. Their unused rectangular
-                    # corners overlap, but the selectable circles must not.
-                    self.assertEqual(aw,ah);self.assertEqual(bw,bh)
-                    self.assertGreaterEqual(math.hypot(ax+aw/2-bx-bw/2,ay+ah/2-by-bh/2),aw/2+bw/2+1)
-                else:
-                    self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
-                                    f'Non-circular tap rectangles overlap: {a.get("slotId")}, {b.get("slotId")}')
+                # Runtime taps use the enclosing slot rectangle, even when the
+                # visible/editor bounds are oval. Keep both models separated.
+                self.assertTrue(ax+aw<=bx or bx+bw<=ax or ay+ah<=by or by+bh<=ay,
+                                f'Runtime tap rectangles overlap: {a.get("slotId")}, {b.get("slotId")}')
             for part in a.iter():
                 if part.tag in ['PartDraw','PartText','PartImage']:
                     self.assertGreaterEqual(float(part.get('x')),0)
@@ -130,7 +126,7 @@ class WatchFaceTests(unittest.TestCase):
         for sid in ['1','2','3']:
             slot=self.face.find(f".//ComplicationSlot[@slotId='{sid}']")
             x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
-            self.assertGreaterEqual(w,100)
+            self.assertGreaterEqual(w,90)
             self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
         g=self.face.find(".//Group[@name='interactive_time']")
         for clock in g.findall('DigitalClock'):

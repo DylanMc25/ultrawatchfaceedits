@@ -77,14 +77,14 @@ def clock(parent, ambient=False):
     color = '#FF8FA9BC' if ambient else C[2]
     # Move minutes left to reserve a separate, larger seconds column.
     d = box(g, 'DigitalClock', 18, 67, 194, 269)
-    for fmt, x, y, width in [('hh', 26, 0, 168), ('mm', 0, 130, 158)]:
+    for fmt, x, y, width in [('hh', 23, 0, 168), ('mm', 0, 130, 153)]:
         t = box(d, 'TimeText', x, y, width, 139, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=126 if ambient else 142,
            color=color, weight='THIN' if ambient else 'MEDIUM')
     text(g, 82, 17, 286, 40, 32, '%s', '[MONTH_F]', color=color, weight='LIGHT' if ambient else 'BOLD')
     text(g, 230, 55, 142, 34, 28, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]', color=color)
     if not ambient:
-        seconds = box(g, 'DigitalClock', 178, 292, 36, 44)
+        seconds = box(g, 'DigitalClock', 173, 292, 36, 44)
         t = box(seconds, 'TimeText', 0, 0, 36, 44, format='ss', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
@@ -143,18 +143,18 @@ GOAL = '([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] > 0 ? clamp([COMPLICATION.GOA
 def complication_label(parent, w, h, kind, label_id):
     # Providers may send an icon, a title, both, or neither. Reserve both bands;
     # absent optional fields render empty, leaving the primary reading centered.
-    image(parent, (w-30)/2, 8, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    image(parent, (w-28)/2, 6, 28, 28, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
     expr = '[COMPLICATION.TEXT]'
     if kind == 'RANGED_VALUE': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
     if kind == 'GOAL_PROGRESS': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
     c, compact = condition(parent, label_id + '_compact', f'textLength({expr}) > 5')
-    text(compact, 6, 37, w-12, 42, 22, '%s', expr, weight='BOLD')
+    text(compact, 6, 32, w-12, 37, 22, '%s', expr, weight='BOLD')
     dc, five = condition(el(c,'Default'), label_id + '_five', f'textLength({expr}) > 4')
-    text(five, 6, 37, w-12, 42, 30, '%s', expr, weight='BOLD')
+    text(five, 6, 32, w-12, 37, 30, '%s', expr, weight='BOLD')
     fc, four = condition(el(dc,'Default'), label_id + '_four', f'textLength({expr}) > 3')
-    text(four, 6, 37, w-12, 42, 34, '%s', expr, weight='BOLD')
-    text(el(fc,'Default'), 6, 37, w-12, 42, 38, '%s', expr, weight='BOLD')
-    text(parent, 9, 77, w-18, 22, 17, '%s', '[COMPLICATION.TITLE]', color=C[3])
+    text(four, 6, 32, w-12, 37, 30, '%s', expr, weight='BOLD')
+    text(el(fc,'Default'), 6, 32, w-12, 37, 38, '%s', expr, weight='BOLD')
+    text(parent, 9, 68, w-18, 20, 16, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
 def circle_slot(parent, sid, name, x, y, size, provider):
@@ -267,9 +267,9 @@ def build():
     el(fill, 'LinearGradient', startX=0, startY=0, endX=0, endY=450, colors=C[0]+' '+C[1], positions='0 1')
     clock(scene); clock(scene, ambient=True)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',216,91,104,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',291,166,100,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',214,233,100,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',210,91,90,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',301,166,90,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',210,245,90,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     weather_slot(scene)
