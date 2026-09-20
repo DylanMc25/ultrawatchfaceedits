@@ -151,7 +151,9 @@ def complication_label(parent, w, h, kind, label_id):
     text(compact, 6, 31, w-12, 34, 20, '%s', expr, weight='BOLD')
     dc, five = condition(el(c,'Default'), label_id + '_five', f'textLength({expr}) > 4')
     text(five, 6, 31, w-12, 34, 26, '%s', expr, weight='BOLD')
-    text(el(dc,'Default'), 6, 31, w-12, 34, 34, '%s', expr, weight='BOLD')
+    fc, four = condition(el(dc,'Default'), label_id + '_four', f'textLength({expr}) > 3')
+    text(four, 6, 31, w-12, 34, 30, '%s', expr, weight='BOLD')
+    text(el(fc,'Default'), 6, 31, w-12, 34, 34, '%s', expr, weight='BOLD')
     text(parent, 9, 64, w-18, 20, 15, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
