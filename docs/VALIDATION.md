@@ -1,3 +1,24 @@
+# Current milestone: 0.1.5 curated bottom panel
+
+Local validation (2026-09-19): 18 regression/fixture checks; official WFF 2 syntax/resources; debug APK; unsigned release AAB; Android lint; no-DEX/signing/package checks; and official memory checks all pass. Maximum active memory is 2,371,712 bytes and maximum ambient memory is 3,181,712 bytes, below the configured limits. The memory validator measures supported WFF resources; it does not prove visual correctness or runtime data access.
+
+The new menu, missing/stale data, partial forecasts, Celsius/Fahrenheit extremes, flat/missing temperature trends, zero/empty/out-of-range health readings, all weather condition codes, None, 12/24-hour labels, midnight/noon and daylight-saving changes are exercised against the generated XML. Fixture expression evaluation models WFF behavior using Node and is not a replacement for native runtime tests.
+
+The six pre-existing complication XML definitions were compared against 0.1.4 and are unchanged. Slot 7 is removed and replaced with the Bottom panel editor setting. Physical-watch upgrade persistence of slots 1–6 still requires checking with a consistently signed update; uninstall/reinstall resets settings by design.
+
+Native emulator results for this milestone will be recorded below; older results in the historical section apply only to their named revisions.
+
+## Physical Galaxy Watch acceptance checklist — pending
+
+1. Install the debug APK, choose Ultra Info Board, open Customize → Bottom panel, and try all seven options. Return to the face and re-open the editor to confirm the chosen option persists.
+2. Confirm Weather has real current conditions and four consecutive hourly entries. Check temperature units and 12/24-hour preference. Missing data must show dashes, not sample values. An exclamation mark means a refresh failed while cached data remains available.
+3. Tap the left, center and right of the panel: each weather view should open Samsung Weather exactly once. None must have no action. Steps should open Samsung Health; Heart rate uses the system heart-rate destination.
+4. Check missing weather/location and health access denied, then restore access. Native WFF supplies no independent steps permission flag; if the runtime supplies zero, zero is displayed. Compare native counts/readings with Samsung Health without assuming both data sources match.
+5. Confirm all six ordinary complication areas still select and launch their own providers, including near boundaries. With a consistently signed upgrade from 0.1.4, verify IDs 1–6 retain selections; the former rectangle assignment is intentionally replaced.
+6. Check readability, midnight/noon, weather hour rollover and real AOD on the physical display. Samsung native weather access and app launches cannot be proved by stock emulator captures.
+
+## Historical validation (earlier revisions)
+
 # Validation evidence
 
 Version 0.1.4, 2026-09-19. Resource-only WFF 2; Temurin JDK 17, Gradle 8.13, AGP 8.13.2, Android platform/build-tools 35.

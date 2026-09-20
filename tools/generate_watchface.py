@@ -176,14 +176,14 @@ def bottom_panel(parent):
             if option=='steps':
                 # WFF exposes no separate step-permission/availability flag.
                 # Empty/sentinel data stays unavailable; a supplied zero is a valid count.
-                c, data = condition(g,'panel_steps_available','[STEP_COUNT] != "" && [STEP_COUNT] >= 0')
+                c, data = condition(g,'panel_steps_available','textLength([STEP_COUNT]) > 0 && [STEP_COUNT] >= 0')
                 text(data,0,0,262,27,24,'%s steps','numberFormat("#,###", [STEP_COUNT])',weight='MEDIUM')
                 goal, valid = condition(data,'panel_steps_goal','[STEP_GOAL] > 0')
                 text(valid,0,28,262,19,16,'Goal %s','numberFormat("#,###", [STEP_GOAL])',color=C[3])
                 progress_bar(valid,'panel_steps','clamp([STEP_COUNT] / [STEP_GOAL], 0, 1)')
                 text(el(goal,'Default'),0,29,262,20,16,'Goal unavailable',color=C[3])
             else:
-                c, data = condition(g,'panel_heart_available','[HEART_RATE] != "" && [HEART_RATE] > 0 && [HEART_RATE] <= 240')
+                c, data = condition(g,'panel_heart_available','textLength([HEART_RATE]) > 0 && [HEART_RATE] > 0 && [HEART_RATE] <= 240')
                 text(data,0,2,262,32,29,'%s bpm','numberFormat("#", [HEART_RATE])',weight='MEDIUM')
                 text(data,0,36,262,21,17,'Heart rate',color=C[3])
             text(el(c,'Default'),0,15,262,30,21,'Steps —' if option=='steps' else 'Heart rate —',color=C[3])

@@ -1,12 +1,17 @@
-# Build blue stacked-time watch face with seven editable complications
+# Ultra Info Board with an Info Brick-style bottom panel
 
-Replaces the placeholder face with a blue gradient, large stacked time, three staggered circular complications, edge indicators and a bottom shortcut. A compact interchangeable weather slot replaces the separate current-weather/forecast grid. It accepts provider text, icons, images/charts and progress, and delegates taps to the selected provider. Heart rate, steps, sunrise/sunset and battery are default sources; weather, right edge and bottom shortcut start unassigned. Larger time, round complications and edge readings fill the familiar layout; the weather rectangle stays the same size. Black always-on mode retains thin time and date only.
+Build a resource-only WFF 2 Galaxy Watch face with large stacked time, six independently editable complications and a compact **Bottom panel** menu. Weather is the default and shows current conditions plus four consecutive hourly forecasts as one tap area. Other choices are Detailed weather, Temperature, Chance of rain, Steps, Heart rate and None. The blue active face switches to black, thin time/date in always-on mode.
 
-![Native active face](previews/emulator-api34-active.png)
-![Native always-on face](previews/emulator-api35-ambient.png)
+Samsung APK inspection confirmed that Info Brick supplies a curated internal rectangle menu; its ordinary public Weather complication supplies current conditions only. This implementation uses native WFF sources and original vector icons. It preserves complication IDs 1–6 and removes generic slot 7, so an existing rectangle assignment is replaced by the new menu. It uses no Samsung private data API, companion app or backend. Health panels show current native readings, not historical charts.
 
-Preserves resource-only WFF 2 packaging and stable slot IDs 1–6; adds slot 7. Restores the pinned Gradle wrapper and produces a debug APK and unsigned release AAB with no DEX. Adds GitHub build/schema/memory/lint checks, geometry regressions and two round Wear OS emulator jobs. Includes setup, installation and release documentation.
+## Validation
 
-Validation: ten regression checks, official WFF syntax/resource and memory checks, builds and lint pass. Native capture provenance, individual chooser results, tap evidence and measured ambient illumination are recorded in [validation evidence](VALIDATION.md). The latest API 34/35 captures render fully; a previous API 34 partial-background redraw was not reproduced and remains a physical-device regression check. Native probes verify taps near neighboring circle edges. API 35 system status overlays can cover the bottom shortcut. Info Brick’s rich Weather presentation remains unresolved; the current basic weather card does not yet fulfill it. Samsung Weather and image/chart providers remain physical-device checks; the stock emulator tests the new slot with Alarm instead.
+- Local debug APK, unsigned release AAB, Android lint, no-DEX/package checks, official WFF 2 syntax/resource and memory checks pass.
+- Eighteen regression and fixture checks cover geometry/taps, menu/ambient structure, partial or stale weather, units/extreme values, zero/empty health readings, trend gaps, midnight/noon and daylight-saving rollover.
+- Fixture tests model documented WFF expressions; illustrative previews use explicit sample data. Neither establishes native weather availability.
+- Native emulator evidence and remaining checks are versioned in [VALIDATION.md](VALIDATION.md).
+- Physical Galaxy Watch native weather, panel editor persistence, app launches, permission denial and update behavior remain pending. Release signing, final package identity and store preparation are separate prerequisites.
 
-This is a development milestone. Physical Galaxy Watch verification, permanent branding/package identity, release signing and Play Store preparation remain required before sale.
+![Illustrative Weather panel](https://raw.githubusercontent.com/DylanMc25/ultrawatchfaceedits/codex/watchface-redesign/docs/previews/panel-weather-illustrative.png)
+
+This image is a layout proof, not a live-data or emulator capture. Build artifacts are available from the successful branch workflow linked in VALIDATION.md.

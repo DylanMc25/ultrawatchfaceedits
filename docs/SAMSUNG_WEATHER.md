@@ -1,6 +1,6 @@
 # Samsung Weather investigation
 
-Status: provider limitation verified from the user-supplied APK, 2026-09-19; Info Brick integration is still under investigation. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
+Status: APK investigation complete for the weather/picker architecture, 2026-09-19. The final section describes the approved 0.1.5 implementation; preceding sections preserve the earlier investigation. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
 
 ## Verified on the physical watch
 
@@ -67,3 +67,21 @@ The editor associates this internal option with the familiar Samsung Weather ser
 Resource-only WFF 2 cannot execute this custom renderer or query arbitrary Android content providers. Copying a provider component name or preferring LONG_TEXT will not port this behavior. Exact Samsung editor/data access parity is not established for a third-party WFF face. A built-in native forecast plus a separate editor switch is a possible approximation; achieving a true selectable forecast complication would require an appropriate external provider. Neither alternative has been approved as a replacement for the requested behavior.
 
 The current basic Weather card remains incomplete relative to the requested forecast. No Samsung code, images or binaries have been added to this repository, and no fabricated readings or independent forecast buttons have been introduced.
+
+## Curated bottom panel implementation (0.1.5)
+
+The subsequent Info Brick inspection resolves the rectangle-picker question. Its medium rectangle uses `complication_type_box`, whose ordinary public supported-type list contains only EMPTY; Samsung injects its own curated panel entries. The medium rectangle's weather entries are **Weather, Detailed weather, Temperature and Chance of rain**. The circle and edge lists are different. Merely accepting more ordinary WFF complication types does not reproduce this picker or its forecast.
+
+Info Brick's health model also makes `ContentResolver.call` requests through `com.samsung.android.watch.watchface.complication.health` or `com.samsung.android.wear.shealth.healthdataprovider`. This establishes Samsung's own data path, not access for an independently signed face. No Samsung Health/helper APK access audit established a public historical-chart contract. A resource-only WFF face cannot execute these arbitrary provider queries regardless of whether an authority is exported.
+
+The approved implementation therefore replaces slot 7 with the **Bottom panel** WFF `ListConfiguration`, defaulting to Weather. Weather, Detailed weather, Temperature and Chance of rain use documented native WFF sources. Steps and Heart rate use native current readings, not history. None is empty and noninteractive. Each nonempty option has one whole-panel Launch target; the other six complication slots retain their provider-owned selection/data/taps.
+
+WFF 2 cannot conditionally enable/disable a complication slot using the newer `complicationSlotIds` configuration attribute. Removing the old rectangle slot avoids invisible, overlapping provider touch targets. Bottom panel appears as a separate editor setting; it does not pretend to be Samsung's private provider-picker extension. Existing slot 7 selections are retired on upgrade, while IDs 1–6 remain stable.
+
+Weather uses hourly indices 0–3 (the current hour and three following hours). Each hour checks its own availability. Labels format future instants using device locale/time zone and time-format preference, including midnight and daylight-saving transitions. Temperature trends only connect adjacent available points. WFF 2 has no hourly precipitation field; Chance of rain displays the current probability. The runtime's temperature-unit preference governs all weather values.
+
+Missing weather shows `Weather —` and a single tap to open Samsung Weather. Available weather accompanied by `WEATHER.IS_ERROR` remains visible with `!`. Missing hours remain dashes. Empty or nonpositive/out-of-range heart rate is unavailable; a zero step count is valid. Native WFF has no separate step permission/availability flag, so the face cannot distinguish a runtime-supplied zero caused by unavailable access from a genuine zero. Physical-watch permission behavior remains a required test.
+
+These sources are provided by the Wear OS runtime, not the Samsung public complication service inspected above. Their availability and freshness on this particular Galaxy Watch must be verified on that watch. Weather launch targets the installed Samsung Weather package; stock emulators lacking that package cannot prove the launch destination. No Samsung artwork, code, APK or private authority is included in the app.
+
+References: [native weather](https://developer.android.com/training/wearables/wff/weather), [available fields](https://developer.android.com/reference/wear-os/wff/common/attributes/source-type), [date/time expression formatting](https://developer.android.com/reference/wear-os/wff/common/attributes/arithmetic-expression).

@@ -26,7 +26,7 @@ Steps shows today's native count/goal, and Heart rate shows the current availabl
 
 ## Build and install
 
-Install JDK 17, Android SDK command-line tools, platform 35 and build-tools 35.0.0. Set `ANDROID_HOME` or create ignored `local.properties` with `sdk.dir=/your/android/sdk`.
+Install JDK 17, Python 3 and Node.js 22 (for fixture checks), Android SDK command-line tools, platform 35 and build-tools 35.0.0. Set `ANDROID_HOME` or create ignored `local.properties` with `sdk.dir=/your/android/sdk`.
 
 ```sh
 sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'platform-tools'

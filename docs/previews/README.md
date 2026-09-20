@@ -20,3 +20,9 @@ The `*-editor.png` images show the real Wear OS editor and its **system sample t
 Generate with `tools/render_preview.py --font /path/to/Roboto-Regular.ttf` (Pillow and Node required). Text placement approximates WFF. The active illustration also serves as the temporary picker preview.
 
 ![Illustrative layout with sample data](active-illustrative.png)
+
+## 0.1.5 bottom panel proofs
+
+`panel-*-illustrative.png` are generated from the current XML using explicit sample values. They show all seven Bottom panel options, including None. They are **illustrative**, not native screenshots or evidence of Samsung weather/health access. `active-illustrative.png` and the packaged picker preview now show the default Weather panel.
+
+Existing `emulator-api*-*.png` files remain labelled by their tested version in VALIDATION.md until replaced with this milestone's captures. Do not infer new-panel editor or data support from older emulator captures.

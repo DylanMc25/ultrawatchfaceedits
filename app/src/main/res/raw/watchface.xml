@@ -4407,7 +4407,7 @@
                         <Launch target="com.samsung.android.wear.shealth" />
                         <Condition>
                             <Expressions>
-                                <Expression name="panel_steps_available">[STEP_COUNT] != "" &amp;&amp; [STEP_COUNT] &gt;= 0</Expression>
+                                <Expression name="panel_steps_available">textLength([STEP_COUNT]) &gt; 0 &amp;&amp; [STEP_COUNT] &gt;= 0</Expression>
                             </Expressions>
                             <Compare expression="panel_steps_available">
                                 <PartText x="0" y="0" width="262" height="27">
@@ -4474,7 +4474,7 @@
                         <Launch target="HEALTH_HEART_RATE" />
                         <Condition>
                             <Expressions>
-                                <Expression name="panel_heart_available">[HEART_RATE] != "" &amp;&amp; [HEART_RATE] &gt; 0 &amp;&amp; [HEART_RATE] &lt;= 240</Expression>
+                                <Expression name="panel_heart_available">textLength([HEART_RATE]) &gt; 0 &amp;&amp; [HEART_RATE] &gt; 0 &amp;&amp; [HEART_RATE] &lt;= 240</Expression>
                             </Expressions>
                             <Compare expression="panel_heart_available">
                                 <PartText x="0" y="2" width="262" height="32">
