@@ -144,6 +144,10 @@ def check_panels():
             if any('complication: COMPLICATION.' in e for e in events):
                 results['tap_mismatches'].append(name+'-'+point)
             if option=='none' and events:results['tap_mismatches'].append(name+'-'+point)
+            if option not in ['none','heart_rate']:
+                target='com.samsung.android.wear.shealth' if option=='steps' else 'com.samsung.android.watch.weather'
+                if len(events)!=1 or target not in events[0]:
+                    results['tap_mismatches'].append(name+'-'+point+'-target')
         tree=open_panel_editor(name+'-persisted')
         if panel_chip(tree).get('text')!=label:
             raise RuntimeError(f'Panel {label} did not persist after leaving editor')

@@ -211,7 +211,12 @@ def bottom_panel(parent):
                 valid=[f'[WEATHER.HOURS.{i}.IS_AVAILABLE]' for i in range(4)]
                 def extrema(fn, fallback):
                     values=[f'({v} ? {t} : {fallback})' for v,t in zip(valid,temps)]
-                    return f'{fn}({fn}({values[0]}, {values[1]}), {fn}({values[2]}, {values[3]}))'
+                    # WFF 2 has clamp(), but no min()/max() functions. The schema
+                    # validator did not reject those inside Transform values; native
+                    # runtimes did. Sentinels bound physically possible temperatures.
+                    def pair(a, b):
+                        return f'clamp({a}, -10000, {b})' if fn=='min' else f'clamp({a}, {b}, 10000)'
+                    return pair(pair(values[0], values[1]), pair(values[2], values[3]))
                 lo,hi=extrema('min',10000),extrema('max',-10000)
                 def ypos(i): return f'({hi} > {lo} ? 42 - 5 * ({temps[i]} - {lo}) / ({hi} - {lo}) : 39.5)'
                 for i in range(3):

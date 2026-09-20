@@ -15,6 +15,14 @@ Both ambient captures have confirmed DOZE state: API 34 **4.6235%**, API 35 **4.
 
 The old provider heart-rate sample emits no tap launch event; other expected provider dispatches were observed, with no wrong-slot launches. Do not interpret absence of a wrong launch as a successful heart-rate app launch. Older results in the historical section apply only to their named revisions.
 
+## Native chart correction
+
+Expanded run [35483891344](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35483891344), source `6d82a1a953c6b8a509c941d2ecc36d1277979ac6`, completed all seven panel choices and persistence checks on both APIs. Each weather/Steps tap reached its package target exactly once at left/center/right; absent Samsung apps produced market-fallback events, not successful Samsung app launches. None produced no events. The heart-rate system shortcut had no launch event on these stock images and remains unverified on Galaxy Watch.
+
+**Manual log review caught a Temperature-chart defect despite the green workflow:** `min()` and `max()` in Transform expressions passed the syntax validator but failed in both native runtimes. The chart is corrected to use supported `clamp()` expressions, fixture evaluation no longer supplies unsupported functions, and CI now fails on native `DWF:Expression ... failed` messages after exercising all panels. The earlier green run must not be treated as a working Temperature chart. Corrected native results will be recorded after the rerun.
+
+Native health fields on stock emulators returned zero steps, unavailable goal and unavailable heart rate even while separate mock complication providers supplied readings. The new panels handle those values explicitly; they do not borrow or fabricate readings from the mock providers. Physical health access, goal availability and Samsung app destinations remain required checks.
+
 ## Physical Galaxy Watch acceptance checklist — pending
 
 1. Install the debug APK, choose Ultra Info Board, open Customize → Bottom panel, and try all seven options. Return to the face and re-open the editor to confirm the chosen option persists.

@@ -53,7 +53,7 @@ def render(font_path, ambient=False, size=450, hour=14, minute=26, panel="weathe
 let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>{
 const {expressions,data}=JSON.parse(s); const result=data.map(values=>Object.fromEntries(expressions.map(e=>{
 const code=e.replace(/\[([^\]]+)\]/g,(_,k)=>JSON.stringify(values[k]??''));
-try {return [e,Function('clamp','numberFormat','textLength','min','max','icuText','return ('+code+')')((n,a,b)=>Math.max(a,Math.min(n,b)),(_,n)=>Number(n).toLocaleString('en-US'),s=>String(s).length,Math.min,Math.max,(fmt,stamp)=>{const h=new Date(Number(stamp)).getUTCHours();return fmt==='HH'?String(h).padStart(2,'0'):`${h%12||12} ${h<12?'AM':'PM'}`;})];}catch{return [e,null];}
+try {return [e,Function('clamp','numberFormat','textLength','icuText','return ('+code+')')((n,a,b)=>Math.max(a,Math.min(n,b)),(_,n)=>Number(n).toLocaleString('en-US'),s=>String(s).length,(fmt,stamp)=>{const h=new Date(Number(stamp)).getUTCHours();return fmt==='HH'?String(h).padStart(2,'0'):`${h%12||12} ${h<12?'AM':'PM'}`;})];}catch{return [e,null];}
 })));process.stdout.write(JSON.stringify(result));});'''
     results=json.loads(subprocess.run(['node','-e',js],input=json.dumps({'expressions':list(expressions),'data':data}),text=True,capture_output=True,check=True).stdout)
     def evaluate(expr,ctx):return results[ctx].get(expr)

@@ -35,8 +35,8 @@ let input='';process.stdin.on('data',d=>input+=d);process.stdin.on('end',()=>{
    const hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:values.zone||'UTC',hour:'numeric',hourCycle:'h23'}).format(date));
    return format==='HH'?String(hour).padStart(2,'0'):`${hour%12||12} ${hour<12?'AM':'PM'}`;
   };
-  const value=Function('clamp','min','max','numberFormat','icuText','textLength',`return (${code})`)(
-   (v,a,b)=>Math.max(a,Math.min(v,b)),Math.min,Math.max,(_,n)=>Number(n).toLocaleString('en-US'),icu,s=>String(s).length);
+  const value=Function('clamp','numberFormat','icuText','textLength',`return (${code})`)(
+   (v,a,b)=>Math.max(a,Math.min(v,b)),(_,n)=>Number(n).toLocaleString('en-US'),icu,s=>String(s).length);
   return [expression,value];
  })));
  process.stdout.write(JSON.stringify(output));

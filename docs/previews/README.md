@@ -1,28 +1,22 @@
-# Emulator captures and layout proofs
+# Watch-face previews and test captures
 
-`emulator-api34-active.png` / `emulator-api34-ambient.png` are native 454 × 454 large-round captures. The API 35 pair is the 384 × 384 small-round Wear OS 5.1 emulator. See [validation evidence](../VALIDATION.md) for the source run, ambient illumination and limitations.
+## Current 0.1.5 bottom panel
 
-![Actual API 34 active face](emulator-api34-active.png)
-![Actual API 35 ambient face](emulator-api35-ambient.png)
+`panel-api34-*.png` and `panel-api35-*.png` are actual native captures from the first bottom-panel run, source `2137a84`. `*-active.png` shows the honest unavailable-weather state on unpaired stock emulators; `*-ambient.png` has confirmed DOZE state. The `*-panel-editor.png` images show the Bottom panel setting with **system-supplied sample weather/time/health values**, not live data. See [validation evidence](../VALIDATION.md) for run links, illumination measurements and subsequent test coverage.
 
-## Editor and provider interactions
+![Native API 34 active face](panel-api34-active.png)
+![Native API 35 ambient face](panel-api35-ambient.png)
+![Native Bottom panel editor with system sample data](panel-api35-panel-editor.png)
 
-The `*-editor.png` images show the real Wear OS editor and its **system sample time/health readings**. All seven outlined areas must independently open their provider chooser. `*-shortcut-picker.png` shows the bottom shortcut chooser; `*-weather-picker.png` shows the new interchangeable weather slot. Battery action captures record the native Battery settings page.
+`panel-*-illustrative.png` show all seven menu choices using explicit fixtures rendered from the current XML. These are **illustrations, not emulator screenshots or evidence of Samsung data access**. `active-illustrative.png` also supplies the temporary packaged picker preview. `ambient-illustrative.png` illustrates the time/date-only layout.
 
-`*-edge-alarm.png` assigns Alarm to the right edge on disposable emulators to verify the angled “Set” label. `*-weather-assigned.png` assigns Alarm to the weather slot to verify it accepts another provider. These assignments are test fixtures; the APK leaves both slots unassigned. Samsung Weather and third-party chart providers require physical-watch checks. The prior API 34 partial-background redraw anomaly was not reproduced in the latest run. API 35 system status overlays can cover the bottom shortcut. Both limitations remain in the validation report.
+The fixtures use September 19, 02:26, 71 bpm, 8,420 steps, 62% battery, partly cloudy 24°C weather and four sample hourly entries. Actual watch readings come from native WFF sources or installed complication providers. Generate these layout proofs with `tools/render_preview.py --font /path/to/Roboto-Regular.ttf` (Pillow and Node required). Text placement approximates WFF.
 
-![Native editor](emulator-api34-editor.png)
+![Illustrative Weather panel](panel-weather-illustrative.png)
+![Illustrative Temperature panel](panel-temperature-illustrative.png)
 
-## Illustrative layout
+## Historical 0.1.4 captures
 
-`active-illustrative.png` and `ambient-illustrative.png` are **illustrations, not emulator screenshots**. They use the committed WFF geometry and explicit sample data: September 19, 02:26, 71 bpm, 8,420 steps, 62% battery and sunny 24° weather. Actual readings always come from selected providers.
+Files beginning `emulator-api` predate the Bottom panel change. They show seven ordinary complication areas, including the old generic weather slot. Their Weather picker/Alarm assignment captures prove that earlier slot's provider contract only; they do not apply to the new curated panel. They remain in the repository as historical evidence, with run details in VALIDATION.md.
 
-Generate with `tools/render_preview.py --font /path/to/Roboto-Regular.ttf` (Pillow and Node required). Text placement approximates WFF. The active illustration also serves as the temporary picker preview.
-
-![Illustrative layout with sample data](active-illustrative.png)
-
-## 0.1.5 bottom panel proofs
-
-`panel-*-illustrative.png` are generated from the current XML using explicit sample values. They show all seven Bottom panel options, including None. They are **illustrative**, not native screenshots or evidence of Samsung weather/health access. `active-illustrative.png` and the packaged picker preview now show the default Weather panel.
-
-Existing `emulator-api*-*.png` files remain labelled by their tested version in VALIDATION.md until replaced with this milestone's captures. Do not infer new-panel editor or data support from older emulator captures.
+The API 35 system status indicator can cover the bottom shortcut; verify this on physical hardware. The older API 34 partial-background redraw anomaly was not reproduced in the first bottom-panel run, but remains a physical-watch regression check.

@@ -82,6 +82,12 @@ adb exec-out screencap -p > "$report/after-idle.png"
 python3 tools/check_ambient_capture.py "$report/after-idle.png" "$report/display-after-idle.txt" > "$report/ambient-pixels.json"
 python3 tools/capture_editor.py
 adb logcat -d > "$report/logcat.txt"
+# Transform expressions are not all rejected by the official syntax validator.
+# Inspect native evaluation after visiting every panel, including editor sample data.
+if grep -qE 'E DWF:Expression:.*failed\.' "$report/logcat.txt"; then
+    echo 'A watch-face expression failed in the native runtime.' >&2
+    exit 1
+fi
 # Installation is asserted; activation, visuals and ambient state need review of
 # these artifacts. Never report an after-idle image as ambient without DOZE evidence.
 adb shell pm path "$pkg" | grep -q 'package:'
