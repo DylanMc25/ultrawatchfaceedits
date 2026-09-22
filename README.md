@@ -24,6 +24,8 @@ Samsung's **public Weather complication** is the preferred default when installe
 
 The physical 0.1.5 test reported `Weather —` while its tap correctly opened Samsung Weather with location and forecast data. That establishes a native weather availability problem in our face, not an empty Samsung Weather app. Version 0.1.6 uses provider data instead; its Samsung data/taps still require a physical check. See [research and compatibility](docs/SAMSUNG_WEATHER.md).
 
+**Investigation update:** Samsung helper access and the one-product/multiple-APK option are documented in [the APK findings](docs/SAMSUNG_APK_FINDINGS.md). The current standard-provider build is not a completed replacement for Samsung's rich forecast; application changes are paused while the supported architecture is resolved.
+
 ## Build and install
 
 Install JDK 17, Python 3 and Node.js 22 (for fixture checks), Android SDK command-line tools, platform 35 and build-tools 35.0.0. Set `ANDROID_HOME` or create ignored `local.properties` with `sdk.dir=/your/android/sdk`.

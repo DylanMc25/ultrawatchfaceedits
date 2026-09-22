@@ -1,6 +1,8 @@
 # Samsung Weather investigation
 
-Status: investigation reopened on 2026-09-21; Samsung helper access and Ultra Info Board comparison remain unresolved. Implementation history is recorded below; the final section describes 0.1.6 after physical testing and the user's clarification. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
+Current findings: see [Samsung APK comparison and one-product packaging](SAMSUNG_APK_FINDINGS.md). The 2026-09-21 helper inspection confirms the caller restriction, and Ultra Info Board confirms the custom picker/renderer path. The user now permits multiple APKs packaged as one Play product. Watch Face Push is the documented architecture under consideration; no application changes were made during this investigation.
+
+The sections below preserve the investigation history. Statements that helper access was uninspected describe the earlier checkpoint and are superseded by the current report.
 
 ## Verified on the physical watch
 
