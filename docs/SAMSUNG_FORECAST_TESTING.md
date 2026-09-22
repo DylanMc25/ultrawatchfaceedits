@@ -1,0 +1,63 @@
+# Samsung forecast integration preview
+
+This preview reads Samsung Weather's saved forecast through its existing user-granted weather permission. It does not contact a replacement weather service, copy Samsung artwork, or modify Samsung's apps. Matching is the requirement; actual access and matching values on the physical watch are not yet verified.
+
+## Install one APK on Wear OS 6
+
+Download `weatherbridge-debug.apk` from the **samsung-forecast-preview** artifact in the **Samsung forecast preview** GitHub workflow. The APK contains the weather setup app, a normal selectable forecast complication, and a separately signed/validated WFF face. Do not install the `androidTest` APK or the AAB on your watch.
+
+With the watch already connected in PowerShell:
+
+```powershell
+& $adb -s $watchAddress install -r "$env:USERPROFILE\Downloads\weatherbridge-debug.apk"
+& $adb -s $watchAddress shell am start -n com.example.ultrainfoboard.bridge/.SetupActivity
+```
+
+The earlier `com.example.ultrainfoboard` face stays installed. The preview host is `com.example.ultrainfoboard.bridge`; its bundled face is `com.example.ultrainfoboard.bridge.watchfacepush.board`. These are separate installed packages behind the one downloaded APK. Old face settings are not automatically migrated to the new package.
+
+On the watch:
+
+1. In **Ultra Info Board Weather**, tap **Allow weather access** and respond to Samsung's system permission prompt.
+2. Tap **Read saved forecast**. The app shows the selected city, current reading, four hourly entries and saved time. Everything stays on the watch; no coordinates or raw provider records are logged or uploaded.
+3. Tap **Open Samsung Weather**. Compare the same location, units, current temperature, forecast hours and temperatures. Refresh Samsung Weather, then return and read again.
+4. Select the newly bundled **Ultra Info Board** in the watch-face picker. If it is missing, return to the app and tap **Install or update watch face**. The bottom rectangle defaults to **Samsung hourly forecast**.
+5. Tap the left, middle and right of the rectangle: each should open Samsung Weather after access is granted. When access is missing, the forecast provider opens its permission setup instead.
+6. In Customize → Complications, replace the rectangle with another installed compatible provider. Its own content and tap should take over. Switch back to **Samsung hourly forecast** to restore the forecast.
+
+If the preview's signature conflicts with a previous build, uninstall **only the preview host and bundled face** before installing; doing so resets their settings. Do not uninstall Samsung Weather. GitHub builds cache preview signing keys to reduce these conflicts, but cache loss or switching between locally signed and CI builds can still change debug signatures. Production signing is a separate release requirement.
+
+## Report these outcomes
+
+| Check | Required evidence | Current status |
+| --- | --- | --- |
+| Permission | A normal system prompt grants weather access to the independently signed app | Pending physical watch |
+| Data | Same Samsung selected city, unit, current value, four times and temperatures | Pending physical watch |
+| Native behavior | Hour rollover, midnight/noon, day/night conditions, favorite city/unit changes | Adapter fixture tests pass; physical comparison pending |
+| Refresh | Samsung app refresh reaches the provider; measure delay with the face active | Pending; content notifications are not assumed reliable |
+| Permission denied/revoked | Honest unavailable state, setup tap, no manufactured forecast | Missing-provider emulator test added; physical denial/revocation pending |
+| Replaceability/taps | Another provider replaces the entire rectangle and its tap | Pending on bundled face |
+| Install/update | One host install adds face; host update updates same face and keeps choices | Official package validation passes; runtime checks pending |
+| Active/ambient | Forecast uses full rectangle; ambient retains black time/date only | Emulator captures configured; physical readability pending |
+
+Do not describe fixture images or stock-emulator results as Samsung integration. The `render-fixtures` PNGs intentionally identify their weather as test data. Stock Wear OS emulators do not contain the Samsung provider.
+
+## Build and verification
+
+Use Java 17, Android SDK 36 and the repository Gradle wrapper:
+
+```bash
+python3 tools/prepare_push_bundle.py
+./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug
+```
+
+Preparation must precede the host build: it creates the signed resource-only face, runs Google's official Push validator, and generates the exact asset/token pair. A failed preparation clears old generated bundle inputs. The original standalone face can still be built with `bash tools/validate.sh`.
+
+The preview AAB produced by CI is an **unsigned host test bundle containing a debug-signed embedded face**. It is not ready for Play release. Production requires separate persistent host/face release keys, rebuilding and validating the release-signed face with `prepare_push_bundle.py --variant release`, and appropriate host signing. No signing key is committed or included in download artifacts.
+
+## Behavior and remaining limits
+
+The adapter follows the observed Samsung favorite-location key, Celsius storage and rounding, raw condition mapping, location timezone and four-hour selection. It retains Samsung's last-four-cached-entries fallback and adds a visible saved-data indication when expired. It honors the requested device 12/24-hour format. Icons are original drawings representing the same conditions, not extracted Samsung artwork.
+
+The provider reads cached data on a 15-minute requested schedule; actual scheduling is controlled by Wear OS. It observes Samsung changes where delivered, and provides bounded future timeline images for hour/expiry changes without another query. After the timeline ends without a successful refresh, it shows unavailable instead of silently restoring an old fresh forecast. It does not force Samsung to fetch data. Instant notification delivery, watch battery cost, exact rendering and the OEM permission's behavior remain physical-test questions.
+
+The permission-based interface was observed in the supplied WeatherWatch APK, not a published stable Samsung SDK. Commercial support and behavior after Samsung updates remain unresolved release questions. [Contract evidence](SAMSUNG_WEATHER_CONTRACT.md), [packaging evidence](WATCH_FACE_PUSH_PLAN.md), and [full investigation](SAMSUNG_APK_FINDINGS.md) distinguish verified code observations from runtime assumptions.

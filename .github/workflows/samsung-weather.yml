@@ -1,0 +1,91 @@
+name: Samsung forecast preview
+on:
+  push:
+    branches: ['codex/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: samsung-forecast-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Keep preview signing consistent across workflow builds
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/pushface-debug.jks
+            ~/.android/debug.keystore
+          key: samsung-forecast-preview-signing-v1
+      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - name: Build and officially validate the bundled watch face
+        run: python3 tools/prepare_push_bundle.py
+      - name: Build forecast app and run contract tests
+        run: ./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:bundleRelease :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: samsung-forecast-preview
+          path: |
+            weatherbridge/build/outputs/apk/debug/*.apk
+            weatherbridge/build/outputs/apk/androidTest/debug/*.apk
+            weatherbridge/build/outputs/bundle/release/*.aab
+            weatherbridge/build/reports/
+            weatherbridge/build/test-results/
+            weatherbridge/build/generated/watchface/validation.json
+            weatherbridge/build/generated/watchface/validator.log
+  emulator:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        device: [wearos_small_round, wearos_large_round]
+    env:
+      ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android
+      ANDROID_EMULATOR_HOME: ${{ github.workspace }}/.cache/android
+      ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android/avd
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: samsung-forecast-preview
+          path: artifacts
+      - name: Install Wear OS 6 emulator
+        run: |
+          sdkmanager 'emulator' 'platform-tools' 'system-images;android-36;android-wear-signed;x86_64'
+          mkdir -p "$ANDROID_AVD_HOME"
+          echo no | avdmanager create avd -n forecast -k 'system-images;android-36;android-wear-signed;x86_64' -d '${{ matrix.device }}'
+          sed -i 's/hw.lcd.circular = false/hw.lcd.circular = true/' "$ANDROID_AVD_HOME/forecast.avd/config.ini"
+          sudo chmod 666 /dev/kvm
+      - name: Test install, unavailable weather and original forecast rendering
+        env:
+          APK: artifacts/outputs/apk/debug/weatherbridge-debug.apk
+          TEST_APK: artifacts/outputs/apk/androidTest/debug/weatherbridge-debug-androidTest.apk
+        run: |
+          python3 -m pip install Pillow==12.3.0
+          mkdir -p build/forecast-emulator
+          "$ANDROID_HOME/emulator/emulator" -avd forecast -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > build/forecast-emulator/emulator.log 2>&1 &
+          export EMULATOR_PID=$!
+          bash tools/weatherbridge_emulator_smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: samsung-forecast-emulator-${{ matrix.device }}
+          path: build/forecast-emulator/

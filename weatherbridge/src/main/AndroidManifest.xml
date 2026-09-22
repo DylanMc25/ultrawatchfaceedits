@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
+    <uses-permission android:name="com.samsung.android.watch.weather.provider.permission.READ_DANGEROUS_PROVIDER" />
+    <uses-permission android:name="com.google.wear.permission.PUSH_WATCH_FACES" />
+    <queries>
+        <package android:name="com.samsung.android.watch.weather" />
+        <provider android:authorities="com.samsung.android.watch.weather.provider.level.dangerous" />
+    </queries>
+    <application android:allowBackup="false" android:label="Ultra Info Board Weather" android:icon="@mipmap/ic_launcher"
+        android:theme="@android:style/Theme.Material.NoActionBar" android:supportsRtl="true">
+        <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
+        <meta-data android:name="com.google.android.wearable.marketplace.DEFAULT_WATCHFACE_VALIDATION_TOKEN"
+            android:value="@string/default_wf_token" />
+        <activity android:name=".SetupActivity" android:exported="true" android:taskAffinity="">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name=".SamsungForecastService" android:exported="true"
+            android:label="Samsung hourly forecast"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+            <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="SMALL_IMAGE" />
+            <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="900" />
+        </service>
+        <receiver android:name=".AppUpdatedReceiver" android:exported="false">
+            <intent-filter><action android:name="android.intent.action.MY_PACKAGE_REPLACED" /></intent-filter>
+        </receiver>
+    </application>
+</manifest>

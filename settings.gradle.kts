@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UltraInfoBoard"
 include(":app")
+include(":weatherbridge")
+include(":pushface")
