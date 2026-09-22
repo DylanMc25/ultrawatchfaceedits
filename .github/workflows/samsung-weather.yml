@@ -58,6 +58,8 @@ jobs:
       ANDROID_USER_HOME: ${{ github.workspace }}/.cache/android
       ANDROID_EMULATOR_HOME: ${{ github.workspace }}/.cache/android
       ANDROID_AVD_HOME: ${{ github.workspace }}/.cache/android/avd
+      ADB_VENDOR_KEYS: ${{ github.workspace }}/.cache/android/adbkey
+      ANDROID_SERIAL: emulator-5554
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -85,7 +87,17 @@ jobs:
         run: |
           python3 -m pip install Pillow==12.3.0
           mkdir -p build/forecast-emulator
-          "$ANDROID_HOME/emulator/emulator" -avd forecast -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > build/forecast-emulator/emulator.log 2>&1 &
+          # The signed API 36 image authenticates ADB. Its emulator-injected public
+          # key and the already-running ADB server must use the same private key.
+          mkdir -p "$ANDROID_USER_HOME"
+          timeout 15s adb kill-server
+          if [[ ! -s "$ADB_VENDOR_KEYS" ]]; then timeout 15s adb keygen "$ADB_VENDOR_KEYS"; fi
+          timeout 15s adb pubkey "$ADB_VENDOR_KEYS" > "$ADB_VENDOR_KEYS.pub"
+          chmod 600 "$ADB_VENDOR_KEYS"
+          chmod 644 "$ADB_VENDOR_KEYS.pub"
+          sha256sum "$ADB_VENDOR_KEYS.pub" > build/forecast-emulator/adb-public-key-sha256.txt
+          timeout 15s adb start-server
+          "$ANDROID_HOME/emulator/emulator" -avd forecast -port 5554 -no-window -no-audio -no-snapshot -no-boot-anim -no-metrics -gpu swiftshader_indirect > build/forecast-emulator/emulator.log 2>&1 &
           export EMULATOR_PID=$!
           bash tools/weatherbridge_emulator_smoke.sh
       - uses: actions/upload-artifact@v4
