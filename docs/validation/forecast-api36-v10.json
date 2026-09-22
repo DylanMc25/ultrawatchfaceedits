@@ -1,0 +1,119 @@
+{
+  "workflow_run": 35677889561,
+  "source_commit": "e9fe68d",
+  "preview_version_code": 10,
+  "preview_version_name": "0.2.0-preview.3",
+  "scope": "Native Wear OS 6 normal provider selection and fully visible Ultra Forecast title; physical Samsung editor remains unresolved",
+  "devices": {
+    "small": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Alarm"
+          },
+          {
+            "tap": "alarm-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{171106459 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{22574539 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{36514057 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{61728030 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{61728030 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{61728030 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Samsung hourly forecast"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 5432,
+        "lit_percent": 4.6902,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:.......\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 0.595\n\nOK (8 tests)",
+      "picker_title_visual_review": "Ultra Forecast is fully visible without ellipsis"
+    },
+    "large": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Alarm"
+          },
+          {
+            "tap": "alarm-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{37264793 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{66988154 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{125385855 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{224142556 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{224142556 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{224142556 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Samsung hourly forecast"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 8439,
+        "lit_percent": 5.2127,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:.......\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 0.66\n\nOK (8 tests)",
+      "picker_title_visual_review": "Ultra Forecast is fully visible without ellipsis"
+    }
+  }
+}

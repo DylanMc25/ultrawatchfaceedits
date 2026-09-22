@@ -6,6 +6,8 @@ This preview reads Samsung Weather's saved forecast through its existing user-gr
 
 Download `weatherbridge-debug.apk` from the **samsung-forecast-preview** artifact in the **Samsung forecast preview** GitHub workflow. The APK contains the weather setup app, a normal selectable forecast complication, and a separately signed/validated WFF face. Do not install the `androidTest` APK or the AAB on your watch.
 
+The reviewed version 10 build is [run 35677889561](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35677889561), source `e9fe68d`. Build/validation and both stock Wear OS 6 editor tests pass. It remains a preview: the Samsung-specific selection report still needs checking when physical testing resumes.
+
 With the watch already connected in PowerShell:
 
 ```powershell
@@ -37,7 +39,7 @@ If the preview's signature conflicts with a previous build, uninstall **only the
 | Permission denied/revoked | Honest unavailable state, setup tap, no manufactured forecast | Missing-provider emulator test added; physical denial/revocation pending |
 | Replaceability/taps | Another provider replaces the entire rectangle and its tap | Physical forecast display and Samsung Weather tap confirmed; user reports normal selection still does not work. API 36 small/large native-picker round trips pass in run 35677046105; Samsung customization unresolved |
 | Install/update | One host install adds face; host update updates same face and keeps choices | Physical install and face selection work; exact automatic-vs-setup install path and upgrades not separately verified |
-| Active/ambient | Forecast uses full rectangle; ambient retains black time/date only | API 36 active/ambient captures reviewed; approximately 4.8–4.9% lit in tested ambient captures. Physical readability pending |
+| Active/ambient | Forecast uses full rectangle; ambient retains black time/date only | Version 10 API 36 active/ambient captures reviewed; 4.6902% small / 5.2127% large lit in tested ambient captures. Physical readability pending |
 
 Do not describe fixture images or stock-emulator results as Samsung integration. The `render-fixtures` PNGs intentionally identify their weather as test data. Stock Wear OS emulators do not contain the Samsung provider.
 
@@ -54,6 +56,8 @@ The first naming attempt in version 9, **Ultra Info Board Forecast**, was visibl
 `tools/test_forecast_editor.py` exercises the actual native editor on disposable API 36 emulators. It verifies the active pushed package, opens the rectangle's normal provider picker, selects Alarm, reopens the editor to check persistence, checks taps across the rectangle, opens setup and verifies Alarm remains selected, then finds and restores **Samsung hourly forecast** through the picker. With Samsung absent, the restored provider should open setup. Screenshots, UI trees, provider registration and activity evidence are retained, including on failure. This does not establish behavior in Samsung's watch or phone editors.
 
 [Run 35677046105](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35677046105), source `b864c30` / version 9, passes that entire sequence on both 384 px and 454 px emulators. Reviewed captures show **Samsung hourly forecast** under **Ultra Info Board Weather** in the ordinary provider list, Alarm occupying the rectangle after replacement, and the forecast restored. All three taps open the chosen provider's destination. Samsung's physical picker issue remains unresolved despite this stock-platform success.
+
+Version 10 repeats all those checks successfully in run **35677889561**. Reviewed picker captures show the complete **Ultra Forecast** name on both display sizes. [Saved results and screenshots](VALIDATION.md) retain the exact source versions and separate emulator evidence from the physical report.
 
 The first API 36 CI attempts stalled with an unauthorized ADB connection before reaching installation. The test setup now provisions one consistent emulator/server key and fails with bounded diagnostics instead of hanging. Those earlier runs are not visual or editor validation.
 

@@ -42,7 +42,12 @@ This run did **not** exercise ordinary provider selection, replacing the rectang
 ![Rectangle assigned to Alarm in the normal editor](previews/forecast/api36-large-alarm-selected.png)
 ![Forecast restored through the normal editor](previews/forecast/api36-large-forecast-restored.png)
 
-The same captures exposed a presentation defect: **Ultra Info Board Forecast** was truncated to **Ultra Info Boa…**, hiding the new name's distinguishing word. Version 10 shortens the picker label to **Ultra Forecast** without changing the package, slots, data source or selection logic. Its updated picker capture is a separate validation item. The physical Samsung editor issue remains unresolved even though the ordinary stock Wear OS editor passes.
+The same captures exposed a presentation defect: **Ultra Info Board Forecast** was truncated to **Ultra Info Boa…**, hiding the new name's distinguishing word. Version 10 shortens the picker label to **Ultra Forecast** without changing the package, slots, data source or selection logic. The physical Samsung editor issue remains unresolved even though the ordinary stock Wear OS editor passes.
+
+**Final version 10 confirmation:** [run 35677889561](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35677889561), source `e9fe68d`, passed the build and both emulator jobs. Both complete native selection/replacement/restoration tests pass again, as do eight Android tests per device and 28 JVM tests. The full **Ultra Forecast** title is visibly readable on both round pickers without an ellipsis. Final ambient captures are DOZE, **5.2127%** large and **4.6902%** small, below 15%. See [version 10 results](validation/forecast-api36-v10.json), [large active](previews/forecast/api36-large-active-v10.png), [small active](previews/forecast/api36-small-active-v10.png), [large ambient](previews/forecast/api36-large-ambient-v10.png), and [small ambient](previews/forecast/api36-small-ambient-v10.png).
+
+![Version 10 small round picker: full Ultra Forecast name](previews/forecast/api36-small-picker-name-v10.png)
+![Version 10 large round picker: full Ultra Forecast name](previews/forecast/api36-large-picker-name-v10.png)
 
 ### Original standalone layout regression
 
@@ -62,7 +67,7 @@ These captured ambient states are below the documented 15% limit; they do not co
 
 ### Remaining acceptance checks
 
-- Confirm the normal editor flow on the Galaxy Watch when physical testing resumes; stock API 36 provider replacement/restoration now passes. Review the shortened name in version 10's picker capture.
+- Confirm the normal editor flow on the Galaxy Watch when physical testing resumes; stock API 36 provider replacement/restoration and version 10's shortened picker name now pass.
 - Compare the forecast against Samsung Weather across location, units, hourly rollover, stale/missing data and permission changes. Confirm one whole-area Samsung Weather tap and provider-owned taps after replacement.
 - Check selections across Setup launches, consistently signed upgrades and reboot. An uninstall/reinstall is not a settings-preservation test.
 - Review physical readability, system overlays, AOD and battery use. Confirm Samsung interface support/commercial suitability before release.
