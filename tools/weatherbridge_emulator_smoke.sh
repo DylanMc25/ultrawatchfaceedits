@@ -91,6 +91,9 @@ sleep 3
 adb exec-out screencap -p > "$report/active.png"
 adb shell dumpsys wallpaper > "$report/wallpaper.txt"
 python3 tools/check_capture.py "$report/active.png"
+stage 'Testing native rectangle selection, replacement and restoration'
+timeout 600s python3 tools/test_forecast_editor.py
+stage 'Native rectangle replacement and restoration passed'
 adb shell settings put global always_on_display_constants 'enabled=true'
 adb shell settings put secure doze_enabled 1
 adb shell svc power stayon false

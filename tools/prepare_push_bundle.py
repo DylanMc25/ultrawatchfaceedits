@@ -21,6 +21,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 HOST_PACKAGE = "com.example.ultrainfoboard.bridge"
 FACE_PACKAGE = HOST_PACKAGE + ".watchfacepush.board"
+FACE_LABEL = "Ultra Info Board Forecast"
 FORECAST_PROVIDER = HOST_PACKAGE + "/" + HOST_PACKAGE + ".SamsungForecastService"
 VALIDATOR_VERSION = "1.1.0-alpha01"
 VALIDATOR_SHA256 = "04dc20a0994df3eaebf025e107f7589c147b2ce8a2c628745e01a5c0a63fe4dd"
@@ -77,6 +78,19 @@ def prepare_resources():
     if count != 1:
         raise RuntimeError("Could not size the bottom rectangle image exactly once")
     watchface.write_text(replaced)
+    # Keep the pushed face distinguishable from the older development face when both are installed.
+    strings_file = destination / "values/strings.xml"
+    strings = strings_file.read_text()
+    named_strings = ET.fromstring(strings).findall("string[@name='app_name']")
+    if len(named_strings) != 1:
+        raise RuntimeError("Expected one default watch-face app_name resource")
+    renamed, count = re.subn(
+        r'(<string\b[^>]*\bname="app_name"[^>]*>).*?(</string>)',
+        lambda match: match.group(1) + FACE_LABEL + match.group(2), strings, flags=re.S,
+    )
+    if count != 1:
+        raise RuntimeError("Could not distinguish the pushed watch-face label")
+    strings_file.write_text(renamed)
     return destination
 
 
@@ -136,8 +150,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=("debug", "release"), default="debug")
     parser.add_argument("--validator", help="Existing official validator-push-cli JAR")
-    parser.add_argument("--version-code", type=int, default=8)
-    parser.add_argument("--version-name", default="0.2.0-preview.1")
+    parser.add_argument("--version-code", type=int, default=9)
+    parser.add_argument("--version-name", default="0.2.0-preview.2")
     args = parser.parse_args()
     if args.version_code < 1:
         parser.error("--version-code must be positive")

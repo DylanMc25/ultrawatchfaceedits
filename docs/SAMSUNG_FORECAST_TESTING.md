@@ -1,6 +1,6 @@
 # Samsung forecast integration preview
 
-This preview reads Samsung Weather's saved forecast through its existing user-granted weather permission. It does not contact a replacement weather service, copy Samsung artwork, or modify Samsung's apps. On 2026-09-21 (user's local date), the user installed the CI preview on the API 36 Galaxy Watch and reported that its forecast appeared correct. They then confirmed the forecast appears correctly in the face's rectangle and tapping it opens Samsung Weather. These are successful physical data/display/tap checks; detailed format/refresh and replacement tests remain in progress.
+This preview reads Samsung Weather's saved forecast through its existing user-granted weather permission. It does not contact a replacement weather service, copy Samsung artwork, or modify Samsung's apps. On 2026-09-21 (user's local date), the user installed the CI preview on the API 36 Galaxy Watch and reported that its forecast appeared correct. They then confirmed the forecast appears correctly in the face's rectangle and tapping it opens Samsung Weather. They subsequently reported that it still was not selectable like a normal complication. Data/display/tap checks succeeded; the customization requirement remains unresolved on Samsung hardware. Physical testing is paused at the user's request for the night; no additional watch access is needed for the unattended work below.
 
 ## Install one APK on Wear OS 6
 
@@ -20,9 +20,9 @@ On the watch:
 1. In **Ultra Info Board Weather**, tap **Allow weather access** and respond to Samsung's system permission prompt.
 2. Tap **Read saved forecast**. The app shows the selected city, current reading, four hourly entries and saved time. Everything stays on the watch; no coordinates or raw provider records are logged or uploaded.
 3. Tap **Open Samsung Weather**. Compare the same location, units, current temperature, forecast hours and temperatures. Refresh Samsung Weather, then return and read again.
-4. Select the newly bundled **Ultra Info Board** in the watch-face picker. If it is missing, return to the app and tap **Install or update watch face**. The bottom rectangle defaults to **Samsung hourly forecast**.
+4. Select the newly bundled **Ultra Info Board Forecast** in the watch-face picker (preview version 9 onward). This distinct name separates it from the older **Ultra Info Board** face. If it is missing, return to the app and tap **Install or update watch face**. The bottom rectangle defaults to **Samsung hourly forecast**.
 5. Tap the left, middle and right of the rectangle: each should open Samsung Weather after access is granted. When access is missing, the forecast provider opens its permission setup instead.
-6. In Customize → Complications, replace the rectangle with another installed compatible provider. Its own content and tap should take over. Switch back to **Samsung hourly forecast** to restore the forecast.
+6. In Customize → Complications → Bottom rectangle, replace the rectangle with another installed compatible provider. Its own content and tap should take over. Restore **Samsung hourly forecast**, listed under **Ultra Info Board Weather** if the picker groups sources by app. Samsung's ordinary **Weather** source is a different provider and supplies current conditions, not this hourly image.
 
 If the preview's signature conflicts with a previous build, uninstall **only the preview host and bundled face** before installing; doing so resets their settings. Do not uninstall Samsung Weather. GitHub builds cache preview signing keys to reduce these conflicts, but cache loss or switching between locally signed and CI builds can still change debug signatures. Production signing is a separate release requirement.
 
@@ -35,11 +35,21 @@ If the preview's signature conflicts with a previous build, uninstall **only the
 | Native behavior | Hour rollover, midnight/noon, day/night conditions, favorite city/unit changes | Adapter fixture tests pass; physical comparison pending |
 | Refresh | Samsung app refresh reaches the provider; measure delay with the face active | Pending; content notifications are not assumed reliable |
 | Permission denied/revoked | Honest unavailable state, setup tap, no manufactured forecast | Missing-provider emulator test added; physical denial/revocation pending |
-| Replaceability/taps | Another provider replaces the entire rectangle and its tap | Physical forecast display and Samsung Weather tap confirmed; replacement/switch-back pending |
+| Replaceability/taps | Another provider replaces the entire rectangle and its tap | Physical forecast display and Samsung Weather tap confirmed; user reports normal selection still does not work. New native-picker emulator test pending; Samsung customization unresolved |
 | Install/update | One host install adds face; host update updates same face and keeps choices | Physical install and face selection work; exact automatic-vs-setup install path and upgrades not separately verified |
 | Active/ambient | Forecast uses full rectangle; ambient retains black time/date only | Emulator captures configured; physical readability pending |
 
 Do not describe fixture images or stock-emulator results as Samsung integration. The `render-fixtures` PNGs intentionally identify their weather as test data. Stock Wear OS emulators do not contain the Samsung provider.
+
+## Customization investigation
+
+The bundled face declares slot 7 as customizable and supports `SMALL_IMAGE` along with text/progress/image alternatives. The forecast service declares the standard complication action, binding permission and `SMALL_IMAGE` type. Its data source is not hidden or restricted to our own face. The [public registration and selection rules](https://developer.android.com/training/wearables/complications/exposing-data) permit this combination; a source being assigned by default does not establish that it is discoverable in every OEM editor.
+
+Version 9 adds a service-specific white icon, distinct face name and exact picker guidance. These are identification improvements, not a proven remedy for the reported Samsung selection problem. Its package identity and all seven slot IDs remain unchanged. Reopening setup skips installation when the installed face is current, and refreshing weather does not assign a provider. Google's [Push update contract](https://developer.android.com/reference/androidx/wear/watchfacepush/WatchFacePushManager) preserves configuration for updates using the same face package; actual upgrade retention still needs testing.
+
+`tools/test_forecast_editor.py` exercises the actual native editor on disposable API 36 emulators. It verifies the active pushed package, opens the rectangle's normal provider picker, selects Alarm, reopens the editor to check persistence, checks taps across the rectangle, opens setup and verifies Alarm remains selected, then finds and restores **Samsung hourly forecast** through the picker. With Samsung absent, the restored provider should open setup. Screenshots, UI trees, provider registration and activity evidence are retained, including on failure. This does not establish behavior in Samsung's watch or phone editors.
+
+The first API 36 CI attempts stalled with an unauthorized ADB connection before reaching installation. The test setup now provisions one consistent emulator/server key and fails with bounded diagnostics instead of hanging. Those earlier runs are not visual or editor validation.
 
 ## Build and verification
 

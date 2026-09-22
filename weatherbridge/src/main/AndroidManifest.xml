@@ -7,7 +7,7 @@
         <package android:name="com.samsung.android.watch.weather" />
         <provider android:authorities="com.samsung.android.watch.weather.provider.level.dangerous" />
     </queries>
-    <application android:allowBackup="false" android:label="Ultra Info Board Weather" android:icon="@mipmap/ic_launcher"
+    <application android:allowBackup="false" android:label="@string/app_name" android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.Material.NoActionBar" android:supportsRtl="true">
         <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
         <meta-data android:name="com.google.android.wearable.marketplace.DEFAULT_WATCHFACE_VALIDATION_TOKEN"
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <service android:name=".SamsungForecastService" android:exported="true"
-            android:label="Samsung hourly forecast"
+            android:label="@string/forecast_complication_name" android:icon="@drawable/ic_forecast_complication"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />

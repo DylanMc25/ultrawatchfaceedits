@@ -46,7 +46,10 @@ class PushBundleTests(unittest.TestCase):
         self.xml_file = self.source / "raw/watchface.xml"
         self.xml_file.write_text(fixture_xml())
         (self.source / "drawable/preview.png").write_bytes(b"unchanged image bytes")
-        (self.source / "values/strings.xml").write_text('<resources><string name="name">Board</string></resources>')
+        (self.source / "values/strings.xml").write_text(
+            '<resources><string name="app_name">Ultra Info Board</string>'
+            '<string name="slot_rectangle">Bottom rectangle</string></resources>'
+        )
         root_patch = patch.object(PREPARE, "ROOT", self.root)
         network_patch = patch.object(
             PREPARE.urllib.request, "urlretrieve", side_effect=AssertionError("Tests must not download")
@@ -59,7 +62,7 @@ class PushBundleTests(unittest.TestCase):
     def snapshot(self, path):
         return {file.relative_to(path): file.read_bytes() for file in path.rglob("*") if file.is_file()}
 
-    def test_only_bottom_provider_and_image_change(self):
+    def test_only_bottom_provider_image_and_face_label_change(self):
         original_files = self.snapshot(self.source)
         destination = PREPARE.prepare_resources()
         generated_files = self.snapshot(destination)
@@ -67,8 +70,14 @@ class PushBundleTests(unittest.TestCase):
         self.assertEqual(set(generated_files), set(original_files))
         self.assertEqual(
             {name for name in generated_files if generated_files[name] != original_files[name]},
-            {Path("raw/watchface.xml")},
+            {Path("raw/watchface.xml"), Path("values/strings.xml")},
         )
+        original_strings = ET.fromstring(original_files[Path("values/strings.xml")])
+        generated_strings = ET.fromstring(generated_files[Path("values/strings.xml")])
+        app_name = generated_strings.find("string[@name='app_name']")
+        self.assertEqual(app_name.text, "Ultra Info Board Forecast")
+        app_name.text = original_strings.find("string[@name='app_name']").text
+        self.assertEqual(ET.tostring(generated_strings), ET.tostring(original_strings))
 
         original = ET.fromstring(original_files[Path("raw/watchface.xml")])
         generated = ET.fromstring(generated_files[Path("raw/watchface.xml")])

@@ -2,7 +2,7 @@
 
 A Galaxy Watch face with a blue gradient, large stacked time and seven editable complication areas. The new **Wear OS 6 Samsung forecast preview** bundles the resource-only face, permission setup and an interchangeable hourly weather provider in one APK.
 
-**Start with the [Samsung forecast installation and comparison guide](docs/SAMSUNG_FORECAST_TESTING.md).** Download `weatherbridge-debug.apk` from the `samsung-forecast-preview` artifact in [this workflow](https://github.com/DylanMc25/ultrawatchfaceedits/actions/workflows/samsung-weather.yml). The physical Galaxy Watch now reads Samsung's forecast in the setup app, and the user reports that it appears correct. On-face interactions and detailed comparisons are still being checked. This is a development preview, not a store release.
+**Start with the [Samsung forecast installation and comparison guide](docs/SAMSUNG_FORECAST_TESTING.md).** Download `weatherbridge-debug.apk` from the `samsung-forecast-preview` artifact in [this workflow](https://github.com/DylanMc25/ultrawatchfaceedits/actions/workflows/samsung-weather.yml). The user confirmed the actual forecast appears in the face and tapping opens Samsung Weather, but reports it still is not selectable like a normal complication. Customization is under investigation. Version 9 names the bundled face **Ultra Info Board Forecast** to distinguish it from older copies. This is a development preview, not a store release.
 
 The original standalone `:app` remains available on Wear OS 5+ as `com.example.ultrainfoboard`. Its layout and installation notes below describe version 0.1.6; the new preview uses the same layout with its own default forecast provider. Final branding, package identity and release signing remain release prerequisites.
 
@@ -26,7 +26,7 @@ Samsung's **public Weather complication** is the preferred default when installe
 
 The physical 0.1.5 test reported `Weather —` while its tap correctly opened Samsung Weather with location and forecast data. That establishes a native weather availability problem in our face, not an empty Samsung Weather app. Version 0.1.6 uses provider data instead; its Samsung data/taps still require a physical check. See [research and compatibility](docs/SAMSUNG_WEATHER.md).
 
-**Samsung forecast preview:** a new Wear OS 6 app bundles the face and a replaceable hourly forecast complication that reads Samsung Weather's cache with the user's permission. It follows Samsung's saved location, units and hourly selection, and opens Samsung Weather when tapped. [Install and test the preview](docs/SAMSUNG_FORECAST_TESTING.md). Permission access and matching readings on the physical watch remain unverified; this is not a production-ready Samsung integration. The original `:app` build above remains available while the new `:weatherbridge` / `:pushface` path is tested.
+**Samsung forecast preview:** a new Wear OS 6 app bundles the face and an hourly forecast complication that reads Samsung Weather's cache with the user's permission. It follows Samsung's saved location, units and hourly selection, and opens Samsung Weather when tapped. [Install and test the preview](docs/SAMSUNG_FORECAST_TESTING.md). Physical forecast display/tap succeeded; normal selection and detailed comparison remain unresolved. The original `:app` build above remains available while the new `:weatherbridge` / `:pushface` path is tested.
 
 ## Build and install
 

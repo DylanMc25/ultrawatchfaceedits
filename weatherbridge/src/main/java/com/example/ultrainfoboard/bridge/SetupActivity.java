@@ -65,6 +65,9 @@ public final class SetupActivity extends Activity {
                 if (!isDestroyed()) status.setText(message);
             });
         }));
+        content.addView(label(getString(R.string.forecast_picker_help,
+                getString(R.string.forecast_face_name), getString(R.string.app_name),
+                getString(R.string.forecast_complication_name)), 13));
         detail = label("", 13);
         content.addView(detail);
         setContentView(scroll);

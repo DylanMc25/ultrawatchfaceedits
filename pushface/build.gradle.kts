@@ -10,8 +10,8 @@ android {
         applicationId = "com.example.ultrainfoboard.bridge.watchfacepush.board"
         minSdk = 36
         targetSdk = 36
-        versionCode = providers.gradleProperty("pushVersionCode").orElse("8").get().toInt()
-        versionName = providers.gradleProperty("pushVersionName").orElse("0.2.0-preview.1").get()
+        versionCode = providers.gradleProperty("pushVersionCode").orElse("9").get().toInt()
+        versionName = providers.gradleProperty("pushVersionName").orElse("0.2.0-preview.2").get()
     }
 
     sourceSets.getByName("main").res.setSrcDirs(listOf(layout.buildDirectory.dir("generated/watchface/res")))

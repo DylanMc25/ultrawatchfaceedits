@@ -83,7 +83,8 @@ public final class BundledFaceInstaller {
                 }
             }
             if (existing != null && existing.getVersionCode() >= versionCode) {
-                finish(true, "Watch face is ready. Select Ultra Info Board in your watch-face picker.");
+                finish(true, "Watch face is ready. Select " + context.getString(R.string.forecast_face_name)
+                        + " in your watch-face picker.");
                 return;
             }
             if (existing == null && response.getRemainingSlotCount() < 1) {
@@ -108,7 +109,8 @@ public final class BundledFaceInstaller {
                 if (existing == null) {
                     BundledFaceInstaller.<WatchFacePushManager.WatchFaceDetails>call(
                             continuation -> manager.addWatchFace(apkFd, token, continuation),
-                            details -> finish(true, "Watch face installed. Select Ultra Info Board in your watch-face picker."),
+                            details -> finish(true, "Watch face installed. Select "
+                                    + context.getString(R.string.forecast_face_name) + " in your watch-face picker."),
                             this::fail);
                 } else {
                     // The slot was read for this operation; it is never persisted or reused later.
