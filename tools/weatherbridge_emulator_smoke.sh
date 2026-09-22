@@ -8,17 +8,23 @@ pkg=com.example.ultrainfoboard.bridge
 face="$pkg.watchfacepush.board"
 apk="${APK:-weatherbridge/build/outputs/apk/debug/weatherbridge-debug.apk}"
 tests="${TEST_APK:-weatherbridge/build/outputs/apk/androidTest/debug/weatherbridge-debug-androidTest.apk}"
-trap 'adb logcat -d > "$report/logcat.txt" 2>/dev/null || true' EXIT
+forecast_adb="$(command -v adb)"
+adb() { timeout 60s "$forecast_adb" "$@"; }
+stage() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$1" | tee -a "$report/progress.txt"; }
+trap 'timeout 15s "$forecast_adb" logcat -d > "$report/logcat.txt" 2>/dev/null || true' EXIT
+stage 'Waiting for Wear OS boot'
 booted=false
-for attempt in $(seq 1 120); do
+boot_deadline=$((SECONDS + 600))
+while ((SECONDS < boot_deadline)); do
     if [[ -n "${EMULATOR_PID:-}" ]] && ! kill -0 "$EMULATOR_PID" 2>/dev/null; then exit 1; fi
-    if [[ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; then
+    if [[ "$(timeout 5s "$forecast_adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; then
         booted=true
         break
     fi
     sleep 5
 done
 [[ "$booted" == true ]]
+stage 'Wear OS booted'
 adb shell getprop > "$report/device-properties.txt"
 sleep 30
 adb logcat -c
@@ -27,16 +33,20 @@ adb shell settings put secure user_setup_complete 1
 adb shell settings put system screen_off_timeout 1800000
 adb shell svc power stayon true
 adb shell input keyevent KEYCODE_WAKEUP
-adb install -r "$apk"
+stage 'Installing host APK'
+timeout 180s "$forecast_adb" install -r "$apk" | tee "$report/install.txt"
+stage 'Host APK installed'
 sleep 15
 adb shell pm path "$face" > "$report/default-face-before-launch.txt" || true
-adb install -r -t "$tests"
-adb shell am instrument -w "$pkg.test/androidx.test.runner.AndroidJUnitRunner" | tee "$report/instrumentation.txt"
+timeout 180s "$forecast_adb" install -r -t "$tests"
+stage 'Running Android rendering tests'
+timeout 180s "$forecast_adb" shell am instrument -w "$pkg.test/androidx.test.runner.AndroidJUnitRunner" | tee "$report/instrumentation.txt"
 grep -q 'OK (' "$report/instrumentation.txt"
 ! grep -qE 'FAILURES|INSTRUMENTATION_FAILED|Process crashed' "$report/instrumentation.txt"
 adb exec-out run-as "$pkg" tar -cf - files/render-fixtures > "$report/fixtures.tar"
 tar -xf "$report/fixtures.tar" -C "$report"
 adb shell am start -n "$pkg/.SetupActivity" > "$report/setup-launch.txt"
+stage 'Setup app started'
 sleep 10
 adb exec-out screencap -p > "$report/setup-samsung-unavailable.png"
 installed=false
@@ -45,6 +55,7 @@ for attempt in $(seq 1 12); do
     sleep 5
 done
 [[ "$installed" == true ]]
+stage 'Bundled watch face found'
 adb shell pm path "$face" > "$report/installed-face.txt"
 adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
     --es operation set-watchface --es watchFaceId "$face" > "$report/activation.txt"

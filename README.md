@@ -1,8 +1,10 @@
 # Ultra Info Board
 
-A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, seven editable complication areas, including a compact bottom rectangle. The layout prioritizes large time and provider readings on round displays.
+A Galaxy Watch face with a blue gradient, large stacked time and seven editable complication areas. The new **Wear OS 6 Samsung forecast preview** bundles the resource-only face, permission setup and an interchangeable hourly weather provider in one APK.
 
-**Development milestone, not a store release.** Requires Wear OS 5 (API 34) or later. The working package is `com.example.ultrainfoboard`; choose the permanent publisher/package identity before the first store upload.
+**Start with the [Samsung forecast installation and comparison guide](docs/SAMSUNG_FORECAST_TESTING.md).** Download `weatherbridge-debug.apk` from the `samsung-forecast-preview` artifact in [this workflow](https://github.com/DylanMc25/ultrawatchfaceedits/actions/workflows/samsung-weather.yml). The physical Galaxy Watch now reads Samsung's forecast in the setup app, and the user reports that it appears correct. On-face interactions and detailed comparisons are still being checked. This is a development preview, not a store release.
+
+The original standalone `:app` remains available on Wear OS 5+ as `com.example.ultrainfoboard`. Its layout and installation notes below describe version 0.1.6; the new preview uses the same layout with its own default forecast provider. Final branding, package identity and release signing remain release prerequisites.
 
 ![Illustrative provider layout](docs/previews/active-illustrative.png)
 

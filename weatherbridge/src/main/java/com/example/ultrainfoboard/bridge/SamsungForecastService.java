@@ -29,12 +29,10 @@ import androidx.wear.watchface.complications.datasource.TimeInterval;
 import androidx.wear.watchface.complications.datasource.TimelineEntry;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
@@ -98,26 +96,17 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
                 // The runtime advances these images at the hour boundary even if no poll arrives then.
                 List<TimelineEntry> timeline = new ArrayList<>();
                 if (result.state == SamsungWeatherReader.State.READY) {
-                    ZonedDateTime boundary = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS);
-                    TreeSet<Instant> points = new TreeSet<>();
                     long now = System.currentTimeMillis();
-                    points.add(Instant.ofEpochMilli(now));
-                    for (int i = 1; i <= 3; i++) points.add(boundary.plusHours(i).toInstant());
-                    Instant last = points.last();
                     List<Long> expirations = new ArrayList<>();
-                    expirations.add(result.snapshot.expiresAtMillis);
-                    for (SamsungWeatherContract.Hour hour : result.snapshot.hours) expirations.add(hour.expiresAtMillis);
-                    for (long expiry : expirations) {
-                        Instant at = Instant.ofEpochMilli(expiry);
-                        if (expiry > now && at.isBefore(last)) points.add(at);
+                    for (long sample : ForecastTimeline.samples(now, ZoneId.systemDefault())) {
+                        SamsungWeatherContract.Snapshot future = result.atTime(sample);
+                        expirations.add(future.expiresAtMillis);
+                        for (SamsungWeatherContract.Hour hour : future.hours) expirations.add(hour.expiresAtMillis);
                     }
-                    List<Instant> ordered = new ArrayList<>(points);
-                    for (int i = 0; i < ordered.size() - 1; i++) {
-                        Instant start = ordered.get(i);
-                        Instant end = ordered.get(i + 1);
-                        SamsungWeatherContract.Snapshot snapshot = result.atTime(
-                                start.toEpochMilli());
-                        timeline.add(new TimelineEntry(new TimeInterval(start, end), data(snapshot,
+                    for (ForecastTimeline.Interval interval : ForecastTimeline.plan(now, ZoneId.systemDefault(), expirations)) {
+                        SamsungWeatherContract.Snapshot snapshot = result.atTime(interval.start());
+                        timeline.add(new TimelineEntry(new TimeInterval(Instant.ofEpochMilli(interval.start()),
+                                Instant.ofEpochMilli(interval.end())), data(snapshot,
                                 result.detail, weatherTap())));
                     }
                     // If all future entries expire without an update, do not restore an old fresh image.
@@ -178,7 +167,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     private ComplicationData imageData(Bitmap source, String description, PendingIntent tap) {
-        // The physical slot is 262×60. Bound IPC memory, including the three timeline images.
+        // The physical slot is 262×60. At most seven timeline images plus one default stay below 512 KiB of pixels.
         Bitmap bitmap = Bitmap.createScaledBitmap(source, 262, 60, true);
         if (bitmap != source) source.recycle();
         SmallImage image = new SmallImage.Builder(Icon.createWithBitmap(bitmap), SmallImageType.PHOTO).build();

@@ -1,6 +1,6 @@
 # Samsung forecast integration preview
 
-This preview reads Samsung Weather's saved forecast through its existing user-granted weather permission. It does not contact a replacement weather service, copy Samsung artwork, or modify Samsung's apps. Matching is the requirement; actual access and matching values on the physical watch are not yet verified.
+This preview reads Samsung Weather's saved forecast through its existing user-granted weather permission. It does not contact a replacement weather service, copy Samsung artwork, or modify Samsung's apps. On 2026-09-21 (user's local date), the user installed the CI preview on the API 36 Galaxy Watch and reported that its forecast appeared correct. They then confirmed the forecast appears correctly in the face's rectangle and tapping it opens Samsung Weather. These are successful physical data/display/tap checks; detailed format/refresh and replacement tests remain in progress.
 
 ## Install one APK on Wear OS 6
 
@@ -30,13 +30,13 @@ If the preview's signature conflicts with a previous build, uninstall **only the
 
 | Check | Required evidence | Current status |
 | --- | --- | --- |
-| Permission | A normal system prompt grants weather access to the independently signed app | Pending physical watch |
-| Data | Same Samsung selected city, unit, current value, four times and temperatures | Pending physical watch |
+| Permission | A normal system prompt grants weather access to the independently signed app | Physical app displays real data; exact prompt behavior was not separately reported |
+| Data | Same Samsung selected city, unit, current value, four times and temperatures | User reports forecast appears correct; detailed field-by-field comparison pending |
 | Native behavior | Hour rollover, midnight/noon, day/night conditions, favorite city/unit changes | Adapter fixture tests pass; physical comparison pending |
 | Refresh | Samsung app refresh reaches the provider; measure delay with the face active | Pending; content notifications are not assumed reliable |
 | Permission denied/revoked | Honest unavailable state, setup tap, no manufactured forecast | Missing-provider emulator test added; physical denial/revocation pending |
-| Replaceability/taps | Another provider replaces the entire rectangle and its tap | Pending on bundled face |
-| Install/update | One host install adds face; host update updates same face and keeps choices | Official package validation passes; runtime checks pending |
+| Replaceability/taps | Another provider replaces the entire rectangle and its tap | Physical forecast display and Samsung Weather tap confirmed; replacement/switch-back pending |
+| Install/update | One host install adds face; host update updates same face and keeps choices | Physical install and face selection work; exact automatic-vs-setup install path and upgrades not separately verified |
 | Active/ambient | Forecast uses full rectangle; ambient retains black time/date only | Emulator captures configured; physical readability pending |
 
 Do not describe fixture images or stock-emulator results as Samsung integration. The `render-fixtures` PNGs intentionally identify their weather as test data. Stock Wear OS emulators do not contain the Samsung provider.

@@ -1,6 +1,6 @@
 # Samsung panel investigation and one-product packaging
 
-Investigation date: 2026-09-21. This is a research result, not a new implementation or a claim of successful physical integration. Application code is unchanged during this investigation.
+Investigation date: 2026-09-21. This report records the research that preceded implementation. A subsequent preview implements the permission-based alternative and one-product packaging. The user installed it on the physical API 36 Galaxy Watch and reported that the setup app's forecast appears correct. See [the device testing guide](SAMSUNG_FORECAST_TESTING.md) for confirmed and remaining checks; the historical unknowns below describe the original research stage.
 
 ## Conclusion
 
