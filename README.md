@@ -24,7 +24,7 @@ Samsung's **public Weather complication** is the preferred default when installe
 
 The physical 0.1.5 test reported `Weather —` while its tap correctly opened Samsung Weather with location and forecast data. That establishes a native weather availability problem in our face, not an empty Samsung Weather app. Version 0.1.6 uses provider data instead; its Samsung data/taps still require a physical check. See [research and compatibility](docs/SAMSUNG_WEATHER.md).
 
-**Investigation update:** Samsung helper access and the one-product/multiple-APK option are documented in [the APK findings](docs/SAMSUNG_APK_FINDINGS.md). The current standard-provider build is not a completed replacement for Samsung's rich forecast; application changes are paused while the supported architecture is resolved.
+**Investigation update:** Samsung helper access, the one-product/multiple-APK option, and a newly identified permission-based hourly provider are documented in [the APK findings](docs/SAMSUNG_APK_FINDINGS.md). The forecast must match Samsung Weather. The permission-based alternative remains untested on the watch; the current standard-provider build is not a completed replacement for Samsung's rich forecast. Application changes are paused while the supported architecture is resolved.
 
 ## Build and install
 

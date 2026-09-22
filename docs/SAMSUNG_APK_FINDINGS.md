@@ -4,9 +4,11 @@ Investigation date: 2026-09-21. This is a research result, not a new implementat
 
 ## Conclusion
 
+**Latest requirement and discovery:** the forecast must match Samsung Weather, and tapping must open Samsung Weather. An independent forecast feed does not satisfy this requirement. A follow-up inspection found a separate runtime-permission-protected Samsung Weather provider with an hourly query path; see **Permission-based alternative** below. The earlier conclusion about the helper's signature gate remains correct, but must not be generalized to every interface in WeatherWatch. This alternative is not yet physically tested or established as a supported production API.
+
 Ultra Info Board and Info Brick implement their rich rectangle as a curated Samsung panel with an internal renderer. Their hourly data comes through Samsung's helper/content-provider path, not the ordinary public Weather complication. The newly supplied helper checks the caller before returning data. An ordinary independently signed Play-installed app does not qualify on a production watch.
 
-The user's clarification permits multiple APKs behind one product/listing. Google's **Watch Face Push default-watch-face mechanism** offers a documented way to bundle a code-free WFF face and a Wear OS app containing complication providers. This is a viable architecture to investigate for our own interchangeable forecast complication on **Wear OS 6+**, with an independent authorized weather source. It does not unlock Samsung's private data.
+The user's clarification permits multiple APKs behind one product/listing. Google's **Watch Face Push default-watch-face mechanism** offers a documented way to bundle a code-free WFF face and a Wear OS app containing complication providers. This is a viable architecture to investigate for our own interchangeable forecast complication on **Wear OS 6+**. Packaging does not itself grant data access; the permission-based Samsung alternative below now takes priority over independent weather sources.
 
 ## Inputs and method
 
@@ -74,11 +76,11 @@ A potential independently licensed feed is MET Norway Locationforecast, which co
 ## Evidence needed before the next implementation
 
 1. The user returned **36** from `getprop ro.build.version.sdk` on 2026-09-21, confirming the OS/API baseline for Watch Face Push. Actual Push availability and installation behavior on that firmware still need a focused runtime check. No further OS-version guess is needed.
-2. Wear OS 6 minimum and one listing/multiple internal APKs are accepted. Select a weather source compatible with commercial distribution and operating costs; a paid weather contract or mandatory backend has not been authorized.
+2. Wear OS 6 minimum and one listing/multiple internal APKs are accepted. The user requires the same Samsung forecast, so independent weather feeds are no longer candidate substitutes. Investigate the permission-based alternative below before changing the application architecture.
 3. Build a bounded packaging/provider proof only after those decisions: fresh install, face automatically listed, setup, default provider, replacement by another provider, whole-area taps, provider update delivery, host/face upgrades and uninstall behavior. Label fixture data explicitly in any isolated test.
 4. Then implement real weather caching, units/time zones, stale/offline states and original chart artwork, and test on physical Galaxy Watch. Do not treat emulator fixtures as Samsung integration.
 
-The evidence supports a one-product **independent forecast complication** architecture. It does not support reusing Samsung's private hourly provider as the production solution.
+The evidence supports investigating a one-product forecast-complication architecture. Its data source is unresolved: the signature-restricted helper is unavailable to us, while the separate permission-based provider below needs device testing and support clarification.
 
 ## Required tap destination: Samsung Weather
 
@@ -88,4 +90,21 @@ The supplied WeatherWatch manifest declares an exported MAIN/LAUNCHER alias `com
 
 For our proposed bundled forecast provider, set its one tap action to the resolved Samsung Weather launcher. Check package availability and visibility and test the provider-owned PendingIntent on API 36; the old WFF Launch test does not establish that unimplemented PendingIntent path. Resolve the public launch entry rather than relying on private detail extras. Replacing the rectangle with another provider must restore that provider's own tap behavior; do not overlay a permanent Samsung launcher over every selection.
 
-An independently sourced forecast can therefore preserve the Samsung tap destination, but readings/location/refresh times may differ. No exact data match is promised. Native WFF weather remains a subscription-free avenue for diagnosing the earlier unavailable state, but it alone does not supply an interchangeable public forecast complication. Samsung's ordinary public Weather source remains an option for current conditions only. Exact matching of Samsung's private hourly output is not an established public option. The user has been asked whether identical forecast data is also required.
+An independently sourced forecast can therefore preserve the Samsung tap destination, but readings/location/refresh times may differ. The user has now explicitly required matching Samsung's forecast, excluding that substitution. Native WFF weather remains an avenue for diagnosing the earlier unavailable state, but it alone does not supply an interchangeable public forecast complication or promise identical Samsung readings. Samsung's ordinary public Weather source remains an option for current conditions only.
+
+## Permission-based alternative — new finding, untested on the watch
+
+The supplied WeatherWatch manifest also declares `DangerousLevelContentProvider`, exported under `com.samsung.android.watch.weather.provider.level.dangerous`. Its read permission is `com.samsung.android.watch.weather.provider.permission.READ_DANGEROUS_PROVIDER`, declared with protection level `0x1` (Android's user-granted **dangerous** permission category). This differs from the helper's signer gate and the original WeatherContentProvider. See [Android permission levels](https://developer.android.com/guide/topics/manifest/permission-element#plevel).
+
+Evidence from this additional inspection:
+
+- `DangerousLevelContentProvider` directly extends `AbsWeatherContentProvider`, overriding only the authority. Both JADX output and official apkanalyzer DEX disassembly confirm this; it does not inherit `SignatureCheckContentProvider`.
+- The base registers `weatherinfo_hour` and routes it to `ContentProviderDataSource.getHourly`. The inspected query bytecode confirms that dispatch and contains no caller-signature check. The data source selects hourly rows from its existing database, optionally by weather-location key.
+- Samsung's bundled weather library itself distinguishes a runtime-permission route from the system route: `WeatherCompatApi.getDangerousPermission`, `B/i.java:i` and `B/i.java:u` identify this permission and authority. We will not copy or redistribute that library.
+- The single-class JADX runs for the provider and base each reported one error; the provider inheritance and base query dispatch were therefore cross-checked against DEX. The data-source single-class run completed without errors. This is not a complete audit of all downstream behavior.
+
+This is a credible lead for reading Samsung's cached forecast with the user's permission. It is **not proof** that a normal installed app will receive the permission on this firmware, that every downstream query will succeed, or that Samsung supports commercial third-party use of the interface. No published Samsung contract for this interface was found in the focused documentation search. Do not call it a production-ready public SDK.
+
+The next bounded device test should use an independently signed diagnostic app, requesting the existing Samsung permission through the normal system prompt. After an explicit grant, read only the relevant current/hourly/settings rows, select Samsung's active location and units, and compare timestamps and values with Samsung Weather. Test denial and revocation too. Do not force-grant permissions, impersonate Samsung, modify its APK, or change the face layout for this test. Keep results local and avoid logging location coordinates. Actual permission behavior, missing/stale data and matching rounding/forecast hours need evidence before integrating a provider.
+
+If successful, this could feed our own replaceable rectangular complication while its tap opens Samsung Weather, using the accepted Wear OS 6 bundled architecture. Access reliability, update notifications and supported commercial use remain separate release questions. Samsung's [developer support](https://developer.samsung.com/support) is the appropriate place to ask whether this permission/interface is supported for independently signed Play-distributed watch apps; no message has been sent.

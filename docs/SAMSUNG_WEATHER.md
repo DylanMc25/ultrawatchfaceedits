@@ -1,6 +1,6 @@
 # Samsung Weather investigation
 
-Current findings: see [Samsung APK comparison and one-product packaging](SAMSUNG_APK_FINDINGS.md). The 2026-09-21 helper inspection confirms the caller restriction, and Ultra Info Board confirms the custom picker/renderer path. The user now permits multiple APKs packaged as one Play product. Watch Face Push is the documented architecture under consideration; no application changes were made during this investigation.
+Current findings: see [Samsung APK comparison and one-product packaging](SAMSUNG_APK_FINDINGS.md). The 2026-09-21 helper inspection confirms the caller restriction, and Ultra Info Board confirms the custom picker/renderer path. Follow-up inspection found a separate runtime-permission-based WeatherWatch hourly provider; this lead is untested and supersedes any generalization that all Samsung hourly access is signature-restricted. The user requires matching Samsung forecasts and permits multiple APKs packaged as one Play product. Watch Face Push is the documented architecture under consideration; no application changes were made during this investigation.
 
 The sections below preserve the investigation history. Statements that helper access was uninspected describe the earlier checkpoint and are superseded by the current report.
 
