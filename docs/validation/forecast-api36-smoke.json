@@ -1,0 +1,42 @@
+{
+  "workflow_run": 35676584438,
+  "source_commit": "1b03299",
+  "scope": "Wear OS 6 bundled-face installation, original renderer fixtures and missing-Samsung behavior; no provider-picker interaction in this run",
+  "devices": {
+    "small": {
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 5555,
+        "lit_percent": 4.7964,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:.......\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 0.7\n\nOK (8 tests)",
+      "default_face_before_setup_launch": "package:/data/app/~~p0uA-qdUPiWl5Y-PiNnvpw==/com.example.ultrainfoboard.bridge.watchfacepush.board-35EDeRbQNXEZKGuer6jSWg==/base.apk",
+      "smoke_exit_code": "0"
+    },
+    "large": {
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 7707,
+        "lit_percent": 4.7606,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:.......\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 1.046\n\nOK (8 tests)",
+      "default_face_before_setup_launch": "package:/data/app/~~Q2Rku2UsXA8-fZGV962aiA==/com.example.ultrainfoboard.bridge.watchfacepush.board-2udi1inC-XVWh1KUvlrzsg==/base.apk",
+      "smoke_exit_code": "0"
+    }
+  },
+  "physical": "User confirmed actual forecast and Samsung Weather tap; normal selection reported unresolved"
+}

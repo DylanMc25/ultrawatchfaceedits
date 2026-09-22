@@ -1,18 +1,91 @@
-# Current milestone: 0.1.6 app-selectable bottom rectangle
+# Validation
+
+## Current Wear OS 6 Samsung forecast preview
+
+The current implementation is a Wear OS 6 / API 36 host app with a bundled resource-only WFF 2 face and an ordinary replaceable rectangular forecast complication. The bundled face is named **Ultra Forecast** in preview 0.2.0-preview.3 (version code 10), distinct from the original standalone **Ultra Info Board**. Version 9's longer **Ultra Info Board Forecast** name was truncated in the round picker and is superseded. See [Samsung preview installation and checks](SAMSUNG_FORECAST_TESTING.md) and [bundle architecture](WATCH_FACE_PUSH_PLAN.md).
+
+**Physical Galaxy Watch report:** the user confirmed that the new forecast displays Samsung weather data and that tapping it opens Samsung Weather. This is physical evidence for the data/tap path. It does not yet establish exact agreement across every hour, temperature unit, location, update state, or weather condition. The user still reported difficulty selecting it as a normal complication; that acceptance item remains unresolved. Physical testing was paused for the evening.
+
+### Local validation
+
+The latest local checks passed: **28 JVM tests**, **18 Python tests**, host debug APK / unsigned release AAB builds and lint, plus all **10 checks in the official Watch Face Push validator** for the bundled APK. The latter includes WFF syntax/resources, memory, manifest/package restrictions, and APK signing. Bundle preparation validates the final signed face and embeds its corresponding token. These checks cannot prove Samsung runtime behavior or editor usability.
+
+Coverage includes Samsung payload parsing, missing/stale and denied data, units and local-hour selection, bounded forecast timeline transitions, original complication/tap geometry, seven stable slots, generated-bundle isolation, and rejecting a validator with an unexpected hash. The six original complication definitions and all seven touch rectangles remain unchanged; the bottom image fills its existing 262 × 60 area.
+
+### Native Wear OS 6 evidence
+
+[Run 35676584438](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35676584438), source `1b03299`, passed both API 36 emulator smoke jobs, with eight Android instrumentation tests passing on each. Captures and installation evidence were downloaded and reviewed. Both `default-face-before-launch.txt` records contain the prefixed bundled face package, confirming automatic installation before the host's first launch.
+
+| API 36 smoke evidence | Large round | Small round |
+| --- | --- | --- |
+| Capture dimensions | 454 × 454 | 384 × 384 |
+| Active blue face | Renders; weather honestly unavailable | Renders; weather honestly unavailable |
+| Ambient | Black time/date only, DOZE | Black time/date only, DOZE |
+| Lit pixels, including system overlays | 7,707 / 161,892 (4.7606%) | 5,555 / 115,816 (4.7964%) |
+
+Active/ambient screens and three explicitly labelled forecast-fixture images fit their bounds. Fixture images are sample-rendering tests, not Samsung observations. A system charging overlay partially obscures the bottom Shortcut. These captured ambient states are below the [15% limit](https://developer.android.com/training/wearables/wff/ambient); other time/date combinations and physical AOD remain separate checks.
+
+Recorded evidence: [API 36 smoke report](validation/forecast-api36-smoke.json), [large setup screen](previews/forecast/api36-large-setup.png), [small setup screen](previews/forecast/api36-small-setup.png).
+
+![API 36 large active face: Samsung Weather absent, unavailable state shown](previews/forecast/api36-large-active.png)
+![API 36 small ambient face: black time/date display with system indicator](previews/forecast/api36-small-ambient.png)
+
+[Saved-data fixture](previews/forecast/forecast-fixture-saved-blue.png), [partial-data fixture](previews/forecast/forecast-fixture-partial-blue.png), and [night fixture](previews/forecast/forecast-fixture-night-black.png) are explicitly synthetic renderer checks.
+
+Manual log review found correct custom-provider registration and `SMALL_IMAGE` delivery, with no application/provider crash, failed WFF expression, or forecast bitmap/Binder error. Both stock API 36 images did log a vendor sensor-service crash on entering ambient (`unexpected sensor type: 26`). The captured displays reached DOZE and the pixel measurements above remain image evidence; these emulators do not establish physical sensor or power behavior.
+
+This run did **not** exercise ordinary provider selection, replacing the rectangle with another app, or restoring the forecast through the native editor. Stock emulators do not contain Samsung Weather and cannot verify that connection.
+
+[Run 35677046105](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35677046105), source `b864c30` / version 9, **passed native editor selection on both sizes**. Artifacts and screenshots were reviewed. Each run opens the actual provider chooser, assigns Alarm, reopens the editor to verify persistence, confirms all three rectangle taps open Clock's Alarm screen, opens setup without overwriting Alarm, then finds and selects **Samsung hourly forecast** through the ordinary provider list. Reopening the editor confirms that selection, and all three taps open setup because Samsung Weather is absent. The [editor evidence](validation/forecast-api36-editor.json) records the actual resumed activities, not only internal slot dispatch. Ambient rechecks were 4.8427% large / 4.8888% small, both DOZE. Eight Android tests passed on each device.
+
+![Normal provider list with Samsung hourly forecast under Ultra Info Board Weather](previews/forecast/api36-small-provider-list.png)
+![Rectangle assigned to Alarm in the normal editor](previews/forecast/api36-large-alarm-selected.png)
+![Forecast restored through the normal editor](previews/forecast/api36-large-forecast-restored.png)
+
+The same captures exposed a presentation defect: **Ultra Info Board Forecast** was truncated to **Ultra Info Boa…**, hiding the new name's distinguishing word. Version 10 shortens the picker label to **Ultra Forecast** without changing the package, slots, data source or selection logic. Its updated picker capture is a separate validation item. The physical Samsung editor issue remains unresolved even though the ordinary stock Wear OS editor passes.
+
+### Original standalone layout regression
+
+[Run 35675092050](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35675092050), source `6f2fa6d`, passed validation and both API 34/35 jobs. Its artifact archives were downloaded, their SHA-256 hashes verified, and active/ambient plus Alarm-assignment captures visually reviewed. These are regression results for the original standalone `:app`, **not** the new bundled forecast face. See the [standalone evidence record](validation/standalone-6f2fa6d.json).
+
+| Check | API 34 large round | API 35-ext15 small round |
+| --- | --- | --- |
+| Capture dimensions | 454 × 454 | 384 × 384 |
+| Time/date, circles and edge captions | Visible without clipping | Visible without clipping |
+| All seven provider choosers | Opened | Opened |
+| Rectangle reassigned to Alarm | Confirmed | Confirmed |
+| Rectangle left/center/right taps | Slot 7 throughout | Slot 7 throughout |
+| Black ambient, time/date only | DOZE confirmed | DOZE confirmed |
+| Non-black round-screen pixels, including system overlays | 4.6988% | 4.4882% |
+
+These captured ambient states are below the documented 15% limit; they do not cover every time/date. API 35's system dot and its active-state background obscure part of the bottom Shortcut; this is distinct from clipping of face content. Heart-rate taps recorded no provider launch, so successful heart-rate app opening is unverified. Both 12/24-hour captures show an hour of 01; they do not demonstrate noon/midnight conversion. Samsung Weather is absent and the rectangle was exercised with Alarm only.
+
+### Remaining acceptance checks
+
+- Confirm the normal editor flow on the Galaxy Watch when physical testing resumes; stock API 36 provider replacement/restoration now passes. Review the shortened name in version 10's picker capture.
+- Compare the forecast against Samsung Weather across location, units, hourly rollover, stale/missing data and permission changes. Confirm one whole-area Samsung Weather tap and provider-owned taps after replacement.
+- Check selections across Setup launches, consistently signed upgrades and reboot. An uninstall/reinstall is not a settings-preservation test.
+- Review physical readability, system overlays, AOD and battery use. Confirm Samsung interface support/commercial suitability before release.
+
+Everything below is **historical evidence for the named earlier versions**. Earlier panel menus, native-weather failures, screenshots and pending checklists do not describe the current Wear OS 6 Samsung-cache provider.
+
+---
+
+## Historical standalone 0.1.6: app-selectable bottom rectangle
 
 The user clarified that the bottom rectangle must accept other apps' complications. This version restores standard editable slot 7, removes the curated native panel menu, and preserves slots 1–6 byte-for-byte. The rectangle retains its 262 × 60 footprint without a heavy background. Samsung's public Weather service is the preferred LONG_TEXT default with EMPTY fallback; the chosen provider owns data and taps.
 
 Physical report for **0.1.5** (2026-09-21): the native panel showed `Weather —`; its tap opened Samsung Weather, where the user confirmed current location and real hourly forecasts. The native data integration is therefore not working on that test watch. This is recorded as a failure, not a successful forecast test. Version 0.1.6's provider integration requires a new physical test.
 
-## Current validation
+### Validation recorded for standalone 0.1.6
 
-Local validation passes: 13 regression/fixture checks, official WFF 2 syntax/resources, debug APK, unsigned release AAB, Android lint, resource-only package checks and official memory validation. Maximum active memory is 2,371,712 bytes; ambient is 3,181,712 bytes. Native emulator checks are being rerun for 0.1.6. No earlier screenshot establishes this revision's appearance or Samsung compatibility. Regression checks cover all seven complete renderers, separate tap regions, provider text/units/missing text, progress boundaries, unchanged time/circles and time/date-only ambient. The emulator script selects Alarm for slot 7 and checks provider dispatch at the left, center and right of the rectangle.
+Local validation passes: 13 regression/fixture checks, official WFF 2 syntax/resources, debug APK, unsigned release AAB, Android lint, resource-only package checks and official memory validation. Maximum active memory is 2,371,712 bytes; ambient is 3,181,712 bytes. Native emulator checks were pending at this checkpoint; the later standalone regression run is recorded above. Those captures do not establish Samsung compatibility. Regression checks cover all seven complete renderers, separate tap regions, provider text/units/missing text, progress boundaries, unchanged time/circles and time/date-only ambient. The emulator script selects Alarm for slot 7 and checks provider dispatch at the left, center and right of the rectangle.
 
 Follow [PHYSICAL_TEST.md](PHYSICAL_TEST.md) to select Weather, replace it with a different app, check persistence/tap destinations, and test an image/chart provider. Samsung's public Weather exposes current conditions, not Info Brick's private hourly chart.
 
 ## Historical 0.1.5 curated panel
 
-# 0.1.5 validation history
+### 0.1.5 local and fixture checks
 
 Local validation (2026-09-19): 18 regression/fixture checks; official WFF 2 syntax/resources; debug APK; unsigned release AAB; Android lint; no-DEX/signing/package checks; and official memory checks all pass. Maximum active memory is 2,371,712 bytes and maximum ambient memory is 3,181,712 bytes, below the configured limits. The memory validator measures supported WFF resources; it does not prove visual correctness or runtime data access.
 
@@ -29,7 +102,7 @@ Both ambient captures have confirmed DOZE state: API 34 **4.6235%**, API 35 **4.
 
 The old provider heart-rate sample emits no tap launch event; other expected provider dispatches were observed, with no wrong-slot launches. Do not interpret absence of a wrong launch as a successful heart-rate app launch. Older results in the historical section apply only to their named revisions.
 
-## Native chart correction
+### Historical 0.1.5 native chart correction
 
 Expanded run [35483891344](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35483891344), source `6d82a1a953c6b8a509c941d2ecc36d1277979ac6`, completed all seven panel choices and persistence checks on both APIs. Each weather/Steps tap reached its package target exactly once at left/center/right; absent Samsung apps produced market-fallback events, not successful Samsung app launches. None produced no events. The heart-rate system shortcut had no launch event on these stock images and remains unverified on Galaxy Watch.
 
@@ -37,7 +110,7 @@ Expanded run [35483891344](https://github.com/DylanMc25/ultrawatchfaceedits/acti
 
 Native health fields on stock emulators returned zero steps, unavailable goal and unavailable heart rate even while separate mock complication providers supplied readings. The new panels handle those values explicitly; they do not borrow or fabricate readings from the mock providers. Physical health access, goal availability and Samsung app destinations remain required checks.
 
-## Physical Galaxy Watch acceptance checklist — pending
+### Archived 0.1.5 physical checklist — superseded by the Wear OS 6 preview
 
 1. Install the debug APK, choose Ultra Info Board, open Customize → Bottom panel, and try all seven options. Return to the face and re-open the editor to confirm the chosen option persists.
 2. Confirm Weather has real current conditions and four consecutive hourly entries. Check temperature units and 12/24-hour preference. Missing data must show dashes, not sample values. An exclamation mark means a refresh failed while cached data remains available.
@@ -48,11 +121,11 @@ Native health fields on stock emulators returned zero steps, unavailable goal an
 
 ## Historical validation (earlier revisions)
 
-# Validation evidence
+### 0.1.4 validation evidence
 
 Version 0.1.4, 2026-09-19. Resource-only WFF 2; Temurin JDK 17, Gradle 8.13, AGP 8.13.2, Android platform/build-tools 35.
 
-## Local checks
+### Historical 0.1.4 local checks
 
 | Check | Result |
 | --- | --- |
@@ -69,7 +142,7 @@ The layout retains the previous stacked time and three staggered circles. Hours/
 
 Lint advisories include available dependency updates, resource references inside raw WFF that lint cannot trace, and backup metadata for a code-free package. Resource shrinking remains disabled. `validation/package-checksums.json` identifies local deliverables; CI APK checksums differ because its debug signing keys are temporary.
 
-## Native emulator evidence
+### Historical 0.1.4 native emulator evidence
 
 [GitHub run 35481758095](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/35481758095), source commit `eea5ffb`, passed the build job and both emulator jobs. Captures were downloaded and visually reviewed.
 
@@ -102,7 +175,7 @@ The editor displays Wear OS sample time/health readings, not live measurements. 
 
 Ambient illumination counts every non-black pixel inside the circular screen, including system indicators. The [15% limit](https://developer.android.com/training/wearables/wff/ambient) applies; measurements establish only the captured time/date/device, not every possible state. The emulator simulates an unplugged battery to avoid the charging overlay. Wear OS status indicators may still overlay the bottom shortcut.
 
-## Remaining physical-device coverage
+### Archived 0.1.4 physical-device coverage
 
 - Check for the recorded API 34 background redraw anomaly after changing providers, including returning from the editor and crossing a minute boundary.
 - Choose Weather in the new slot on the user's Galaxy Watch, check permissions, live readings, units, unavailable state and the provider's tap destination.
@@ -113,6 +186,6 @@ Ambient illumination counts every non-black pixel inside the circular screen, in
 
 The previous layout's physical user feedback informed the revision, but the revised layout is not yet verified on a physical Galaxy Watch. See [release prerequisites](RELEASE.md) before selling.
 
-## Preview status
+### Historical preview status
 
 `docs/previews/*-illustrative.png` are approximate layout proofs from WFF geometry and explicit sample data. They do not prove native font metrics, provider compatibility or battery behavior. The active illustration is the temporary system picker preview; use verified device screenshots before publishing.

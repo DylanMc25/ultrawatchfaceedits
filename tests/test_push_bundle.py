@@ -75,7 +75,7 @@ class PushBundleTests(unittest.TestCase):
         original_strings = ET.fromstring(original_files[Path("values/strings.xml")])
         generated_strings = ET.fromstring(generated_files[Path("values/strings.xml")])
         app_name = generated_strings.find("string[@name='app_name']")
-        self.assertEqual(app_name.text, "Ultra Info Board Forecast")
+        self.assertEqual(app_name.text, "Ultra Forecast")
         app_name.text = original_strings.find("string[@name='app_name']").text
         self.assertEqual(ET.tostring(generated_strings), ET.tostring(original_strings))
 

@@ -1,0 +1,106 @@
+{
+  "workflow_run": 35675092050,
+  "commit": "6f2fa6df4807f0929b6a86e043e71fc67c2e178a",
+  "scope": "Original standalone app layout regression only; not bundled face or Samsung forecast integration",
+  "devices": {
+    "api34": {
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 7607,
+        "lit_percent": 4.6988,
+        "limit_percent": 15
+      },
+      "provider_choosers_visible": 7,
+      "tap_mismatches": [],
+      "rectangle_provider_test": {
+        "assigned_provider": "Alarm",
+        "expected_slot": 7,
+        "observed_launch_slots": [
+          7
+        ],
+        "tap_attempts": [
+          {
+            "point": "left",
+            "observed_launch_slots": [
+              7
+            ]
+          },
+          {
+            "point": "center",
+            "observed_launch_slots": [
+              7
+            ]
+          },
+          {
+            "point": "right",
+            "observed_launch_slots": [
+              7
+            ]
+          }
+        ],
+        "samsung_weather_verified": false
+      },
+      "heart_rate_tap_logged": [],
+      "visual_review": "Time/date, three circles and edge labels visible without clipping. Ambient shows thin time/date on black; seconds and all complications hidden."
+    },
+    "api35": {
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 5198,
+        "lit_percent": 4.4882,
+        "limit_percent": 15
+      },
+      "provider_choosers_visible": 7,
+      "tap_mismatches": [],
+      "rectangle_provider_test": {
+        "assigned_provider": "Alarm",
+        "expected_slot": 7,
+        "observed_launch_slots": [
+          7
+        ],
+        "tap_attempts": [
+          {
+            "point": "left",
+            "observed_launch_slots": [
+              7
+            ]
+          },
+          {
+            "point": "center",
+            "observed_launch_slots": [
+              7
+            ]
+          },
+          {
+            "point": "right",
+            "observed_launch_slots": [
+              7
+            ]
+          }
+        ],
+        "samsung_weather_verified": false
+      },
+      "heart_rate_tap_logged": [],
+      "visual_review": "Time/date, three circles and edge labels visible without clipping. Ambient shows thin time/date on black; seconds and all complications hidden."
+    }
+  },
+  "limitations": [
+    "API35 system overlay covers bottom Shortcut center; the same white system dot appears in ambient.",
+    "12/24 captures were taken at01hours so do not visually establish noon/midnight conversion.",
+    "Heart-rate taps produced no observed launch record, although no wrong slot was recorded.",
+    "Samsung Weather absent; bottom slot tested with Alarm only.",
+    "No physical device or new forecast-provider behavior is established."
+  ]
+}

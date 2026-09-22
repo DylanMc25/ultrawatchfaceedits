@@ -97,10 +97,10 @@ def open_editor(name):
     current = capture(name + "-entry")
     # WFF wallpaper dumps often identify only the delegating system runtime.
     # Confirm the selected face by its distinct, centered picker title instead.
-    selected = [n for n in current.iter("node") if label(n) == "Ultra Info Board Forecast"
+    selected = [n for n in current.iter("node") if label(n) == "Ultra Forecast"
                 and len(bounds(n)) == 4 and bounds(n)[0] < WIDTH / 2 < bounds(n)[2]]
     if not selected:
-        raise RuntimeError("Centered picker item is not Ultra Info Board Forecast")
+        raise RuntimeError("Centered picker item is not Ultra Forecast")
     edit = next((n for n in current.iter("node") if re.search(
         r"edit|customi[sz]e", label(n) + " " + n.get("resource-id", ""), re.I)), None)
     if edit is None:

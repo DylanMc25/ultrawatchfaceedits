@@ -103,4 +103,4 @@ sleep 25
 adb shell dumpsys display > "$report/display-after-idle.txt"
 adb exec-out screencap -p > "$report/after-idle.png"
 python3 tools/check_ambient_capture.py "$report/after-idle.png" "$report/display-after-idle.txt" > "$report/ambient-pixels.json"
-printf '%s\n' 'Stock emulator: installed bundled face and ran rendering/fallback tests. Samsung data access remains unverified.' > "$report/result.txt"
+printf '%s\n' 'Stock emulator: installed bundled face; rendering, unavailable data, native provider replacement/restoration and ambient checks passed. This run does not verify Samsung data or its OEM editor.' > "$report/result.txt"

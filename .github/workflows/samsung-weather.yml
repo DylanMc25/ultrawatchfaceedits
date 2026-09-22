@@ -80,7 +80,7 @@ jobs:
           echo no | avdmanager create avd -n forecast -k 'system-images;android-36;android-wear-signed;x86_64' -d '${{ matrix.device }}'
           sed -i 's/hw.lcd.circular = false/hw.lcd.circular = true/' "$ANDROID_AVD_HOME/forecast.avd/config.ini"
           sudo chmod 666 /dev/kvm
-      - name: Test install, unavailable weather and original forecast rendering
+      - name: Test installation, rendering and native complication selection
         env:
           APK: artifacts/outputs/apk/debug/weatherbridge-debug.apk
           TEST_APK: artifacts/outputs/apk/androidTest/debug/weatherbridge-debug-androidTest.apk

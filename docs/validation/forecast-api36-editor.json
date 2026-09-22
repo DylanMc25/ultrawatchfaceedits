@@ -1,0 +1,114 @@
+{
+  "workflow_run": 35677046105,
+  "source_commit": "b864c30",
+  "preview_version_code": 9,
+  "scope": "Native Wear OS 6 provider selection/replacement/restoration; Samsung OEM editor remains unresolved",
+  "devices": {
+    "small": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Alarm"
+          },
+          {
+            "tap": "alarm-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{39819769 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{162441264 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{73737373 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{53638690 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{53638690 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{53638690 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Samsung hourly forecast"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 5662,
+        "lit_percent": 4.8888,
+        "limit_percent": 15
+      }
+    },
+    "large": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Alarm"
+          },
+          {
+            "tap": "alarm-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{171474638 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{10247638 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "tap": "alarm-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{257827454 u0 com.google.android.deskclock/com.google.android.wearable.deskclock.alarm.AlarmTimePickerActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{159067339 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{159067339 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{159067339 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Samsung hourly forecast"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 7840,
+        "lit_percent": 4.8427,
+        "limit_percent": 15
+      }
+    }
+  }
+}

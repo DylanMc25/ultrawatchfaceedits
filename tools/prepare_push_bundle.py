@@ -21,7 +21,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 HOST_PACKAGE = "com.example.ultrainfoboard.bridge"
 FACE_PACKAGE = HOST_PACKAGE + ".watchfacepush.board"
-FACE_LABEL = "Ultra Info Board Forecast"
+FACE_LABEL = "Ultra Forecast"
 FORECAST_PROVIDER = HOST_PACKAGE + "/" + HOST_PACKAGE + ".SamsungForecastService"
 VALIDATOR_VERSION = "1.1.0-alpha01"
 VALIDATOR_SHA256 = "04dc20a0994df3eaebf025e107f7589c147b2ce8a2c628745e01a5c0a63fe4dd"
@@ -150,8 +150,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=("debug", "release"), default="debug")
     parser.add_argument("--validator", help="Existing official validator-push-cli JAR")
-    parser.add_argument("--version-code", type=int, default=9)
-    parser.add_argument("--version-name", default="0.2.0-preview.2")
+    parser.add_argument("--version-code", type=int, default=10)
+    parser.add_argument("--version-name", default="0.2.0-preview.3")
     args = parser.parse_args()
     if args.version_code < 1:
         parser.error("--version-code must be positive")
