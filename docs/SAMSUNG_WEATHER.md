@@ -1,6 +1,6 @@
 # Samsung Weather investigation
 
-Status: APK investigation complete for the weather/picker architecture, 2026-09-19. Implementation history is recorded below; the final section describes 0.1.6 after physical testing and the user's clarification. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
+Status: investigation reopened on 2026-09-21; Samsung helper access and Ultra Info Board comparison remain unresolved. Implementation history is recorded below; the final section describes 0.1.6 after physical testing and the user's clarification. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
 
 ## Verified on the physical watch
 
@@ -93,3 +93,17 @@ The user tested 0.1.5 on their Galaxy Watch: `Weather —` on the face, successf
 The user then explicitly clarified that the rectangle must accept **other apps' rectangular complications**. Version 0.1.6 replaces the curated menu with standard editable slot 7; IDs 1–6 and the geometry stay unchanged. All supported public text/image/progress formats have renderers. Samsung Weather's verified public component is the preferred LONG_TEXT default with EMPTY fallback; no signature-restricted service is called. Each provider owns the displayed data and tap action.
 
 This enables provider choice but does **not** reproduce Info Brick's hourly forecast. A suitable installed image/chart provider may supply richer content. No claim is made that Samsung's public Weather provider now exposes an hourly chart, or that its data delivery on this new build has been physically verified.
+
+## Investigation checkpoint: trace the helper before further implementation
+
+On 2026-09-21 the user requested evidence-led investigation rather than more trial implementations, and offered the Ultra Info Board APK. Further application changes are paused. Commit `c44ac53` is a standard-provider implementation checkpoint, not a verified solution to Info Brick parity and not a new physical-test requirement.
+
+Reinspection confirms these details from the supplied Info Brick APK:
+
+- `data/j1.java` constructs the provider selector with the helper authority first, then Samsung Weather's own authority. `p067u1/c.java` chooses the first authority resolvable by PackageManager; this is presence selection, not proof that an independently signed caller is permitted to query it.
+- `data/j1.java:T` conditionally binds `com.samsung.android.watch.watchface.complicationhelper.ComplicationLaunchTransitionHelper` on API >34 when the helper version is below 100104045. Newer helper versions omit this binding. This establishes a helper-version dependency in Samsung's implementation, not a requirement we can assume for WFF.
+- `data/f1.java:f` forms the hourly URI using the selected authority and `/weatherinfo_hour`.
+- The rectangle's public supported-type array remains EMPTY-only (`p079x2/a.java:d`, selected in `p082y2/e.java`). The custom picker adds a list of Samsung panels in `J0/c.java`, separately from the standard complication payloads.
+- Samsung Weather's own signature check is confirmed, but it must not be generalized to the uninspected helper. A helper APK inspection is required to determine its provider declarations, access checks, data forwarding and any public extension path. No query or signature bypass is proposed.
+
+Requested comparison inputs: `com.samsung.android.watch.watchface.ultrainfoboard` and `com.samsung.android.watch.watchface.complicationhelper`. Trace their manifest, selection menu, weather rendering/data source and access conditions before choosing an implementation. No Samsung code/assets will be redistributed. The reason native WFF weather is unavailable on the test watch also remains unproven.
