@@ -1,6 +1,6 @@
 # Test the bottom panel on a Galaxy Watch
 
-Download **watchface-build-and-reports** from the latest successful workflow for `codex/watchface-redesign`, extract it, and find `app-debug.apk`. This milestone is version **0.1.5** (version code 6). The smaller/large emulator reports are separate artifacts.
+Download **watchface-build-and-reports** from the latest successful workflow for `codex/watchface-redesign`, extract it, and find `app-debug.apk`. This milestone is version **0.1.6** (version code 7). The smaller/large emulator reports are separate artifacts.
 
 ## Connect from Windows
 
@@ -36,10 +36,13 @@ Do not uninstall when testing preservation of complication assignments across an
 ## Select and check the face
 
 1. Long-press the current face, add/select **Ultra Info Board**, then open **Customize**.
-2. Find the **Bottom panel** setting. Choose Weather, Detailed weather, Temperature, Chance of rain, Steps, Heart rate, or None. Swipe to **Complications** to change the six normal areas.
-3. Weather should show current conditions and four consecutive hours. A missing hour is a dash; `Weather —` means native weather data is unavailable. Open Samsung Weather and confirm it has a location and a recent reading. The native WFF source may update separately from Samsung's public complication provider.
-4. Tap across the rectangle. Weather modes should all open Samsung Weather. Steps opens Samsung Health; Heart rate uses the system heart-rate destination. None must have no action.
-5. Leave and reopen Customize to check the selected panel persists. Check 12/24-hour preference, temperature units, and always-on mode. The panel and seconds should disappear in always-on mode.
+2. Open **Complications → Bottom rectangle**, or tap the rectangle in the editor. It should open the standard installed-provider picker, not the former seven-choice Bottom panel menu.
+3. Select **Weather** from Samsung Weather and grant any requested access. Return to the face. It should show the provider's current conditions; this is not the private Info Brick hourly forecast.
+4. Tap the left, center and right of the rectangle. All three should open the selected provider's app, with no neighboring complication triggered.
+5. Change the rectangle to a different installed provider (calendar, Alarm, or a compatible image/chart provider). Confirm both the displayed content and tap destination change. Return to Customize and verify the choice persists.
+6. Choose Empty/None in the provider picker; check the subtle setup placeholder and absence of a provider tap action. Check all seven areas remain individually editable, and all complications/seconds disappear in always-on mode.
+
+**Observed on 0.1.5, 2026-09-21:** the native Weather panel showed `Weather —`. Its tap opened Samsung Weather correctly, and Samsung Weather had current location and real hourly forecasts. This does not establish public-provider data delivery in 0.1.6; repeat steps 3–5 with this build.
 
 For diagnostics, the following only reads the face version and captures the screen:
 
@@ -49,4 +52,4 @@ For diagnostics, the following only reads the face version and captures the scre
 & $adb -s $watchAddress pull /sdcard/ultra-panel.png "$env:USERPROFILE\Downloads\ultra-panel.png"
 ```
 
-Native weather availability, Samsung app destinations, real denied-permission behavior and physical AOD are **pending until tested on a Galaxy Watch**. The complete acceptance list is in [VALIDATION.md](VALIDATION.md).
+Public Samsung Weather data delivery, other installed providers, image/chart readability, saved assignments and physical AOD remain pending for 0.1.6. The complete validation record is in [VALIDATION.md](VALIDATION.md).

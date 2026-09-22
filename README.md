@@ -1,10 +1,10 @@
 # Ultra Info Board
 
-A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, six editable complication areas and a compact, selectable bottom panel. The layout prioritizes large time and provider readings on round displays.
+A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked time, seven editable complication areas, including a compact bottom rectangle. The layout prioritizes large time and provider readings on round displays.
 
 **Development milestone, not a store release.** Requires Wear OS 5 (API 34) or later. The working package is `com.example.ultrainfoboard`; choose the permanent publisher/package identity before the first store upload.
 
-![Illustrative Weather panel](docs/previews/panel-weather-illustrative.png)
+![Illustrative provider layout](docs/previews/active-illustrative.png)
 
 *Illustrative layout with explicit sample data, not an emulator capture. Native captures and their tested versions are recorded in [validation evidence](docs/VALIDATION.md).*
 
@@ -13,16 +13,16 @@ A resource-only Galaxy Watch / Wear OS face with a blue gradient, large stacked 
 - Month and day/date above larger stacked hours/minutes (142-unit type); seconds have a separate column.
 - The familiar three staggered circles on the right: heart rate, steps and sunrise/sunset. Larger 90-unit circles use up to 38-unit type, with smaller sizes for longer readings.
 - Segmented left battery gauge, thick right-edge arc, provider icons and angled edge labels. Right edge and bottom shortcut start unassigned.
-- One compact **Bottom panel** with Weather, Detailed weather, Temperature, Chance of rain, Steps, Heart rate and None. Weather is the default. The whole panel has one tap action; forecasts are not individual buttons.
-- Black always-on display with thin time and date; all other content is hidden.
+- One compact **Bottom rectangle** for compatible installed apps' text, image and progress complications. No heavy background fill.
+- Black always-on display with thin time and date; all complications are hidden.
 
-Long-press the face and choose **Customize → Bottom panel** to select a panel. Swipe to **Complications** to assign the six normal areas. Available providers determine the choices in those areas; a `+` marks an unassigned slot. Time follows the device’s 12/24-hour preference.
+Long-press the face and choose **Customize → Complications → Bottom rectangle** (or tap the rectangle in the editor). Choose an installed provider, such as Weather, calendar or a compatible image/chart provider. The provider owns the data, units and whole-area tap action. Time follows the device's 12/24-hour preference. A `+` marks an empty slot; missing text is a dash.
 
-Weather uses Wear OS native weather data and its temperature-unit preference. **Weather** shows current conditions and the current hour plus three following hours. **Detailed weather** shows conditions, high/low and precipitation chance. **Temperature** shows the same four hours as a compact trend; gaps stay disconnected. **Chance of rain** shows the current probability, not an invented hourly forecast. A dash means unavailable data; `!` indicates a failed refresh of otherwise available weather. Tap any weather panel to open Samsung Weather on a Galaxy Watch. Weather data requires the device to obtain a location (normally through its connected phone/network).
+Samsung's **public Weather complication** is the preferred default when installed and eligible; otherwise the rectangle starts empty. If necessary, select Weather manually and complete any provider permission/setup prompt. This provider supplies current conditions, **not Info Brick's hourly forecast**. Other apps appear only if they expose a supported complication type. An image provider can supply its own chart; the face does not generate history or manufacture forecasts.
 
-Steps shows today's native count/goal, and Heart rate shows the current available native reading. Zero/empty heart rate displays a dash. WFF has no separate step-permission flag: a supplied zero is shown as zero; empty or negative data shows a dash. These are not Samsung Health history charts, and native steps/heart readings may differ from Samsung's synced history. Tap Steps to open Samsung Health, or Heart rate for the system heart-rate destination. **None** removes the panel and its tap action.
+**Updating from 0.1.5:** the fixed Bottom panel menu is replaced with standard editable slot 7. IDs 1–6 and their geometry remain unchanged. Choose the bottom provider in Complications; the old menu choice does not map to a provider assignment. A consistently signed update is needed to test retention of saved assignments. No companion app or private Samsung interface is used.
 
-**Updating from 0.1.4:** slot IDs 1–6 remain unchanged. The former generic rectangle (slot 7) is removed; its assignment does not carry over. Select the replacement in **Bottom panel**, which defaults to Weather. No extra app is needed. Samsung's restricted rectangle menu and internal forecast rendering informed this design; this is an independent implementation using supported WFF data, not Samsung's private panel picker. See [APK research and compatibility](docs/SAMSUNG_WEATHER.md).
+The physical 0.1.5 test reported `Weather —` while its tap correctly opened Samsung Weather with location and forecast data. That establishes a native weather availability problem in our face, not an empty Samsung Weather app. Version 0.1.6 uses provider data instead; its Samsung data/taps still require a physical check. See [research and compatibility](docs/SAMSUNG_WEATHER.md).
 
 ## Build and install
 
@@ -55,7 +55,7 @@ If installation reports mismatched signatures, run this in PowerShell while only
 
 Expect `Success`. Uninstalling resets this face's saved complication choices. The full path avoids the `adb is not recognized` error; if your SDK is elsewhere, use its location from Android Studio's SDK Manager.
 
-For a physical Galaxy Watch, enable developer options and wireless debugging, then use `adb pair WATCH_IP:PAIRING_PORT` and `adb connect WATCH_IP:DEBUG_PORT` with the addresses shown on the watch. After installation, open the watch-face picker and add **Ultra Info Board**. The debug selection broadcast above is used by the emulator tests; use the picker if the watch does not honor it. All physical Galaxy Watch results remain pending. See the [Windows connection and bottom-panel test walkthrough](docs/PHYSICAL_TEST.md).
+For a physical Galaxy Watch, enable developer options and wireless debugging, then use `adb pair WATCH_IP:PAIRING_PORT` and `adb connect WATCH_IP:DEBUG_PORT` with the addresses shown on the watch. After installation, open the watch-face picker and add **Ultra Info Board**. The debug selection broadcast above is used by the emulator tests; use the picker if the watch does not honor it. The 0.1.6 provider integration remains pending a physical Galaxy Watch test. See the [Windows connection and bottom-panel test walkthrough](docs/PHYSICAL_TEST.md).
 
 ## Edit and validate
 

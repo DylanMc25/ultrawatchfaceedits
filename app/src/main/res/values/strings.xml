@@ -7,12 +7,5 @@
     <string name="slot_left_edge">Left edge</string>
     <string name="slot_right_edge">Right edge</string>
     <string name="slot_shortcut">Bottom shortcut</string>
-    <string name="bottom_panel">Bottom panel</string>
-    <string name="panel_weather">Weather</string>
-    <string name="panel_detailed_weather">Detailed weather</string>
-    <string name="panel_temperature">Temperature</string>
-    <string name="panel_rain">Chance of rain</string>
-    <string name="panel_steps">Steps</string>
-    <string name="panel_heart_rate">Heart rate</string>
-    <string name="panel_none">None</string>
+    <string name="slot_rectangle">Bottom rectangle</string>
 </resources>

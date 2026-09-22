@@ -1,4 +1,18 @@
-# Current milestone: 0.1.5 curated bottom panel
+# Current milestone: 0.1.6 app-selectable bottom rectangle
+
+The user clarified that the bottom rectangle must accept other apps' complications. This version restores standard editable slot 7, removes the curated native panel menu, and preserves slots 1–6 byte-for-byte. The rectangle retains its 262 × 60 footprint without a heavy background. Samsung's public Weather service is the preferred LONG_TEXT default with EMPTY fallback; the chosen provider owns data and taps.
+
+Physical report for **0.1.5** (2026-09-21): the native panel showed `Weather —`; its tap opened Samsung Weather, where the user confirmed current location and real hourly forecasts. The native data integration is therefore not working on that test watch. This is recorded as a failure, not a successful forecast test. Version 0.1.6's provider integration requires a new physical test.
+
+## Current validation
+
+Local validation passes: 13 regression/fixture checks, official WFF 2 syntax/resources, debug APK, unsigned release AAB, Android lint, resource-only package checks and official memory validation. Maximum active memory is 2,371,712 bytes; ambient is 3,181,712 bytes. Native emulator checks are being rerun for 0.1.6. No earlier screenshot establishes this revision's appearance or Samsung compatibility. Regression checks cover all seven complete renderers, separate tap regions, provider text/units/missing text, progress boundaries, unchanged time/circles and time/date-only ambient. The emulator script selects Alarm for slot 7 and checks provider dispatch at the left, center and right of the rectangle.
+
+Follow [PHYSICAL_TEST.md](PHYSICAL_TEST.md) to select Weather, replace it with a different app, check persistence/tap destinations, and test an image/chart provider. Samsung's public Weather exposes current conditions, not Info Brick's private hourly chart.
+
+## Historical 0.1.5 curated panel
+
+# 0.1.5 validation history
 
 Local validation (2026-09-19): 18 regression/fixture checks; official WFF 2 syntax/resources; debug APK; unsigned release AAB; Android lint; no-DEX/signing/package checks; and official memory checks all pass. Maximum active memory is 2,371,712 bytes and maximum ambient memory is 3,181,712 bytes, below the configured limits. The memory validator measures supported WFF resources; it does not prove visual correctness or runtime data access.
 

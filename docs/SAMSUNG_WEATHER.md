@@ -1,6 +1,6 @@
 # Samsung Weather investigation
 
-Status: APK investigation complete for the weather/picker architecture, 2026-09-19. The final section describes the approved 0.1.5 implementation; preceding sections preserve the earlier investigation. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
+Status: APK investigation complete for the weather/picker architecture, 2026-09-19. Implementation history is recorded below; the final section describes 0.1.6 after physical testing and the user's clarification. The requested result is the **Weather** option in Samsung Info Brick: current conditions and several hourly forecasts rendered in one replaceable rectangular complication. The user explicitly confirmed this is not the option named Detailed weather.
 
 ## Verified on the physical watch
 
@@ -85,3 +85,11 @@ Missing weather shows `Weather —` and a single tap to open Samsung Weather. Av
 These sources are provided by the Wear OS runtime, not the Samsung public complication service inspected above. Their availability and freshness on this particular Galaxy Watch must be verified on that watch. Weather launch targets the installed Samsung Weather package; stock emulators lacking that package cannot prove the launch destination. No Samsung artwork, code, APK or private authority is included in the app.
 
 References: [native weather](https://developer.android.com/training/wearables/wff/weather), [available fields](https://developer.android.com/reference/wear-os/wff/common/attributes/source-type), [date/time expression formatting](https://developer.android.com/reference/wear-os/wff/common/attributes/arithmetic-expression).
+
+## Physical result and app-selectable rectangle (0.1.6, 2026-09-21)
+
+The user tested 0.1.5 on their Galaxy Watch: `Weather —` on the face, successful launch of Samsung Weather, and a real location/hourly forecast inside that app. The exact cause of the native WFF weather source being unavailable is not established. Samsung Weather having data does not prove that the separate WFF source receives it.
+
+The user then explicitly clarified that the rectangle must accept **other apps' rectangular complications**. Version 0.1.6 replaces the curated menu with standard editable slot 7; IDs 1–6 and the geometry stay unchanged. All supported public text/image/progress formats have renderers. Samsung Weather's verified public component is the preferred LONG_TEXT default with EMPTY fallback; no signature-restricted service is called. Each provider owns the displayed data and tap action.
+
+This enables provider choice but does **not** reproduce Info Brick's hourly forecast. A suitable installed image/chart provider may supply richer content. No claim is made that Samsung's public Weather provider now exposes an hourly chart, or that its data delivery on this new build has been physically verified.

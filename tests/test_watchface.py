@@ -11,9 +11,9 @@ class WatchFaceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.face=ET.parse(ROOT/'app/src/main/res/raw/watchface.xml').getroot()
 
-    def test_six_slots_have_complete_renderers(self):
+    def test_seven_slots_have_complete_renderers(self):
         slots=self.face.findall('.//ComplicationSlot')
-        self.assertEqual([s.get('slotId') for s in slots],['1','2','3','4','5','6'])
+        self.assertEqual([s.get('slotId') for s in slots],['1','2','3','4','5','6','7'])
         for slot in slots:
             self.assertEqual(set(slot.get('supportedTypes').split()),{c.get('type') for c in slot.findall('Complication')})
             self.assertEqual(slot.get('isCustomizable'),'TRUE')
@@ -99,42 +99,23 @@ class WatchFaceTests(unittest.TestCase):
                 highest_text_pixel=y+h/2-abs(math.sin(a))*w/2-abs(math.cos(a))*h/2
                 self.assertGreaterEqual(highest_text_pixel-lowest_drawn_pixel,2)
 
-    def test_panel_menu_replaces_slot_seven(self):
-        config=self.face.find("UserConfigurations/ListConfiguration[@id='bottom_panel']")
-        self.assertEqual(config.get('defaultValue'),'weather')
-        options=['weather','detailed_weather','temperature','rain','steps','heart_rate','none']
-        self.assertEqual([o.get('id') for o in config],options)
-        panel=self.face.find("Scene/Group[@name='bottom_panel']")
-        self.assertEqual(tuple(float(panel.get(k)) for k in ['x','y','width','height']),(94,339,262,60))
-        self.assertFalse(panel.findall('.//ComplicationSlot'))
-        rendered=panel.find('ListConfiguration')
-        self.assertEqual([o.get('id') for o in rendered],options)
-        for o in rendered:
-            taps=o.findall('.//Launch')
-            self.assertEqual(len(taps),0 if o.get('id')=='none' else 1)
-            if taps:self.assertIsNotNone(o.find('Group/Launch'))
-            for slot in self.face.findall('.//ComplicationSlot'):
-                x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
-                self.assertTrue(x+w<=94 or x>=356 or y+h<=339 or y>=399)
-
-    def test_weather_guards_and_partial_forecasts(self):
-        for option in ['weather','temperature','detailed_weather','rain']:
-            g=self.face.find(f".//Group[@name='panel_{option}']")
-            self.assertEqual(g.find('Launch').get('target'),'com.samsung.android.watch.weather')
-            c=g.find('Condition')
-            self.assertEqual(c.find('Expressions/Expression').text,'[WEATHER.IS_AVAILABLE]')
-            self.assertNotIn('[WEATHER.',ET.tostring(c.find('Default'),encoding='unicode'))
-            self.assertIn('[WEATHER.IS_ERROR]',ET.tostring(c.find('Compare'),encoding='unicode'))
-            if option in ['weather','temperature']:
-                for i in range(4):
-                    exp=g.find(f".//Expression[@name='{option}_hour_{i}']")
-                    self.assertEqual(exp.text,f'[WEATHER.HOURS.{i}.IS_AVAILABLE]')
+    def test_weather_is_one_native_editable_slot(self):
+        slot=self.face.find(".//ComplicationSlot[@slotId='7']")
+        self.assertEqual(slot.get('name'),'rectangle')
+        self.assertEqual(slot.get('displayName'),'slot_rectangle')
+        self.assertIn('SHORT_TEXT',slot.get('supportedTypes').split())
+        self.assertTrue({'LONG_TEXT','SMALL_IMAGE','PHOTO_IMAGE','RANGED_VALUE','GOAL_PROGRESS','WEIGHTED_ELEMENTS'} <= set(slot.get('supportedTypes').split()))
+        self.assertEqual(slot.find('DefaultProviderPolicy').get('defaultSystemProvider'),'EMPTY')
+        self.assertFalse(self.face.findall('.//Launch'), 'Provider must own the tap action')
         xml=ET.tostring(self.face,encoding='unicode')
-        self.assertNotRegex(xml,r'WEATHER.HOURS.\d+.CHANCE_OF_PRECIPITATION')
-        self.assertNotIn('content://',xml)
-        for i in range(3):
-            expr=self.face.find(f".//Expression[@name='temperature_segment_{i}']").text
-            self.assertEqual(expr,f'[WEATHER.HOURS.{i}.IS_AVAILABLE] && [WEATHER.HOURS.{i+1}.IS_AVAILABLE]')
+        self.assertNotIn('[WEATHER.',xml)
+        self.assertFalse(self.face.findall('.//ListConfiguration'))
+        policy=slot.find('DefaultProviderPolicy')
+        self.assertEqual(policy.get('primaryProviderType'),'LONG_TEXT')
+        self.assertTrue(policy.get('primaryProvider').endswith('.WeatherComplicationService'))
+        self.assertFalse(slot.findall('.//RoundRectangle'), 'Keep the panel integrated with the face')
+        self.assertTrue(all(n.get('maxLines')=='2' for n in slot.findall("Complication[@type='LONG_TEXT']//PartText/Text") if n.find('Font').get('size')=='17'))
+        self.assertEqual(tuple(float(slot.get(k)) for k in ['x','y','width','height']),(94,339,262,60))
 
     def test_minutes_and_seconds_have_separate_space(self):
         g=self.face.find(".//Group[@name='interactive_time']")

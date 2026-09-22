@@ -83,7 +83,7 @@ python3 tools/check_ambient_capture.py "$report/after-idle.png" "$report/display
 python3 tools/capture_editor.py
 adb logcat -d > "$report/logcat.txt"
 # Transform expressions are not all rejected by the official syntax validator.
-# Inspect native evaluation after visiting every panel, including editor sample data.
+# Inspect native evaluation after provider selection and taps, including editor sample data.
 if grep -qE 'E DWF:Expression:.*failed\.' "$report/logcat.txt"; then
     echo 'A watch-face expression failed in the native runtime.' >&2
     exit 1

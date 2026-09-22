@@ -74,93 +74,6 @@ def return_to_editor():
     raise RuntimeError('Editor did not return after provider chooser; stopped coordinate taps.')
 
 
-def tap_node(node):
-    x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
-    tap((x1+x2)/2,(y1+y2)/2)
-
-
-def panel_chip(tree):
-    return next((n for n in tree.iter('node') if n.get('resource-id','').endswith(':id/editor_list_current_option_chip')),None)
-
-
-def open_panel_editor(name):
-    ensure_face()
-    adb('shell','input','swipe',str(w//2),str(h//2),str(w//2),str(h//2),'1200')
-    time.sleep(3)
-    tree=capture(name+'-entry')
-    edit=next(n for n in tree.iter('node') if re.search(r'edit|customi[sz]e',' '.join(n.get(k,'') for k in ['text','content-desc','resource-id']),re.I))
-    tap_node(edit)
-    tree=capture(name+'-page')
-    for attempt in range(3):
-        if panel_chip(tree) is not None:return tree
-        adb('shell','input','swipe',str(round(w*.18)),str(h//2),str(round(w*.82)),str(h//2),'350')
-        time.sleep(2)
-        tree=capture(name+f'-page-{attempt}')
-    raise RuntimeError('Bottom panel editor page was not found')
-
-
-def select_panel(tree, label, name):
-    chip=panel_chip(tree)
-    if chip.get('text')==label:return tree
-    tap_node(chip)
-    for attempt in range(18):
-        choices=capture(name+f'-choices-{attempt}')
-        node=next((n for n in choices.iter('node') if n.get('text')==label and n.get('enabled')=='true'),None)
-        if node is not None:
-            tap_node(node)
-            return_to_editor()
-            selected=capture(name+'-selected')
-            if panel_chip(selected) is None or panel_chip(selected).get('text')!=label:
-                raise RuntimeError(f'Panel selection did not become {label}')
-            return selected
-        # Walk down the short list, then back up (for restoring Weather).
-        start,end=(.75,.25) if attempt<6 else (.25,.75)
-        adb('shell','input','swipe',str(w//2),str(round(h*start)),str(w//2),str(round(h*end)),'350')
-        time.sleep(1)
-    raise RuntimeError(f'Panel option {label} was not found')
-
-
-def check_panels():
-    results['panel_captures']=[]
-    for option,label in [('weather','Weather'),('detailed_weather','Detailed weather'),
-                         ('temperature','Temperature'),('rain','Chance of rain'),
-                         ('steps','Steps'),('heart_rate','Heart rate'),('none','None')]:
-        name='panel-'+option
-        tree=open_panel_editor(name)
-        select_panel(tree,label,name)
-        adb('shell','input','keyevent','KEYCODE_HOME')
-        ensure_face()
-        capture(name+'-active')
-        # Check all three parts of the full rectangle, not individual weather cells.
-        attempts=[]
-        for point,x in [('left',100),('center',225),('right',350)]:
-            ensure_face()
-            before=launch_log()
-            tap(x*w/450,369*h/450)
-            events=sorted(launch_log()-before)
-            (out/f'{name}-tap-{point}.txt').write_text('\n'.join(events)+'\n')
-            capture(f'{name}-tap-{point}')
-            attempts.append({'point':point,'launch_events':events})
-            if any('complication: COMPLICATION.' in e for e in events):
-                results['tap_mismatches'].append(name+'-'+point)
-            if option=='none' and events:results['tap_mismatches'].append(name+'-'+point)
-            if option not in ['none','heart_rate']:
-                target='com.samsung.android.wear.shealth' if option=='steps' else 'com.samsung.android.watch.weather'
-                if len(events)!=1 or target not in events[0]:
-                    results['tap_mismatches'].append(name+'-'+point+'-target')
-        tree=open_panel_editor(name+'-persisted')
-        if panel_chip(tree).get('text')!=label:
-            raise RuntimeError(f'Panel {label} did not persist after leaving editor')
-        results['panel_captures'].append({'option':option,'label':label,'selection_persisted':True,
-                                          'tap_attempts':attempts,'samsung_app_launch_verified':False})
-        adb('shell','input','keyevent','KEYCODE_HOME')
-    tree=open_panel_editor('panel-restore')
-    select_panel(tree,'Weather','panel-restore-weather')
-    adb('shell','input','keyevent','KEYCODE_HOME')
-    ensure_face()
-    capture('active-panel-restored')
-
-
 results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'tap_mismatches': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
@@ -192,22 +105,14 @@ try:
     else:
         x1, y1, x2, y2 = map(int, re.findall(r'\d+', edit.get('bounds')))
         tap((x1+x2)/2, (y1+y2)/2)
-        slot_tree=capture('editor-initial-page')
-        # WFF list settings add an editor page before Complications.
-        for page in range(6):
-            labels=' '.join(n.get('text','')+' '+n.get('content-desc','') for n in slot_tree.iter('node'))
-            if 'Swipe back to return to Bottom panel' in labels or 'Upper circle' in labels: break
-            adb('shell','input','swipe',str(round(w*.82)),str(round(h*.5)),str(round(w*.18)),str(round(h*.5)),'350')
-            time.sleep(2)
-            slot_tree=capture(f'editor-page-{page}')
-        capture('editor-slots')
+        slot_tree=capture('editor-slots')
         results['editor_opened'] = True
-        # Coordinates come from the six WFF touch regions, scaled to the display.
+        # Coordinates come from the seven WFF touch regions, scaled to the display.
         for name, x, y in [('upper', 255, 136), ('middle', 346, 211),
                            ('lower', 255, 290), ('left', 16, 225),
-                           ('right', 420, 225), ('bottom', 225, 425)]:
+                           ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 369)]:
             slot_tree=return_to_editor()
-            label='Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
+            label='Bottom rectangle' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
             if node is not None:
                 x1,y1,x2,y2=map(int,re.findall(r'\d+',node.get('bounds')))
@@ -233,7 +138,46 @@ try:
             ensure_face()
             capture('active-edge-alarm')
             results['edge_alarm_capture']=True
-        check_panels()
+        # A stock emulator lacks Samsung Weather. Select its Alarm provider in
+        # the weather slot to verify actual assignment and provider-owned taps.
+        # This does not claim Samsung Weather integration on physical hardware.
+        if results.get('edge_alarm_capture'):
+            # Reopen the editor, since the preceding check returned to the face.
+            adb('shell', 'input', 'swipe', str(w//2), str(h//2), str(w//2), str(h//2), '1200')
+            time.sleep(3)
+            tree=capture('weather-editor-entry')
+            edit=next(n for n in tree.iter('node') if re.search(r'edit|customi[sz]e', ' '.join(n.get(k,'') for k in ['text','content-desc','resource-id']), re.I))
+            x1,y1,x2,y2=map(int,re.findall(r'\d+',edit.get('bounds')))
+            tap((x1+x2)/2,(y1+y2)/2)
+            return_to_editor()
+            tap(225*w/450,369*h/450)
+            chooser=capture('weather-provider-chooser')
+            alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
+            if alarm is None:
+                results['notes'].append('Alarm test provider unavailable in weather slot.')
+            else:
+                x1,y1,x2,y2=map(int,re.findall(r'\d+',alarm.get('bounds')))
+                tap((x1+x2)/2,(y1+y2)/2)
+                return_to_editor()
+                capture('editor-weather-assigned')
+                adb('shell','input','keyevent','KEYCODE_HOME')
+                ensure_face()
+                capture('active-weather-assigned')
+                attempts=[]
+                for point,x in [('left',100),('center',225),('right',350)]:
+                    ensure_face()
+                    before=launch_log()
+                    tap(x*w/450,369*h/450)
+                    capture('tap-rectangle-'+point)
+                    evidence=sorted(launch_log()-before)
+                    (out/f'tap-rectangle-{point}-launch.txt').write_text('\n'.join(evidence)+'\n')
+                    ids=[int(m.group(1)) for line in evidence if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
+                    attempts.append({'point':point,'observed_launch_slots':ids})
+                    if ids != [7]:results['tap_mismatches'].append('rectangle-'+point)
+                results['weather_provider_test']={'assigned_provider':'Alarm','expected_slot':7,
+                    'observed_launch_slots':attempts[1]['observed_launch_slots'],'tap_attempts':attempts,
+                    'samsung_weather_verified':False}
+
 except Exception as exc:
     detail = (getattr(exc, 'stderr', None) or b'').decode(errors='replace').strip()
     results['notes'].append(f'Editor automation inconclusive: {exc}; {detail}')
@@ -243,10 +187,10 @@ finally:
 if results['tap_mismatches']:
     raise SystemExit('Wrong complication received taps: '+', '.join(results['tap_mismatches']))
 
-if len(results['slot_captures']) != 6 or not all(s['provider_chooser_visible'] for s in results['slot_captures']):
-    raise SystemExit('Not all six native provider choosers were verified; inspect editor-results.json.')
+if len(results['slot_captures']) != 7 or not all(s['provider_chooser_visible'] for s in results['slot_captures']):
+    raise SystemExit('Not all seven native provider choosers were verified; inspect editor-results.json.')
 if not results.get('edge_alarm_capture'):
     raise SystemExit('Assigned edge text was not captured; inspect editor-results.json.')
 
-if len(results.get('panel_captures',[])) != 7:
-    raise SystemExit('Not all seven panel selections/persistence checks completed; inspect editor-results.json.')
+if 7 not in results.get('weather_provider_test',{}).get('observed_launch_slots',[]):
+    raise SystemExit('Weather slot provider tap was not verified; inspect weather tap logs.')

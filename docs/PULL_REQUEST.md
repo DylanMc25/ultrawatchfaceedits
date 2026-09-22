@@ -1,17 +1,15 @@
-# Ultra Info Board with an Info Brick-style bottom panel
+# Build Ultra Info Board with an app-selectable bottom rectangle
 
-Build a resource-only WFF 2 Galaxy Watch face with large stacked time, six independently editable complications and a compact **Bottom panel** menu. Weather is the default and shows current conditions plus four consecutive hourly forecasts as one tap area. Other choices are Detailed weather, Temperature, Chance of rain, Steps, Heart rate and None. The blue active face switches to black, thin time/date in always-on mode.
+Create a resource-only WFF 2 Galaxy Watch face with large stacked time, three staggered circles, two edge indicators, a bottom shortcut and an editable rectangular complication. The rectangle accepts installed providers' text, images and progress data; taps go to the selected provider. Samsung Weather's public service is the preferred default with an empty fallback. The blue face switches to black, thin time/date in always-on mode.
 
-Samsung APK inspection confirmed that Info Brick supplies a curated internal rectangle menu; its ordinary public Weather complication supplies current conditions only. This implementation uses native WFF sources and original vector icons. It preserves complication IDs 1–6 and removes generic slot 7, so an existing rectangle assignment is replaced by the new menu. It uses no Samsung private data API, companion app or backend. Health panels show current native readings, not historical charts.
+The native forecast experiment reported unavailable weather on the physical Galaxy Watch even though Samsung Weather had a forecast. The current implementation uses standard complications to support the requested app selection. Samsung's public Weather sends current conditions, not Info Brick's private hourly chart. The face uses original artwork and no backend, companion app or Samsung-private data access.
+
+The six existing slot IDs and geometry are preserved; slot 7 replaces the former fixed panel menu. A previous panel-menu choice does not map to a provider assignment. The rectangle has no heavy background and supports short/long text, images, ranged/goal progress and weighted elements.
 
 ## Validation
 
-- Local debug APK, unsigned release AAB, Android lint, no-DEX/package checks, official WFF 2 syntax/resource and memory checks pass.
-- Eighteen regression and fixture checks cover geometry/taps, menu/ambient structure, partial or stale weather, units/extreme values, zero/empty health readings, trend gaps, midnight/noon and daylight-saving rollover.
-- Fixture tests model documented WFF expressions; illustrative previews use explicit sample data. Neither establishes native weather availability.
-- Native emulator evidence and remaining checks are versioned in [VALIDATION.md](VALIDATION.md).
-- Physical Galaxy Watch native weather, panel editor persistence, app launches, permission denial and update behavior remain pending. Release signing, final package identity and store preparation are separate prerequisites.
+Current build, native emulator results and remaining physical checks are recorded in [VALIDATION.md](VALIDATION.md). Regression checks include non-overlapping tap regions, provider-owned data/actions, empty text, progress boundaries and ambient behavior. Emulators exercise all seven choosers and an assigned provider at three positions across the rectangle. Samsung data and real app destinations require a physical-watch test.
 
-![Illustrative Weather panel](https://raw.githubusercontent.com/DylanMc25/ultrawatchfaceedits/codex/watchface-redesign/docs/previews/panel-weather-illustrative.png)
+![Illustrative provider layout](https://raw.githubusercontent.com/DylanMc25/ultrawatchfaceedits/codex/watchface-redesign/docs/previews/active-illustrative.png)
 
-This image is a layout proof, not a live-data or emulator capture. Build artifacts are available from the successful branch workflow linked in VALIDATION.md.
+This preview uses sample data; it is not a native screenshot. Release signing, final package identity, store materials and physical battery/ambient tests remain release prerequisites.
