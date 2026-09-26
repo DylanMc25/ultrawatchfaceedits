@@ -145,7 +145,7 @@ public final class BottomPanelDataTest {
         Map<String, String> current = row("COL_WEATHER_KEY", LOCATION,
                 "COL_WEATHER_NAME", "Illustrative fixture", "COL_WEATHER_TIMEZONE", "UTC",
                 "COL_WEATHER_CURRENT_TEMP", String.valueOf(20 + temperatureOffset),
-                "COL_WEATHER_WEATHER_CODE", "1", "COL_WEATHER_IS_DAY_OR_NIGHT", "1",
+                "COL_WEATHER_CONVERTED_ICON_NUM", "1", "COL_WEATHER_IS_DAY_OR_NIGHT", "1",
                 "COL_WEATHER_UPDATE_TIME", String.valueOf(NOW),
                 "COL_WEATHER_EXPIRE_TIME", String.valueOf(NOW + 8 * 3_600_000L));
         List<Map<String, String>> hours = new ArrayList<>();
@@ -154,7 +154,7 @@ public final class BottomPanelDataTest {
             Map<String, String> hour = row("COL_WEATHER_KEY", LOCATION,
                     "COL_HOURLY_TIME", String.valueOf(NOW + i * 3_600_000L),
                     "COL_HOURLY_CURRENT_TEMP", String.valueOf(20 + temperatureOffset + i),
-                    "COL_HOURLY_IS_DAY_OR_NIGHT", "1", "COL_HOURLY_WEATHER_CODE", "1",
+                    "COL_HOURLY_IS_DAY_OR_NIGHT", "1", "COL_HOURLY_CONVERTED_ICON_NUM", "1",
                     "COL_HOURLY_EXPIRE_TIME", String.valueOf(NOW + 8 * 3_600_000L));
             if (rain[i] != null) hour.put("COL_HOURLY_RAIN_PROBABILITY", rain[i]);
             hours.add(hour);

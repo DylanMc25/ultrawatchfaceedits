@@ -61,6 +61,9 @@ val verifyBundledWatchFace by tasks.registering {
         check(evidence["host_package"] == "com.example.ultrainfoboard.bridge") {
             "Embedded face was validated for a different host."
         }
+        check(evidence["watchface_version_code"].toString() == android.defaultConfig.versionCode.toString()) {
+            "Host and bundled face versions must advance together for preview updates. Prepare the matching face version."
+        }
         val document = DocumentBuilderFactory.newInstance().apply {
             setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
         }.newDocumentBuilder().parse(values)

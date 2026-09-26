@@ -160,8 +160,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=("debug", "release"), default="debug")
     parser.add_argument("--validator", help="Existing official validator-push-cli JAR")
-    parser.add_argument("--version-code", type=int, default=13)
-    parser.add_argument("--version-name", default="0.2.0-preview.6")
+    parser.add_argument("--version-code", type=int, default=14)
+    parser.add_argument("--version-name", default="0.2.0-preview.7")
     args = parser.parse_args()
     if args.version_code < 1:
         parser.error("--version-code must be positive")
