@@ -70,6 +70,38 @@ public class SamsungWeatherContractTest {
         assertEquals("—", SamsungWeatherContract.temperature("20", 5));
     }
 
+    @Test public void preservesHourlyPrecipitationPercentagesIncludingZeroAndOneHundred() {
+        List<Map<String, String>> rows = hours("2026-09-21T12:00:00Z", 4);
+        int[] percentages = {0, 1, 50, 100};
+        for (int index = 0; index < rows.size(); index++) {
+            rows.get(index).put("COL_HOURLY_RAIN_PROBABILITY", String.valueOf(percentages[index]));
+        }
+        SamsungWeatherContract.Snapshot snapshot = parse(rows, "2026-09-21T12:00:00Z", "UTC", false);
+        for (int index = 0; index < percentages.length; index++) {
+            assertEquals(Integer.valueOf(percentages[index]), snapshot.hours.get(index).precipitationProbability);
+            assertEquals((20 + index) + "°", snapshot.hours.get(index).temperature);
+        }
+    }
+
+    @Test public void neverInventsHourlyRainProbabilityForMissingOrInvalidValues() {
+        for (String raw : Arrays.asList(null, "", "-1", "101", "999", "NaN", "Infinity",
+                "0.5", "50.0", "rain", "2147483648")) {
+            List<Map<String, String>> rows = hours("2026-09-21T12:00:00Z", 4);
+            rows.get(0).put("COL_HOURLY_RAIN_PROBABILITY", "25");
+            rows.get(1).put("COL_HOURLY_RAIN_PROBABILITY", raw);
+            // Entry 2 has no column at all; entry 3 has a genuine zero.
+            rows.get(3).put("COL_HOURLY_RAIN_PROBABILITY", "0");
+            SamsungWeatherContract.Snapshot snapshot = parse(rows, "2026-09-21T12:00:00Z", "UTC", false);
+            assertEquals(Integer.valueOf(25), snapshot.hours.get(0).precipitationProbability);
+            assertNull("invalid " + raw, snapshot.hours.get(1).precipitationProbability);
+            assertNull(snapshot.hours.get(2).precipitationProbability);
+            assertEquals(Integer.valueOf(0), snapshot.hours.get(3).precipitationProbability);
+            assertEquals("21°", snapshot.hours.get(1).temperature);
+            assertEquals("1PM", snapshot.hours.get(1).localTime);
+            assertTrue(snapshot.usable);
+        }
+    }
+
     @Test public void selectsCurrentHourAndNextThreeWhenHorizonIsLongEnough() {
         List<Map<String, String>> hours = hours("2026-09-21T10:00:00Z", 8);
         Collections.reverse(hours);

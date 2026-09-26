@@ -74,9 +74,14 @@ def prepare_resources():
         )
         if image_count != 1:
             raise RuntimeError("Expected one SMALL_IMAGE renderer in the bottom rectangle")
-        # The Wear OS 6 panel accepts complete image panels, not generic text.
+        # Retire editable slot 7. A new fixed ID prevents a saved third-party
+        # assignment from surviving the migration to our curated chart menu.
         opening = re.sub(r'supportedTypes="[^"]*"', 'supportedTypes="SMALL_IMAGE EMPTY"', match.group(1))
+        opening = opening.replace('slotId="7"', 'slotId="8"').replace('isCustomizable="TRUE"', 'isCustomizable="FALSE"')
+        opening = opening.replace('name="rectangle"', 'name="bottom_panel"')
         content = re.sub(r'\s*<Complication type="LONG_TEXT">.*?</Complication>', '', content, flags=re.S)
+        # None must have neither placeholder artwork nor a retained tap target.
+        content = re.sub(r'<Complication type="EMPTY">.*?</Complication>', '<Complication type="EMPTY" />', content, flags=re.S)
         return opening + content + match.group(3)
 
     replaced, count = rectangle_pattern.subn(fill_rectangle, replaced)

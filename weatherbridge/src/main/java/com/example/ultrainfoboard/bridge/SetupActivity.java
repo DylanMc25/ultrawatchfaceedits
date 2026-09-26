@@ -40,9 +40,10 @@ public final class SetupActivity extends Activity {
         int side = Math.round(getResources().getDisplayMetrics().widthPixels * .12f);
         content.setPadding(side, dp(30), side, dp(40));
         scroll.addView(content);
-        TextView title = label("Samsung forecast", 20);
+        TextView title = label("Ultra Info Board", 20);
         title.setTypeface(null, android.graphics.Typeface.BOLD);
         content.addView(title);
+        content.addView(button("Bottom panel", view -> startActivity(new Intent(this, BottomPanelActivity.class))));
         status = label("Checking weather access…", 14);
         content.addView(status);
         forecast = new ImageView(this);

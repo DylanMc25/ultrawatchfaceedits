@@ -36,13 +36,9 @@ jobs:
       - name: Build and officially validate the bundled watch face
         run: python3 tools/prepare_push_bundle.py
       - name: Build forecast app and run contract tests
-        run: ./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:bundleRelease :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug :panelfixture:assembleDebug
+        run: ./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:bundleRelease :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug
       - name: Verify and report preview signing identity
         run: python3 tools/preview_signing.py verify
-      - uses: actions/upload-artifact@v4
-        with:
-          name: panel-fixture-test-only
-          path: panelfixture/build/outputs/apk/debug/*.apk
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -82,10 +78,6 @@ jobs:
         with:
           name: samsung-forecast-preview
           path: artifacts
-      - uses: actions/download-artifact@v4
-        with:
-          name: panel-fixture-test-only
-          path: panel-fixture
       - name: Install Wear OS 6 emulator
         run: |
           sdkmanager 'emulator' 'platform-tools' 'system-images;android-36;android-wear-signed;x86_64'
@@ -93,10 +85,9 @@ jobs:
           echo no | avdmanager create avd -n forecast -k 'system-images;android-36;android-wear-signed;x86_64' -d '${{ matrix.device }}'
           sed -i 's/hw.lcd.circular = false/hw.lcd.circular = true/' "$ANDROID_AVD_HOME/forecast.avd/config.ini"
           sudo chmod 666 /dev/kvm
-      - name: Test installation, rendering and native complication selection
+      - name: Test installation, chart menu and native complication selection
         env:
           APK: artifacts/outputs/apk/debug/weatherbridge-debug.apk
-          PANEL_APK: panel-fixture/panelfixture-debug.apk
           TEST_APK: artifacts/outputs/apk/androidTest/debug/weatherbridge-debug-androidTest.apk
         run: |
           python3 -m pip install Pillow==12.3.0

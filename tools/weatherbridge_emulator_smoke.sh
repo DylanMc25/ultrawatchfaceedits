@@ -91,10 +91,9 @@ sleep 3
 adb exec-out screencap -p > "$report/active.png"
 adb shell dumpsys wallpaper > "$report/wallpaper.txt"
 python3 tools/check_capture.py "$report/active.png"
-timeout 180s "$forecast_adb" install -r -t "${PANEL_APK:-panelfixture/build/outputs/apk/debug/panelfixture-debug.apk}"
-stage 'Testing native rectangle selection, replacement and restoration'
-timeout 600s python3 tools/test_forecast_editor.py
-stage 'Native rectangle replacement and restoration passed'
+stage 'Testing curated chart menu, persistence and whole-panel taps'
+timeout 900s python3 tools/test_forecast_editor.py
+stage 'Curated chart menu, persistence and tap checks passed'
 adb shell settings put global always_on_display_constants 'enabled=true'
 adb shell settings put secure doze_enabled 1
 adb shell svc power stayon false
@@ -104,4 +103,4 @@ sleep 25
 adb shell dumpsys display > "$report/display-after-idle.txt"
 adb exec-out screencap -p > "$report/after-idle.png"
 python3 tools/check_ambient_capture.py "$report/after-idle.png" "$report/display-after-idle.txt" > "$report/ambient-pixels.json"
-printf '%s\n' 'Stock emulator: installed bundled face; rendering, unavailable data, native provider replacement/restoration and ambient checks passed. This run does not verify Samsung data or its OEM editor.' > "$report/result.txt"
+printf '%s\n' 'Stock emulator: installed bundled face; rendering, unavailable data, curated chart selection/persistence and six editable slots and ambient checks passed. This run does not verify Samsung data or its OEM editor.' > "$report/result.txt"

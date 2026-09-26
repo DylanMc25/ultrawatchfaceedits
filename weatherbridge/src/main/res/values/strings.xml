@@ -3,5 +3,5 @@
     <string name="app_name">Ultra Info Board Weather</string>
     <string name="forecast_complication_name">Weather</string>
     <string name="forecast_face_name">Ultra Forecast</string>
-    <string name="forecast_picker_help">Watch face: %1$s\nChange content: Customize → Bottom rectangle\nRestore forecast: %2$s → %3$s</string>
+    <string name="forecast_picker_help">Watch face: %1$s\nChange charts: Bottom panel in this app\nRestore forecast: Bottom panel → %3$s\nThe six other complications stay editable on the face.</string>
 </resources>

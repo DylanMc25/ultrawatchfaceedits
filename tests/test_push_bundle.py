@@ -63,7 +63,7 @@ class PushBundleTests(unittest.TestCase):
     def snapshot(self, path):
         return {file.relative_to(path): file.read_bytes() for file in path.rglob("*") if file.is_file()}
 
-    def test_only_bottom_provider_image_and_face_label_change(self):
+    def test_curated_panel_retires_old_assignment_and_preserves_six_editable_slots(self):
         original_files = self.snapshot(self.source)
         destination = PREPARE.prepare_resources()
         generated_files = self.snapshot(destination)
@@ -73,46 +73,30 @@ class PushBundleTests(unittest.TestCase):
             {name for name in generated_files if generated_files[name] != original_files[name]},
             {Path("raw/watchface.xml"), Path("values/strings.xml")},
         )
-        original_strings = ET.fromstring(original_files[Path("values/strings.xml")])
         generated_strings = ET.fromstring(generated_files[Path("values/strings.xml")])
-        app_name = generated_strings.find("string[@name='app_name']")
-        self.assertEqual(app_name.text, "Ultra Forecast")
-        app_name.text = original_strings.find("string[@name='app_name']").text
-        self.assertEqual(ET.tostring(generated_strings), ET.tostring(original_strings))
-
+        self.assertEqual(generated_strings.find("string[@name='app_name']").text, "Ultra Forecast")
         original = ET.fromstring(original_files[Path("raw/watchface.xml")])
         generated = ET.fromstring(generated_files[Path("raw/watchface.xml")])
         old_slots = original.findall(".//ComplicationSlot")
         new_slots = generated.findall(".//ComplicationSlot")
-        self.assertEqual([slot.get("slotId") for slot in new_slots], [str(i) for i in range(1, 8)])
-        self.assertEqual(new_slots[6].get("supportedTypes"), "SMALL_IMAGE EMPTY")
-        self.assertIsNone(new_slots[6].find("Complication[@type='LONG_TEXT']"))
-        new_slots[6].set("supportedTypes", old_slots[6].get("supportedTypes"))
-        self.assertEqual([slot.attrib for slot in new_slots], [slot.attrib for slot in old_slots])
+        self.assertEqual([slot.get("slotId") for slot in new_slots], ['1', '2', '3', '4', '5', '6', '8'])
+        self.assertEqual([slot.get("slotId") for slot in new_slots if slot.get("isCustomizable") == "TRUE"],
+                         ['1', '2', '3', '4', '5', '6'])
         for old_slot, new_slot in zip(old_slots[:6], new_slots[:6]):
             self.assertEqual(ET.tostring(new_slot), ET.tostring(old_slot))
-
-        policy = new_slots[6].find("DefaultProviderPolicy")
-        self.assertEqual(policy.attrib, {
+        panel = new_slots[-1]
+        self.assertEqual(panel.get("isCustomizable"), "FALSE")
+        self.assertEqual(panel.get("supportedTypes"), "SMALL_IMAGE EMPTY")
+        self.assertIsNone(panel.find("Complication[@type='LONG_TEXT']"))
+        self.assertEqual(len(panel.find("Complication[@type='EMPTY']")), 0)
+        self.assertEqual(panel.find("DefaultProviderPolicy").attrib, {
             "primaryProvider": "com.example.ultrainfoboard.bridge/com.example.ultrainfoboard.bridge.SamsungForecastService",
-            "primaryProviderType": "SMALL_IMAGE",
-            "defaultSystemProvider": "EMPTY",
-            "defaultSystemProviderType": "EMPTY",
+            "primaryProviderType": "SMALL_IMAGE", "defaultSystemProvider": "EMPTY", "defaultSystemProviderType": "EMPTY",
         })
-        image = new_slots[6].find("Complication[@type='SMALL_IMAGE']/PartImage")
-        self.assertEqual(image.attrib, {"x": "0", "y": "0", "width": "262", "height": "94"})
-        # Reverting intended edits must recover the original document.
-        old_slots[6].remove(old_slots[6].find("Complication[@type='LONG_TEXT']"))
-        policy.attrib.clear()
-        policy.attrib.update(old_slots[6].find("DefaultProviderPolicy").attrib)
-        image.attrib.clear()
-        image.attrib.update(old_slots[6].find("Complication[@type='SMALL_IMAGE']/PartImage").attrib)
-        # Whitespace around the removed renderer is not significant XML content.
-        for root in [original, generated]:
-            for node in root.iter():
-                if node.text and not node.text.strip(): node.text = None
-                if node.tail and not node.tail.strip(): node.tail = None
-        self.assertEqual(ET.tostring(generated), ET.tostring(original))
+        self.assertEqual(panel.find("Complication[@type='SMALL_IMAGE']/PartImage").attrib,
+                         {"x": "0", "y": "0", "width": "262", "height": "94"})
+        self.assertEqual(panel.find("Variant").attrib, {"mode": "AMBIENT", "target": "alpha", "value": "0"})
+        self.assertFalse(panel.findall('.//Launch'), "Only the chosen provider data owns the panel tap")
 
     def test_repreparation_removes_stale_generated_assets(self):
         destination = PREPARE.prepare_resources()

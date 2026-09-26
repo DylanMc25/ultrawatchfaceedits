@@ -32,7 +32,8 @@ public final class SamsungWeatherReader {
                     "COL_WEATHER_ARCTIC_NIGHT_TYPE"),
             "weatherinfo_hour", List.of("COL_WEATHER_KEY", "COL_HOURLY_TIME", "COL_HOURLY_CURRENT_TEMP",
                     "COL_HOURLY_CONVERTED_ICON_NUM", "COL_HOURLY_EXPANSION_ICON_NUM",
-                    "COL_HOURLY_WEATHER_TEXT", "COL_HOURLY_IS_DAY_OR_NIGHT", "COL_HOURLY_EXPIRE_TIME"));
+                    "COL_HOURLY_WEATHER_TEXT", "COL_HOURLY_IS_DAY_OR_NIGHT", "COL_HOURLY_EXPIRE_TIME",
+                    "COL_HOURLY_RAIN_PROBABILITY"));
 
     public enum State { READY, PERMISSION_REQUIRED, UNSUPPORTED, EMPTY, INCOMPATIBLE, ERROR }
     public static final class Result {

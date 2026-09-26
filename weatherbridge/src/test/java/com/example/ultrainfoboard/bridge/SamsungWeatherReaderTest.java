@@ -41,6 +41,7 @@ public class SamsungWeatherReaderTest {
                 SamsungWeatherReader.columnsFor("settings"));
         assertTrue(SamsungWeatherReader.columnsFor("weatherinfo").contains("COL_WEATHER_UPDATE_TIME"));
         assertTrue(SamsungWeatherReader.columnsFor("weatherinfo_hour").contains("COL_HOURLY_TIME"));
+        assertTrue(SamsungWeatherReader.columnsFor("weatherinfo_hour").contains("COL_HOURLY_RAIN_PROBABILITY"));
         for (String path : List.of("settings", "weatherinfo", "weatherinfo_hour")) {
             for (String column : SamsungWeatherReader.columnsFor(path)) {
                 assertFalse(column.contains("LATITUDE"));

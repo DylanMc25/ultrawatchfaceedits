@@ -42,9 +42,12 @@ public final class SamsungWeatherContract {
         public final String localTime;
         public final String conditionText;
         public final long expiresAtMillis;
+        /** Samsung's hourly precipitation percentage, or null when absent/invalid. */
+        public final Integer precipitationProbability;
 
         private Hour(long timestampMillis, String temperature, int condition, boolean day,
-                boolean dayKnown, String localTime, String conditionText, long expiresAtMillis) {
+                boolean dayKnown, String localTime, String conditionText, long expiresAtMillis,
+                Integer precipitationProbability) {
             this.timestampMillis = timestampMillis;
             this.temperature = temperature;
             this.condition = condition;
@@ -53,6 +56,7 @@ public final class SamsungWeatherContract {
             this.localTime = localTime;
             this.conditionText = conditionText;
             this.expiresAtMillis = expiresAtMillis;
+            this.precipitationProbability = precipitationProbability;
         }
     }
 
@@ -170,7 +174,8 @@ public final class SamsungWeatherContract {
                                 .toUpperCase(displayLocale);
                 Hour hour = new Hour(timestamp, temperature(value(row, "COL_HOURLY_CURRENT_TEMP"), scale),
                         category, Boolean.TRUE.equals(daylight), daylight != null, time,
-                        value(row, "COL_HOURLY_WEATHER_TEXT"), timestamp(row, "COL_HOURLY_EXPIRE_TIME"));
+                        value(row, "COL_HOURLY_WEATHER_TEXT"), timestamp(row, "COL_HOURLY_EXPIRE_TIME"),
+                        probability(row, "COL_HOURLY_RAIN_PROBABILITY"));
                 if (byTimestamp.putIfAbsent(timestamp, hour) != null
                         && !warnings.contains("duplicate_hourly_timestamp")) {
                     warnings.add("duplicate_hourly_timestamp");
@@ -306,6 +311,13 @@ public final class SamsungWeatherContract {
     private static Integer integer(Map<String, String> row, String field) {
         try { return Integer.valueOf(value(row, field)); }
         catch (NumberFormatException ignored) { return null; }
+    }
+
+    private static Integer probability(Map<String, String> row, String field) {
+        Integer result = integer(row, field);
+        // The stored value is a percentage, not a 0..1 ratio. In particular,
+        // preserve genuine 0%, and never clamp Samsung's 999 sentinel to 100%.
+        return result != null && result >= 0 && result <= 100 ? result : null;
     }
 
     private static long timestamp(Map<String, String> row, String field) {

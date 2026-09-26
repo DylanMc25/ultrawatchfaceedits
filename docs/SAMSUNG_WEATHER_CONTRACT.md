@@ -43,10 +43,24 @@ The adapter uses the favorite key strictly. If it is absent, or its current row 
 | `COL_WEATHER_TIME` / `COL_HOURLY_TIME` | Epoch timestamps in **milliseconds** |
 | `COL_WEATHER_UPDATE_TIME` | Last weather update timestamp |
 | `COL_WEATHER_EXPIRE_TIME` / `COL_HOURLY_EXPIRE_TIME` | Cache expiry timestamps; zero means unspecified |
+| `COL_HOURLY_RAIN_PROBABILITY` | Optional integer precipitation percentage for that exact hourly record |
 | `COL_WEATHER_SUNRISE_TIME` / `COL_WEATHER_SUNSET_TIME` | Day/night fallback timestamps |
 | `COL_WEATHER_ARCTIC_NIGHT_TYPE` | `1` continuous daylight; `2` polar night; otherwise normal |
 
 `999` is a temperature/no-value sentinel and must not render as `999°`. Missing, malformed and non-finite values remain unavailable. The adapter does not synthesize an hourly record for a gap or repeat another hour's temperature to fill one.
+
+### Hourly precipitation evidence (2026-09-26)
+
+The supplied WeatherWatch APK also exposes actual hourly precipitation probabilities through the same authorized `/weatherinfo_hour` endpoint. This is a separate field from precipitation amount and from the condition icon; it is not calculated from either.
+
+- `ContentProviderDataSource.getHourly` delegates to `CursorDbDao.getHourlyInfo`. `CursorRoomDao_Impl.getHourlyInfo` selects the rows of `TABLE_HOURLY_INFO`, including the selected-location variant with `COL_WEATHER_KEY = ?`.
+- `WeatherDatabase_Impl$1.createAllTables` defines `COL_HOURLY_RAIN_PROBABILITY` as a nullable integer column. `HourlyEntity.rainProbability` is a nullable `Integer`.
+- `DbToWeatherExtKt.toIndexList(HourlyEntity)` excludes null and negative probabilities before calling `toProbability(HourlyEntity)`, which uses the stored integer directly. `ConvertHourlyPrecipIndex.getHourlyPrecipProb` labels the corresponding forecast value with `ProbUnits.PERCENT`.
+- `PrecipitationIndex` uses `999` as its absent probability default; `isEmpty` checks that sentinel. The upstream hourly precipitation model includes rain, snow, and mixed precipitation, so the stored percentage describes precipitation chance despite the historical `RAIN_PROBABILITY` column name.
+
+The original adapter retains this optional field as `Hour.precipitationProbability`. Only integer percentages from 0 through 100 are accepted. Missing columns, nulls, negative values, values above 100 (including 999), malformed text, and fractional representations remain `null`; no value is clamped or multiplied by 100. Zero remains a real 0%. An unavailable probability does not remove that hour's temperature/icon/time or contaminate adjacent hours. Chart renderers must leave missing readings unavailable and must not join a graph across them.
+
+This is evidence of the schema and native interpretation in WeatherWatch 113060000, not proof that every location or Samsung weather backend populates the field. Its presence and chart values still need comparison on the user's physical Galaxy Watch. Inspection used Android SDK `apkanalyzer dex code` against the supplied APK; no extracted implementation is shipped.
 
 ## Conversion and selecting the four hours
 
@@ -117,5 +131,7 @@ Relevant local inspection sources, identified for reproducibility but not redist
 - Info Brick `Z1/O.q` and Ultra `p002a2/O.q`: displayed hour selection and label formatting.
 
 The pure-Java adapter tests cover favorite-location isolation, missing favorite/current rows, Celsius/Fahrenheit conversion and negative ties, extreme and invalid readings, individual missing entries, sorting/de-duplication, current-hour selection, native tail fallback, cache expiry, midnight/noon, 12/24-hour labels, location-zone differences, DST repeated hours, every observed condition code, expansion code selection, and unavailable day/night. Reader helper tests cover settings/current-record changes and the column allowlist, which excludes coordinates, addresses and web URLs from retained rows. These are fixture-based interoperability tests, not proof of Samsung permission or on-watch equivalence.
+
+Hourly precipitation fixtures additionally cover genuine 0%, 1%, 50%, and 100%, absent columns, null, negative/out-of-range/sentinel/malformed values, and preservation of each hour's existing temperature and time when precipitation is unavailable.
 
 Required physical comparison: grant/deny/revoke permission; compare current and four hourly values against the native panel at the same moment; repeat after a unit change, favorite-location change, hour rollover, Samsung Weather refresh, watch restart, and offline period. Confirm actual effective permission metadata, schema, update timestamps, app opening, and replacement of the rectangle by another provider. No physical comparison results are recorded yet.

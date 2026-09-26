@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.ultrainfoboard.bridge"
         minSdk = 36
         targetSdk = 36
-        versionCode = 13
-        versionName = "0.2.0-preview.6"
+        versionCode = 14
+        versionName = "0.2.0-preview.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {

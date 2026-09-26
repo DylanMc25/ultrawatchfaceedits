@@ -17,6 +17,7 @@ import android.os.RemoteException;
 
 import androidx.wear.watchface.complications.data.ComplicationData;
 import androidx.wear.watchface.complications.data.ComplicationType;
+import androidx.wear.watchface.complications.data.EmptyComplicationData;
 import androidx.wear.watchface.complications.data.PlainComplicationText;
 import androidx.wear.watchface.complications.data.SmallImage;
 import androidx.wear.watchface.complications.data.SmallImageComplicationData;
@@ -40,7 +41,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** A normal replaceable SMALL_IMAGE complication, backed exclusively by Samsung's cache. */
+/** Samsung-backed charts for the fixed bottom panel and compatible external faces. */
 public final class SamsungForecastService extends ComplicationDataSourceService {
     private final ExecutorService worker = Executors.newFixedThreadPool(2);
     private final ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
@@ -82,6 +83,10 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     @Override public void onComplicationRequest(ComplicationRequest request, ComplicationRequestListener listener) {
+        if (BottomPanelPreferences.get(this) == BottomPanelPreferences.Panel.NONE) {
+            send(listener, new AtomicBoolean(), new EmptyComplicationData());
+            return;
+        }
         observe();
         AtomicBoolean delivered = new AtomicBoolean();
         CancellationSignal cancellation = new CancellationSignal();
@@ -92,10 +97,12 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
         worker.execute(() -> {
             try {
                 SamsungWeatherReader.Result result = SamsungWeatherReader.read(this, cancellation);
-                ComplicationData data = data(result);
+                BottomPanelPreferences.Panel panel = BottomPanelPreferences.get(this);
+                ComplicationData data = data(result.snapshot, result.detail,
+                        result.state == SamsungWeatherReader.State.PERMISSION_REQUIRED ? setupTap() : weatherTap(), panel);
                 // The runtime advances these images at the hour boundary even if no poll arrives then.
                 List<TimelineEntry> timeline = new ArrayList<>();
-                if (result.state == SamsungWeatherReader.State.READY) {
+                if (panel != BottomPanelPreferences.Panel.NONE && result.state == SamsungWeatherReader.State.READY) {
                     long now = System.currentTimeMillis();
                     List<Long> expirations = new ArrayList<>();
                     for (long sample : ForecastTimeline.samples(now, ZoneId.systemDefault())) {
@@ -107,10 +114,19 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
                         SamsungWeatherContract.Snapshot snapshot = result.atTime(interval.start());
                         timeline.add(new TimelineEntry(new TimeInterval(Instant.ofEpochMilli(interval.start()),
                                 Instant.ofEpochMilli(interval.end())), data(snapshot,
-                                result.detail, weatherTap())));
+                                result.detail, weatherTap(), panel)));
                     }
                     // If all future entries expire without an update, do not restore an old fresh image.
                     data = unavailable("Open Weather");
+                }
+                // A menu change during a slow read must not reinstall an old chart
+                // or its future timeline after the user has chosen None.
+                if (panel != BottomPanelPreferences.get(this)) {
+                    timeline.clear();
+                    data = data(result.snapshot, result.detail,
+                            result.state == SamsungWeatherReader.State.PERMISSION_REQUIRED ? setupTap() : weatherTap(),
+                            BottomPanelPreferences.get(this));
+                    requestUpdates(this);
                 }
                 if (delivered.compareAndSet(false, true)) {
                     try {
@@ -153,17 +169,58 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     private ComplicationData unavailable(String text) {
-        return imageData(ForecastRenderer.render(new ForecastRenderer.RenderData(text, Collections.emptyList(), false)),
-                text, SamsungWeatherReader.granted(this) ? weatherTap() : setupTap());
+        BottomPanelPreferences.Panel panel = BottomPanelPreferences.get(this);
+        if (panel == BottomPanelPreferences.Panel.NONE) return new EmptyComplicationData();
+        Bitmap bitmap = panel == BottomPanelPreferences.Panel.WEATHER
+                ? ForecastRenderer.render(new ForecastRenderer.RenderData(text, Collections.emptyList(), false))
+                : renderPanel(null, panel);
+        return imageData(bitmap, panel.title + ". " + text,
+                SamsungWeatherReader.granted(this) ? weatherTap() : setupTap());
     }
 
-    private ComplicationData data(SamsungWeatherReader.Result result) {
-        return data(result.snapshot, result.detail,
-                result.state == SamsungWeatherReader.State.PERMISSION_REQUIRED ? setupTap() : weatherTap());
+    private ComplicationData data(SamsungWeatherContract.Snapshot snapshot, String detail, PendingIntent tap,
+            BottomPanelPreferences.Panel panel) {
+        if (panel == BottomPanelPreferences.Panel.NONE) return new EmptyComplicationData();
+        return imageData(renderPanel(snapshot, panel), describePanel(snapshot, detail, panel), tap);
     }
 
-    private ComplicationData data(SamsungWeatherContract.Snapshot snapshot, String detail, PendingIntent tap) {
-        return imageData(render(snapshot), describe(snapshot, detail), tap);
+    static Bitmap renderPanel(SamsungWeatherContract.Snapshot snapshot, BottomPanelPreferences.Panel panel) {
+        if (panel == BottomPanelPreferences.Panel.WEATHER) return render(snapshot);
+        List<PanelChartRenderer.Point> points = new ArrayList<>();
+        if (snapshot != null) for (SamsungWeatherContract.Hour hour : snapshot.hours) {
+            Double value = panel == BottomPanelPreferences.Panel.RAIN
+                    ? (hour.precipitationProbability == null ? null : hour.precipitationProbability.doubleValue())
+                    : chartTemperature(hour.temperature);
+            points.add(new PanelChartRenderer.Point(hour.localTime, value, hour.timestampMillis));
+        }
+        return PanelChartRenderer.render(panel == BottomPanelPreferences.Panel.RAIN ? "Chance of rain" : "Temperature",
+                panel == BottomPanelPreferences.Panel.RAIN ? "%" : snapshot == null ? "" : snapshot.unit,
+                points, snapshot != null && snapshot.stale, panel == BottomPanelPreferences.Panel.RAIN);
+    }
+
+    private static Double chartTemperature(String formatted) {
+        if (formatted == null || !formatted.endsWith("°")) return null;
+        try {
+            double value = Double.parseDouble(formatted.substring(0, formatted.length() - 1));
+            return Double.isFinite(value) ? value : null;
+        } catch (NumberFormatException ignored) { return null; }
+    }
+
+    static String describePanel(SamsungWeatherContract.Snapshot snapshot, String detail,
+            BottomPanelPreferences.Panel panel) {
+        if (panel == BottomPanelPreferences.Panel.WEATHER) return describe(snapshot, detail);
+        if (snapshot == null) return panel.title + ". " + detail;
+        StringBuilder description = new StringBuilder(panel.title).append(". ").append(snapshot.locationName);
+        for (SamsungWeatherContract.Hour hour : snapshot.hours) {
+            description.append('\n').append(hour.localTime).append(' ');
+            if (panel == BottomPanelPreferences.Panel.RAIN) {
+                description.append(hour.precipitationProbability == null ? "unavailable"
+                        : hour.precipitationProbability + "%");
+            } else description.append(hour.temperature).append(' ').append(snapshot.unit);
+        }
+        if (snapshot.hours.isEmpty()) description.append(". Hourly data unavailable.");
+        if (snapshot.stale) description.append(". Saved forecast may be out of date.");
+        return description.toString();
     }
 
     private ComplicationData imageData(Bitmap source, String description, PendingIntent tap) {

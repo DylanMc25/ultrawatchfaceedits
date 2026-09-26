@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Exercise the real Wear OS picker, replacement, persistence and provider taps.
+"""Exercise the curated chart menu, six native slots, persistence and panel taps.
 
-Run only on a disposable stock emulator with the bundled forecast face active.
-A synthetic chart provider lives only in a separately installed test-only app.
-No synthetic Samsung provider or weather readings are installed. Screenshots and
-UI trees are retained on failure so an automation failure is not reported as a
-successful selection test.
+Only for a disposable stock emulator. Samsung readings are not installed;
+renderer fixtures and real provider unavailable states are tested separately.
+UI trees and screenshots are retained on failure.
 """
 import json
 from pathlib import Path
@@ -20,7 +18,6 @@ from PIL import Image
 OUT = Path("build/forecast-emulator/editor")
 HOST = "com.example.ultrainfoboard.bridge"
 FACE = HOST + ".watchfacepush.board"
-CHART_ACTIVITY = "com.example.ultrainfoboard.panelfixture/" + HOST + ".ChartTestActivity"
 RECTANGLE_CENTER = (225, 357)
 RESULT = {"passed": False, "checks": [], "samsung_integration_verified": False}
 WIDTH = HEIGHT = 0
@@ -113,15 +110,6 @@ def open_editor(name):
     return capture(name + "-slots")
 
 
-def open_rectangle(name):
-    wait_editor()
-    tap(RECTANGLE_CENTER[0] * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450)
-    current = capture(name)
-    if "ProviderChooserActivity" not in top_activity():
-        raise RuntimeError("Rectangle did not open the normal provider chooser")
-    return current
-
-
 def provider_match(current, wanted, category, in_category=False):
     """Match a source within its own app, never another app's same-name source."""
     for node in current.iter("node"):
@@ -177,16 +165,6 @@ def select_provider(wanted, prefix, category=None):
     raise RuntimeError(f"Provider {wanted!r} was not found in the native rectangle picker")
 
 
-def rectangle_label(current):
-    x, y = RECTANGLE_CENTER[0] * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450
-    found = []
-    for node in current.iter("node"):
-        b = bounds(node)
-        if len(b) == 4 and b[0] <= x <= b[2] and b[1] <= y <= b[3] and label(node):
-            found.append(((b[2] - b[0]) * (b[3] - b[1]), label(node)))
-    return min(found)[1] if found else ""
-
-
 def leave_editor():
     adb("shell", "input", "keyevent", "KEYCODE_HOME")
     ensure_face()
@@ -209,6 +187,41 @@ def verify_taps(prefix, expected):
         RESULT["checks"].append({"tap": prefix + "-" + point, "resumed_activity": resumed})
 
 
+def open_panel_menu(prefix):
+    adb("shell", "am", "start", "-n", HOST + "/.SetupActivity")
+    time.sleep(3)
+    current = capture(prefix + "-setup")
+    button = next((n for n in current.iter("node") if n.get("text") == "Bottom panel"), None)
+    if button is None:
+        raise RuntimeError("Setup does not expose the Bottom panel button")
+    click(button)
+    current = capture(prefix + "-menu")
+    if "BottomPanelActivity" not in top_activity():
+        raise RuntimeError("Bottom panel button did not open curated menu")
+    return current
+
+
+def find_chart(wanted, prefix, require_checked=False):
+    for page in range(6):
+        current = capture(f"{prefix}-{page}")
+        node = next((n for n in current.iter("node") if n.get("text") == wanted
+                     and n.get("class") == "android.widget.RadioButton"), None)
+        if node is not None:
+            if require_checked and node.get("checked") != "true":
+                raise RuntimeError(wanted + " did not remain selected")
+            return node
+        adb("shell", "input", "swipe", str(WIDTH // 2), str(round(HEIGHT * .78)),
+            str(WIDTH // 2), str(round(HEIGHT * .3)), "400")
+        time.sleep(1)
+    raise RuntimeError("Curated choice not found: " + wanted)
+
+
+def select_chart(wanted, prefix):
+    click(find_chart(wanted, prefix))
+    find_chart(wanted, prefix + "-selected", require_checked=True)
+    time.sleep(5)
+
+
 def main():
     global WIDTH, HEIGHT
     OUT.mkdir(parents=True, exist_ok=True)
@@ -223,51 +236,44 @@ def main():
         (OUT / "registered-providers.txt").write_bytes(providers)
         if b"SamsungForecastService" not in providers:
             raise RuntimeError("Forecast source not discoverable through standard complication action")
-        open_editor("replace")
+        current = open_editor("curated")
+        slot_nodes = [n for n in current.iter("node") if n.get("clickable") == "true"
+                      and n.get("content-desc") and not n.get("resource-id")]
+        if len(slot_nodes) != 6:
+            raise RuntimeError(f"Expected six editable slots, found {len(slot_nodes)}")
+        RESULT["checks"].append({"editable_slots": [label(n) for n in slot_nodes]})
+        tap(RECTANGLE_CENTER[0] * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450)
+        capture("bottom-is-fixed")
+        if "ProviderChooserActivity" in top_activity():
+            raise RuntimeError("Bottom panel still opens the unrestricted provider picker")
         tap(225 * WIDTH / 450, 425 * HEIGHT / 450)
         shortcut_tree = capture("shortcut-chooser")
         if "ProviderChooserActivity" not in top_activity():
             raise RuntimeError("Shortcut did not open the native chooser")
         if not any("app shortcut" in label(n).casefold() for n in shortcut_tree.iter("node")):
-            raise RuntimeError("The narrowed shortcut picker lost the system app shortcut source")
-        RESULT["checks"].append({"shortcut_picker_supports_app_shortcut": True})
-        # Cancelling this system picker with BACK can leave a blank transition.
-        # Commit its existing Empty choice instead, then require the real editor.
+            raise RuntimeError("Shortcut lost the system App shortcut source")
         select_provider("Empty", "shortcut-empty")
-        open_rectangle("replace-chooser")
-        # A separate app proves SMALL_IMAGE remains replaceable through the native picker.
-        select_provider("Test chart", "chart", "Panel test")
         leave_editor()
-        capture("chart-active")
-        # Reopening proves it was saved, not only highlighted in the chooser.
-        current = open_editor("chart-persisted")
-        if rectangle_label(current).casefold() != "test chart":
-            raise RuntimeError("Chart assignment did not persist in the rectangle")
-        RESULT["checks"].append({"replacement_persisted": rectangle_label(current)})
+        for wanted in ["Temperature trend", "Chance of rain", "None", "Weather"]:
+            prefix = wanted.lower().replace(" ", "-")
+            open_panel_menu(prefix)
+            select_chart(wanted, prefix)
+            # Kill/reopen the app to verify durable persistence, not only a selected radio button.
+            adb("shell", "am", "force-stop", HOST)
+            open_panel_menu(prefix + "-reopened")
+            find_chart(wanted, prefix + "-persisted", require_checked=True)
+            leave_editor()
+            time.sleep(8)
+            capture(prefix + "-active")
+            if wanted == "None":
+                before = top_activity()
+                verify_taps(prefix, lambda resumed: resumed == before)
+            else:
+                verify_taps(prefix, lambda resumed: HOST + "/.SetupActivity" in resumed
+                            or HOST + "/" + HOST + ".SetupActivity" in resumed)
+            RESULT["checks"].append({"panel": wanted, "selection_persisted": True,
+                                     "tap": "none" if wanted == "None" else "setup_without_samsung"})
         leave_editor()
-        verify_taps("chart", lambda resumed: CHART_ACTIVITY in resumed)
-        adb("shell", "am", "start", "-n", HOST + "/.SetupActivity")
-        time.sleep(5)
-        current = open_editor("chart-after-setup")
-        if rectangle_label(current).casefold() != "test chart":
-            raise RuntimeError("Opening setup replaced the saved Chart assignment")
-        RESULT["checks"].append({"replacement_survives_setup": True})
-        leave_editor()
-        open_editor("restore")
-        open_rectangle("restore-chooser")
-        select_provider("Weather", "forecast", "Ultra Info Board Weather")
-        leave_editor()
-        capture("forecast-restored-active")
-        current = open_editor("forecast-persisted")
-        restored_label = rectangle_label(current)
-        if restored_label.casefold() != "weather":
-            raise RuntimeError("Forecast assignment did not persist in the rectangle: " + restored_label)
-        leave_editor()
-        # Without Samsung installed, the real provider's unavailable-state tap
-        # opens our setup app. This confirms the provider was restored, not Weather integration.
-        verify_taps("forecast", lambda resumed: HOST + "/.SetupActivity" in resumed
-                    or HOST + "/" + HOST + ".SetupActivity" in resumed)
-        RESULT["checks"].append({"restoration_persisted": restored_label})
         RESULT["passed"] = True
     except Exception as error:
         RESULT["error"] = str(error)
