@@ -23,3 +23,6 @@ __pycache__/
 *.keystore
 keystore.properties
 core
+
+# Generated output from every Android module, including test fixtures.
+**/build/
