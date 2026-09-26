@@ -20,6 +20,8 @@ The current layout is standalone `:app` version **0.1.9 / 10** and Samsung forec
 
 Long-press the face and choose **Customize → Complications → Bottom rectangle** (or tap the rectangle in the editor). Choose an installed provider, such as Weather or a compatible image/chart provider. The provider owns the data, units and whole-area tap action. Time follows the device's 12/24-hour preference. A `+` marks an empty slot; missing text is a dash.
 
+The [supplied WFS project investigation](docs/WFS_PICKER_FINDINGS.md) compares its Large Box, circle and edge filters with this face. Its pictured forecast consists of separate weather layers; its editable Large Box accepts more formats than our forecast rectangle. No additional app allowlist was found in the project or documented WFS controls.
+
 In the standalone face, Samsung's **public Weather complication** is the preferred default when installed and eligible; otherwise the rectangle starts empty. It supplies current conditions, **not Info Brick's hourly forecast**. In the Wear OS 6 preview, **Weather** under **Ultra Info Board Weather** is our Samsung-source hourly provider and is the default. An eligible image provider can supply its own chart; the face does not manufacture forecasts or history.
 
 All seven slot IDs stay stable in this update. The narrower rectangle type list removes short-text, progress and icon-only choices from its menu. A previously assigned source that only supports a removed type may need to be selected again or replaced; migration and saved-assignment retention have not been verified. The other six slots retain normal complication selection.
