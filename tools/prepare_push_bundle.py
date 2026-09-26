@@ -74,7 +74,10 @@ def prepare_resources():
         )
         if image_count != 1:
             raise RuntimeError("Expected one SMALL_IMAGE renderer in the bottom rectangle")
-        return match.group(1) + content + match.group(3)
+        # The Wear OS 6 panel accepts complete image panels, not generic text.
+        opening = re.sub(r'supportedTypes="[^"]*"', 'supportedTypes="SMALL_IMAGE EMPTY"', match.group(1))
+        content = re.sub(r'\s*<Complication type="LONG_TEXT">.*?</Complication>', '', content, flags=re.S)
+        return opening + content + match.group(3)
 
     replaced, count = rectangle_pattern.subn(fill_rectangle, replaced)
     if count != 1:
@@ -152,8 +155,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=("debug", "release"), default="debug")
     parser.add_argument("--validator", help="Existing official validator-push-cli JAR")
-    parser.add_argument("--version-code", type=int, default=11)
-    parser.add_argument("--version-name", default="0.2.0-preview.4")
+    parser.add_argument("--version-code", type=int, default=12)
+    parser.add_argument("--version-name", default="0.2.0-preview.5")
     args = parser.parse_args()
     if args.version_code < 1:
         parser.error("--version-code must be positive")

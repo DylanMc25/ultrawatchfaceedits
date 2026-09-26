@@ -78,16 +78,16 @@ def clock(parent, ambient=False):
     # Retain the installed face's stacked time and two-line date. Slightly
     # smaller, inset digits clear the battery gauge and larger forecast below.
     d = box(g, 'DigitalClock', 28, 67, 176, 246)
-    for fmt, x, y, width in [('hh', 22, 0, 154), ('mm', 0, 116, 138)]:
+    for fmt, x, y, width in [('hh', 22, 0, 152), ('mm', 0, 116, 136)]:
         t = box(d, 'TimeText', x, y, width, 130, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else 134,
            color=color, weight='THIN' if ambient else 'MEDIUM')
     text(g, 82, 17, 286, 40, 24, '%s', '[MONTH_F]',
-         color=color if ambient else C[3], weight='LIGHT' if ambient else 'NORMAL')
-    text(g, 230, 55, 142, 29, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
-         color=color if ambient else C[3])
+         color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
+    text(g, 202, 55, 96, 29, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
+         color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
     if not ambient:
-        seconds = box(g, 'DigitalClock', 168, 270, 36, 40)
+        seconds = box(g, 'DigitalClock', 166, 270, 36, 40)
         t = box(seconds, 'TimeText', 0, 0, 36, 40, format='ss', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
@@ -253,9 +253,9 @@ def build():
     el(fill, 'LinearGradient', startX=0, startY=0, endX=0, endY=450, colors=C[0]+' '+C[1], positions='0 1')
     clock(scene); clock(scene, ambient=True)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',204,86,96,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',302,166,94,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',204,212,96,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',202,86,96,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',300,143,96,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',202,199,96,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     rectangle_slot(scene)

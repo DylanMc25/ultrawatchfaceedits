@@ -2,6 +2,7 @@
 """Exercise the real Wear OS picker, replacement, persistence and provider taps.
 
 Run only on a disposable stock emulator with the bundled forecast face active.
+A synthetic chart provider lives only in a separately installed test-only app.
 No synthetic Samsung provider or weather readings are installed. Screenshots and
 UI trees are retained on failure so an automation failure is not reported as a
 successful selection test.
@@ -19,8 +20,7 @@ from PIL import Image
 OUT = Path("build/forecast-emulator/editor")
 HOST = "com.example.ultrainfoboard.bridge"
 FACE = HOST + ".watchfacepush.board"
-BATTERY_ACTIVITY = ("com.google.android.apps.wearable.settings/"
-                    "com.google.android.clockwork.settings.MainSettingsActivity")
+CHART_ACTIVITY = "com.example.ultrainfoboard.panelfixture/" + HOST + ".ChartTestActivity"
 RECTANGLE_CENTER = (225, 357)
 RESULT = {"passed": False, "checks": [], "samsung_integration_verified": False}
 WIDTH = HEIGHT = 0
@@ -225,22 +225,22 @@ def main():
             raise RuntimeError("Forecast source not discoverable through standard complication action")
         open_editor("replace")
         open_rectangle("replace-chooser")
-        # Battery supports LONG_TEXT without account, permission or app setup.
-        select_provider("Battery", "battery", "Wear OS")
+        # A separate app proves SMALL_IMAGE remains replaceable through the native picker.
+        select_provider("Test chart", "chart", "Panel test")
         leave_editor()
-        capture("battery-active")
+        capture("chart-active")
         # Reopening proves it was saved, not only highlighted in the chooser.
-        current = open_editor("battery-persisted")
-        if rectangle_label(current).casefold() != "battery":
-            raise RuntimeError("Battery assignment did not persist in the rectangle")
+        current = open_editor("chart-persisted")
+        if rectangle_label(current).casefold() != "test chart":
+            raise RuntimeError("Chart assignment did not persist in the rectangle")
         RESULT["checks"].append({"replacement_persisted": rectangle_label(current)})
         leave_editor()
-        verify_taps("battery", lambda resumed: BATTERY_ACTIVITY in resumed)
+        verify_taps("chart", lambda resumed: CHART_ACTIVITY in resumed)
         adb("shell", "am", "start", "-n", HOST + "/.SetupActivity")
         time.sleep(5)
-        current = open_editor("battery-after-setup")
-        if rectangle_label(current).casefold() != "battery":
-            raise RuntimeError("Opening setup replaced the saved Battery assignment")
+        current = open_editor("chart-after-setup")
+        if rectangle_label(current).casefold() != "test chart":
+            raise RuntimeError("Opening setup replaced the saved Chart assignment")
         RESULT["checks"].append({"replacement_survives_setup": True})
         leave_editor()
         open_editor("restore")

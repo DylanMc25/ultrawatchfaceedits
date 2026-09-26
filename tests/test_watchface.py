@@ -133,6 +133,10 @@ class WatchFaceTests(unittest.TestCase):
             x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
             self.assertGreaterEqual(w,94)
             self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
+        centers=[(float(s.get('x'))+float(s.get('width'))/2,
+                  float(s.get('y'))+float(s.get('height'))/2) for s in slots[:3]]
+        gaps=[math.dist(centers[a],centers[b])-96 for a,b in [(0,1),(1,2),(0,2)]]
+        self.assertLess(max(gaps)-min(gaps),1, 'Circle spacing must be even')
         g=self.face.find(".//Group[@name='interactive_time']")
         for clock in g.findall('DigitalClock'):
             for t in clock.findall('TimeText'):

@@ -1,5 +1,12 @@
 # Validation
 
+## Version 12 alignment, picker and signing update
+
+Local validation passes: 18 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v9 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
+
+The user reports weather works after tapping Allow. This supports a permission-reset explanation for the latest failure, not a weather-data regression. v10/v11 downloaded host certificates differ while their embedded face certificate is unchanged. The explicit cached host key and certificate checks address that CI defect; permission retention still requires a same-key physical update check.
+
+
 ## Current preview 0.2.0-preview.4 (version 11)
 
 The installed face remains the layout baseline: two-line date, stacked time and three staggered circles. Month/date text is smaller, time is slightly smaller and inset, and live readings are larger. The forecast rectangle grows from 262 × 60 to 262 × 94 with larger temperatures, icons and hourly labels. Its source is now named **Weather**. The native picker accepts `LONG_TEXT`, `SMALL_IMAGE` and `EMPTY`; the OS decides which providers satisfy those formats. All seven slot IDs and provider component identities remain stable, but bounds have changed. The original standalone build is now 0.1.7 (version 8).

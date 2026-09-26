@@ -28,12 +28,21 @@ jobs:
           path: |
             .cache/pushface-debug.jks
             ~/.android/debug.keystore
-          key: samsung-forecast-preview-signing-v1
+          key: samsung-forecast-preview-signing-v2
+          restore-keys: samsung-forecast-preview-signing-v1
+      - name: Prepare persistent preview host signing
+        run: python3 tools/preview_signing.py prepare
       - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
       - name: Build and officially validate the bundled watch face
         run: python3 tools/prepare_push_bundle.py
       - name: Build forecast app and run contract tests
-        run: ./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:bundleRelease :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug
+        run: ./gradlew :weatherbridge:assembleDebug :weatherbridge:assembleDebugAndroidTest :weatherbridge:bundleRelease :weatherbridge:testDebugUnitTest :weatherbridge:lintDebug :panelfixture:assembleDebug
+      - name: Verify and report preview signing identity
+        run: python3 tools/preview_signing.py verify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: panel-fixture-test-only
+          path: panelfixture/build/outputs/apk/debug/*.apk
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -73,6 +82,10 @@ jobs:
         with:
           name: samsung-forecast-preview
           path: artifacts
+      - uses: actions/download-artifact@v4
+        with:
+          name: panel-fixture-test-only
+          path: panel-fixture
       - name: Install Wear OS 6 emulator
         run: |
           sdkmanager 'emulator' 'platform-tools' 'system-images;android-36;android-wear-signed;x86_64'
@@ -83,6 +96,7 @@ jobs:
       - name: Test installation, rendering and native complication selection
         env:
           APK: artifacts/outputs/apk/debug/weatherbridge-debug.apk
+          PANEL_APK: panel-fixture/panelfixture-debug.apk
           TEST_APK: artifacts/outputs/apk/androidTest/debug/weatherbridge-debug-androidTest.apk
         run: |
           python3 -m pip install Pillow==12.3.0

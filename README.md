@@ -4,7 +4,7 @@ A Galaxy Watch face with a blue gradient, large stacked time and seven editable 
 
 **Start with the [Samsung forecast installation and comparison guide](docs/SAMSUNG_FORECAST_TESTING.md).** Download `weatherbridge-debug.apk` from the `samsung-forecast-preview` artifact in [this workflow](https://github.com/DylanMc25/ultrawatchfaceedits/actions/workflows/samsung-weather.yml), checking the source version before installation. The user confirmed the forecast appears in the face and tapping opens Samsung Weather; the narrowed picker still needs a physical Samsung check. The bundled face is **Ultra Forecast**. This is a development preview, not a store release.
 
-The current layout is standalone `:app` version **0.1.7 / 8** and Samsung forecast preview **0.2.0-preview.4 / 11**. The original standalone face remains available on Wear OS 5+ as `com.example.ultrainfoboard`; the bundled preview requires Wear OS 6. Version 11 keeps the familiar staggered layout, reduces the date/time slightly and enlarges complication readings and the forecast. The current layout passed native checks on small/large API 36 and standalone API 34/35; physical readability and upgrade retention still need review. Final branding, package identity and release signing remain release prerequisites.
+The current layout is standalone `:app` version **0.1.8 / 9** and Samsung forecast preview **0.2.0-preview.5 / 12**. The original standalone face remains available on Wear OS 5+ as `com.example.ultrainfoboard`; the bundled preview requires Wear OS 6. Version 12 keeps the familiar staggered layout, evens the circle gaps, makes the date bold, and limits the forecast picker to image panels. Prior version 11 passed native checks on small/large API 36 and standalone API 34/35; this revision is awaiting CI evidence; physical readability and upgrade retention still need review. Final branding, package identity and release signing remain release prerequisites.
 
 ![Illustrative provider layout](docs/previews/active-illustrative.png)
 
@@ -12,13 +12,13 @@ The current layout is standalone `:app` version **0.1.7 / 8** and Samsung foreca
 
 ## Layout
 
-- Month and day/date remain on two lines above stacked hours/minutes. Month/date type is 24/21 units and time is 134 units; seconds retain a separate column.
-- Three staggered circles on the right: heart rate, steps and sunrise/sunset. Diameters are 96/94/96 units, with main readings up to 46 units and smaller sizes for longer values.
+- Month and day/date remain on two lines above stacked hours/minutes. Active month/date text is bold, 24/21 units and time is 134 units; seconds retain a separate column.
+- Three staggered circles on the right: heart rate, steps and sunrise/sunset. Diameters are 96/96/96 units, with main readings up to 46 units and smaller sizes for longer values.
 - Segmented left battery gauge, thick right-edge arc, provider icons and angled edge labels. Right edge and bottom shortcut start unassigned.
-- One transparent **Bottom rectangle**, 262 × 94 units, for compatible installed apps' `LONG_TEXT` and `SMALL_IMAGE` complications, or Empty. Wear OS determines which installed sources support those types; there is no app whitelist.
+- One transparent **Bottom rectangle**, 262 × 94 units, for compatible installed apps' image panels (`SMALL_IMAGE`) or Empty in the Wear OS 6 forecast face. The legacy standalone face also accepts `LONG_TEXT`. Wear OS determines which installed sources support those types; there is no app whitelist.
 - Black always-on display with thin time and date; all complications are hidden.
 
-Long-press the face and choose **Customize → Complications → Bottom rectangle** (or tap the rectangle in the editor). Choose an installed provider, such as Weather, calendar or a compatible image/chart provider. The provider owns the data, units and whole-area tap action. Time follows the device's 12/24-hour preference. A `+` marks an empty slot; missing text is a dash.
+Long-press the face and choose **Customize → Complications → Bottom rectangle** (or tap the rectangle in the editor). Choose an installed provider, such as Weather or a compatible image/chart provider. The provider owns the data, units and whole-area tap action. Time follows the device's 12/24-hour preference. A `+` marks an empty slot; missing text is a dash.
 
 In the standalone face, Samsung's **public Weather complication** is the preferred default when installed and eligible; otherwise the rectangle starts empty. It supplies current conditions, **not Info Brick's hourly forecast**. In the Wear OS 6 preview, **Weather** under **Ultra Info Board Weather** is our Samsung-source hourly provider and is the default. An eligible image provider can supply its own chart; the face does not manufacture forecasts or history.
 
@@ -28,7 +28,7 @@ All seven slot IDs stay stable in this update. The narrower rectangle type list 
 
 The historical 0.1.5 test reported `Weather —` while its tap correctly opened Samsung Weather with location and forecast data. The standalone face switched to provider data in 0.1.6; its integration remains separate from the physically confirmed Wear OS 6 preview. See [research and compatibility](docs/SAMSUNG_WEATHER.md).
 
-**Samsung forecast preview:** the Wear OS 6 app bundles the face and an hourly forecast complication that reads Samsung Weather's cache with the user's permission. It follows Samsung's saved location, units and hourly selection, and opens Samsung Weather when tapped. [Install and test the preview](docs/SAMSUNG_FORECAST_TESTING.md). Physical forecast display/tap succeeded on an earlier build; the version 11 Samsung picker, detailed data comparison and physical readability remain unverified. The original `:app` build remains available alongside `:weatherbridge` / `:pushface`.
+**Samsung forecast preview:** the Wear OS 6 app bundles the face and an hourly forecast complication that reads Samsung Weather's cache with the user's permission. It follows Samsung's saved location, units and hourly selection, and opens Samsung Weather when tapped. [Install and test the preview](docs/SAMSUNG_FORECAST_TESTING.md). Physical forecast display/tap succeeded on an earlier build; the version 12 Samsung picker, detailed data comparison and physical readability remain unverified. The original `:app` build remains available alongside `:weatherbridge` / `:pushface`.
 
 ## Build and install
 
@@ -44,7 +44,7 @@ adb shell am broadcast -a com.google.android.wearable.app.DEBUG_SURFACE \
 
 The debug APK is installable and signed with the development key. The release AAB is **unsigned**, for later release preparation. Both builds remove generated Android resource bytecode so no DEX is packaged. Do not enable resource shrinking: resources referenced in raw WFF XML must remain available.
 
-CI runners generate temporary debug signing keys. If an update from a different runner fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, uninstall the earlier development build before installing the new one; this resets that build's watch-face settings. Stable release signing is a later milestone.
+The standalone CI build uses temporary debug keys. The Wear OS 6 preview now explicitly caches and checks its signing identity to avoid repeated reinstalls and permission resets; see [preview update guidance](docs/SAMSUNG_FORECAST_TESTING.md#keeping-weather-permission-across-updates). Production signing remains a release prerequisite.
 
 ### Test a downloaded APK in Android Studio on Windows
 

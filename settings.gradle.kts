@@ -16,3 +16,6 @@ rootProject.name = "UltraInfoBoard"
 include(":app")
 include(":weatherbridge")
 include(":pushface")
+
+// Synthetic provider for disposable emulator checks only.
+include(":panelfixture")

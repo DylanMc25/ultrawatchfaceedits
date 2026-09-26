@@ -91,6 +91,7 @@ sleep 3
 adb exec-out screencap -p > "$report/active.png"
 adb shell dumpsys wallpaper > "$report/wallpaper.txt"
 python3 tools/check_capture.py "$report/active.png"
+timeout 180s "$forecast_adb" install -r -t "${PANEL_APK:-panelfixture/build/outputs/apk/debug/panelfixture-debug.apk}"
 stage 'Testing native rectangle selection, replacement and restoration'
 timeout 600s python3 tools/test_forecast_editor.py
 stage 'Native rectangle replacement and restoration passed'

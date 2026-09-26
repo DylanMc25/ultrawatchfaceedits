@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.ultrainfoboard.bridge"
         minSdk = 36
         targetSdk = 36
-        versionCode = 11
-        versionName = "0.2.0-preview.4"
+        versionCode = 12
+        versionName = "0.2.0-preview.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -22,6 +22,13 @@ android {
     sourceSets.getByName("main") {
         assets.srcDir(layout.buildDirectory.dir("generated/watchface/assets"))
         res.srcDir(layout.buildDirectory.dir("generated/watchface/res"))
+    }
+    signingConfigs.getByName("debug") {
+        // Match the explicit CI cache path; do not depend on AGP's Android user home.
+        storeFile = File(System.getProperty("user.home"), ".android/debug.keystore")
+        storePassword = "android"
+        keyAlias = "androiddebugkey"
+        keyPassword = "android"
     }
     buildTypes {
         release { isMinifyEnabled = false }

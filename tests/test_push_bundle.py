@@ -19,11 +19,12 @@ def fixture_xml():
     for slot_id in range(1, 8):
         slots.append(f'''<ComplicationSlot slotId="{slot_id}" name="slot_{slot_id}"
             x="{slot_id * 10}" y="310" width="262" height="94"
-            isCustomizable="TRUE" supportedTypes="SMALL_IMAGE EMPTY">
+            isCustomizable="TRUE" supportedTypes="LONG_TEXT SMALL_IMAGE EMPTY">
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <BoundingBox x="0" y="0" width="262" height="94" />
             <DefaultProviderPolicy primaryProvider="original.provider/Slot{slot_id}"
                 primaryProviderType="LONG_TEXT" defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" />
+            <Complication type="LONG_TEXT"><PartText name="long_text" /></Complication>
             <Complication type="SMALL_IMAGE">
                 <PartImage x="12" y="6" width="238" height="48">
                     <Image resource="[COMPLICATION.SMALL_IMAGE]" />
@@ -84,6 +85,9 @@ class PushBundleTests(unittest.TestCase):
         old_slots = original.findall(".//ComplicationSlot")
         new_slots = generated.findall(".//ComplicationSlot")
         self.assertEqual([slot.get("slotId") for slot in new_slots], [str(i) for i in range(1, 8)])
+        self.assertEqual(new_slots[6].get("supportedTypes"), "SMALL_IMAGE EMPTY")
+        self.assertIsNone(new_slots[6].find("Complication[@type='LONG_TEXT']"))
+        new_slots[6].set("supportedTypes", old_slots[6].get("supportedTypes"))
         self.assertEqual([slot.attrib for slot in new_slots], [slot.attrib for slot in old_slots])
         for old_slot, new_slot in zip(old_slots[:6], new_slots[:6]):
             self.assertEqual(ET.tostring(new_slot), ET.tostring(old_slot))
@@ -97,11 +101,17 @@ class PushBundleTests(unittest.TestCase):
         })
         image = new_slots[6].find("Complication[@type='SMALL_IMAGE']/PartImage")
         self.assertEqual(image.attrib, {"x": "0", "y": "0", "width": "262", "height": "94"})
-        # Reverting the two intended edits must recover the complete original document.
+        # Reverting intended edits must recover the original document.
+        old_slots[6].remove(old_slots[6].find("Complication[@type='LONG_TEXT']"))
         policy.attrib.clear()
         policy.attrib.update(old_slots[6].find("DefaultProviderPolicy").attrib)
         image.attrib.clear()
         image.attrib.update(old_slots[6].find("Complication[@type='SMALL_IMAGE']/PartImage").attrib)
+        # Whitespace around the removed renderer is not significant XML content.
+        for root in [original, generated]:
+            for node in root.iter():
+                if node.text and not node.text.strip(): node.text = None
+                if node.tail and not node.tail.strip(): node.tail = None
         self.assertEqual(ET.tostring(generated), ET.tostring(original))
 
     def test_repreparation_removes_stale_generated_assets(self):

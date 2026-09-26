@@ -14,31 +14,31 @@
         <Group x="0" y="0" width="450" height="450" name="interactive_time" alpha="255">
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <DigitalClock x="28" y="67" width="176" height="246">
-                <TimeText x="22" y="0" width="154" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                <TimeText x="22" y="0" width="152" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="134" color="#FFDAF1FF" weight="MEDIUM" />
                 </TimeText>
-                <TimeText x="0" y="116" width="138" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                <TimeText x="0" y="116" width="136" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="134" color="#FFDAF1FF" weight="MEDIUM" />
                 </TimeText>
             </DigitalClock>
             <PartText x="82" y="17" width="286" height="40">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                    <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="NORMAL">
+                    <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="BOLD">
                         <Template>%s<Parameter expression="[MONTH_F]" />
                         </Template>
                     </Font>
                 </Text>
             </PartText>
-            <PartText x="230" y="55" width="142" height="29">
+            <PartText x="202" y="55" width="96" height="29">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                    <Font family="sans-serif" size="21" color="#FFB4DAF6" weight="NORMAL">
+                    <Font family="sans-serif" size="21" color="#FFB4DAF6" weight="BOLD">
                         <Template>%s %s<Parameter expression="[DAY_OF_WEEK_S]" />
                             <Parameter expression="[DAY]" />
                         </Template>
                     </Font>
                 </Text>
             </PartText>
-            <DigitalClock x="168" y="270" width="36" height="40">
+            <DigitalClock x="166" y="270" width="36" height="40">
                 <TimeText x="0" y="0" width="36" height="40" format="ss" align="CENTER">
                     <Font family="sans-serif-condensed" size="36" color="#FFB4DAF6" weight="MEDIUM" />
                 </TimeText>
@@ -47,10 +47,10 @@
         <Group x="0" y="0" width="450" height="450" name="ambient_time" alpha="0">
             <Variant mode="AMBIENT" target="alpha" value="255" />
             <DigitalClock x="28" y="67" width="176" height="246">
-                <TimeText x="22" y="0" width="154" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                <TimeText x="22" y="0" width="152" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="116" color="#FF8FA9BC" weight="THIN" />
                 </TimeText>
-                <TimeText x="0" y="116" width="138" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                <TimeText x="0" y="116" width="136" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="116" color="#FF8FA9BC" weight="THIN" />
                 </TimeText>
             </DigitalClock>
@@ -62,9 +62,9 @@
                     </Font>
                 </Text>
             </PartText>
-            <PartText x="230" y="55" width="142" height="29">
+            <PartText x="202" y="55" width="96" height="29">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                    <Font family="sans-serif" size="21" color="#FF8FA9BC" weight="NORMAL">
+                    <Font family="sans-serif" size="21" color="#FF8FA9BC" weight="LIGHT">
                         <Template>%s %s<Parameter expression="[DAY_OF_WEEK_S]" />
                             <Parameter expression="[DAY]" />
                         </Template>
@@ -72,7 +72,7 @@
                 </Text>
             </PartText>
         </Group>
-        <ComplicationSlot x="204" y="86" width="96" height="96" slotId="1" name="upper_circle" displayName="slot_upper_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
+        <ComplicationSlot x="202" y="86" width="96" height="96" slotId="1" name="upper_circle" displayName="slot_upper_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
             <BoundingOval x="0" y="0" width="96" height="96" />
             <DefaultProviderPolicy defaultSystemProvider="HEART_RATE" defaultSystemProviderType="SHORT_TEXT" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
@@ -585,17 +585,17 @@
                 </PartText>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="302" y="166" width="94" height="94" slotId="2" name="middle_circle" displayName="slot_middle_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
-            <BoundingOval x="0" y="0" width="94" height="94" />
+        <ComplicationSlot x="300" y="143" width="96" height="96" slotId="2" name="middle_circle" displayName="slot_middle_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
+            <BoundingOval x="0" y="0" width="96" height="96" />
             <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT" defaultSystemProviderType="SHORT_TEXT" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Complication type="SHORT_TEXT">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartImage x="32" y="4" width="30" height="30" tintColor="#FFDAF1FF">
+                <PartImage x="33" y="5" width="30" height="30" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -603,7 +603,7 @@
                         <Expression name="slot_2_short_text_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
                     <Compare expression="slot_2_short_text_long">
-                        <PartText x="5" y="31" width="84" height="45">
+                        <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -618,7 +618,7 @@
                                 <Expression name="slot_2_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
                             <Compare expression="slot_2_short_text_compact">
-                                <PartText x="5" y="31" width="84" height="45">
+                                <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                         <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -633,7 +633,7 @@
                                         <Expression name="slot_2_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
                                     <Compare expression="slot_2_short_text_five">
-                                        <PartText x="5" y="31" width="84" height="45">
+                                        <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                 <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -648,7 +648,7 @@
                                                 <Expression name="slot_2_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
                                             </Expressions>
                                             <Compare expression="slot_2_short_text_four">
-                                                <PartText x="5" y="31" width="84" height="45">
+                                                <PartText x="5" y="32" width="86" height="45">
                                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                         <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
                                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -663,7 +663,7 @@
                                                         <Expression name="slot_2_short_text_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
                                                     </Expressions>
                                                     <Compare expression="slot_2_short_text_three">
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -673,7 +673,7 @@
                                                         </PartText>
                                                     </Compare>
                                                     <Default>
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -691,7 +691,7 @@
                         </Condition>
                     </Default>
                 </Condition>
-                <PartText x="9" y="76" width="76" height="18">
+                <PartText x="9" y="77" width="78" height="18">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="14" color="#FFB4DAF6" weight="NORMAL">
                             <Template>%s<Parameter expression="[COMPLICATION.TITLE]" />
@@ -701,23 +701,23 @@
                 </PartText>
             </Complication>
             <Complication type="RANGED_VALUE">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <Stroke color="#FF234A77" thickness="3" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <Stroke color="#FFB4DAF6" thickness="3" cap="ROUND" />
                         <Transform target="endAngle" value="360 * ([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0)" />
                     </Arc>
                 </PartDraw>
-                <PartImage x="32" y="4" width="30" height="30" tintColor="#FFDAF1FF">
+                <PartImage x="33" y="5" width="30" height="30" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -725,7 +725,7 @@
                         <Expression name="slot_2_ranged_value_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
                     <Compare expression="slot_2_ranged_value_long">
-                        <PartText x="5" y="31" width="84" height="45">
+                        <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -740,7 +740,7 @@
                                 <Expression name="slot_2_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
                             <Compare expression="slot_2_ranged_value_compact">
-                                <PartText x="5" y="31" width="84" height="45">
+                                <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                         <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -755,7 +755,7 @@
                                         <Expression name="slot_2_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
                                     <Compare expression="slot_2_ranged_value_five">
-                                        <PartText x="5" y="31" width="84" height="45">
+                                        <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                 <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -770,7 +770,7 @@
                                                 <Expression name="slot_2_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                                             </Expressions>
                                             <Compare expression="slot_2_ranged_value_four">
-                                                <PartText x="5" y="31" width="84" height="45">
+                                                <PartText x="5" y="32" width="86" height="45">
                                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                         <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
                                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -785,7 +785,7 @@
                                                         <Expression name="slot_2_ranged_value_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
                                                     </Expressions>
                                                     <Compare expression="slot_2_ranged_value_three">
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -795,7 +795,7 @@
                                                         </PartText>
                                                     </Compare>
                                                     <Default>
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -813,7 +813,7 @@
                         </Condition>
                     </Default>
                 </Condition>
-                <PartText x="9" y="76" width="76" height="18">
+                <PartText x="9" y="77" width="78" height="18">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="14" color="#FFB4DAF6" weight="NORMAL">
                             <Template>%s<Parameter expression="[COMPLICATION.TITLE]" />
@@ -823,23 +823,23 @@
                 </PartText>
             </Complication>
             <Complication type="GOAL_PROGRESS">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <Stroke color="#FF234A77" thickness="3" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <Stroke color="#FFB4DAF6" thickness="3" cap="ROUND" />
                         <Transform target="endAngle" value="360 * ([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0)" />
                     </Arc>
                 </PartDraw>
-                <PartImage x="32" y="4" width="30" height="30" tintColor="#FFDAF1FF">
+                <PartImage x="33" y="5" width="30" height="30" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -847,7 +847,7 @@
                         <Expression name="slot_2_goal_progress_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
                     <Compare expression="slot_2_goal_progress_long">
-                        <PartText x="5" y="31" width="84" height="45">
+                        <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -862,7 +862,7 @@
                                 <Expression name="slot_2_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
                             <Compare expression="slot_2_goal_progress_compact">
-                                <PartText x="5" y="31" width="84" height="45">
+                                <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                         <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -877,7 +877,7 @@
                                         <Expression name="slot_2_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
                                     <Compare expression="slot_2_goal_progress_five">
-                                        <PartText x="5" y="31" width="84" height="45">
+                                        <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                 <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -892,7 +892,7 @@
                                                 <Expression name="slot_2_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                                             </Expressions>
                                             <Compare expression="slot_2_goal_progress_four">
-                                                <PartText x="5" y="31" width="84" height="45">
+                                                <PartText x="5" y="32" width="86" height="45">
                                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                         <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
                                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -907,7 +907,7 @@
                                                         <Expression name="slot_2_goal_progress_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
                                                     </Expressions>
                                                     <Compare expression="slot_2_goal_progress_three">
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -917,7 +917,7 @@
                                                         </PartText>
                                                     </Compare>
                                                     <Default>
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -935,7 +935,7 @@
                         </Condition>
                     </Default>
                 </Condition>
-                <PartText x="9" y="76" width="76" height="18">
+                <PartText x="9" y="77" width="78" height="18">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="14" color="#FFB4DAF6" weight="NORMAL">
                             <Template>%s<Parameter expression="[COMPLICATION.TITLE]" />
@@ -945,22 +945,22 @@
                 </PartText>
             </Complication>
             <Complication type="WEIGHTED_ELEMENTS">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <Stroke color="#FF234A77" thickness="3" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Arc centerX="47" centerY="47" width="88" height="88" startAngle="0" endAngle="360">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Arc centerX="48" centerY="48" width="90" height="90" startAngle="0" endAngle="360">
                         <WeightedStroke colors="[COMPLICATION.WEIGHTED_ELEMENTS_COLORS]" weights="[COMPLICATION.WEIGHTED_ELEMENTS_WEIGHTS]" thickness="3" cap="ROUND" discreteGap="3" />
                     </Arc>
                 </PartDraw>
-                <PartImage x="32" y="4" width="30" height="30" tintColor="#FFDAF1FF">
+                <PartImage x="33" y="5" width="30" height="30" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -968,7 +968,7 @@
                         <Expression name="slot_2_weighted_elements_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
                     <Compare expression="slot_2_weighted_elements_long">
-                        <PartText x="5" y="31" width="84" height="45">
+                        <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -983,7 +983,7 @@
                                 <Expression name="slot_2_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
                             <Compare expression="slot_2_weighted_elements_compact">
-                                <PartText x="5" y="31" width="84" height="45">
+                                <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                         <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -998,7 +998,7 @@
                                         <Expression name="slot_2_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
                                     <Compare expression="slot_2_weighted_elements_five">
-                                        <PartText x="5" y="31" width="84" height="45">
+                                        <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                 <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1013,7 +1013,7 @@
                                                 <Expression name="slot_2_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
                                             </Expressions>
                                             <Compare expression="slot_2_weighted_elements_four">
-                                                <PartText x="5" y="31" width="84" height="45">
+                                                <PartText x="5" y="32" width="86" height="45">
                                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                         <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
                                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1028,7 +1028,7 @@
                                                         <Expression name="slot_2_weighted_elements_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
                                                     </Expressions>
                                                     <Compare expression="slot_2_weighted_elements_three">
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1038,7 +1038,7 @@
                                                         </PartText>
                                                     </Compare>
                                                     <Default>
-                                                        <PartText x="5" y="31" width="84" height="45">
+                                                        <PartText x="5" y="32" width="86" height="45">
                                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                                                 <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
                                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1056,7 +1056,7 @@
                         </Condition>
                     </Default>
                 </Condition>
-                <PartText x="9" y="76" width="76" height="18">
+                <PartText x="9" y="77" width="78" height="18">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="14" color="#FFB4DAF6" weight="NORMAL">
                             <Template>%s<Parameter expression="[COMPLICATION.TITLE]" />
@@ -1066,39 +1066,39 @@
                 </PartText>
             </Complication>
             <Complication type="MONOCHROMATIC_IMAGE">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartImage x="16" y="16" width="62" height="62" tintColor="#FFDAF1FF">
+                <PartImage x="16" y="16" width="64" height="64" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
             </Complication>
             <Complication type="SMALL_IMAGE">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartImage x="16" y="16" width="62" height="62">
+                <PartImage x="16" y="16" width="64" height="64">
                     <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                 </PartImage>
             </Complication>
             <Complication type="EMPTY">
-                <PartDraw x="0" y="0" width="94" height="94">
-                    <Ellipse x="0" y="0" width="94" height="94">
+                <PartDraw x="0" y="0" width="96" height="96">
+                    <Ellipse x="0" y="0" width="96" height="96">
                         <Fill color="#FF509EFA" />
                     </Ellipse>
                 </PartDraw>
-                <PartText x="0" y="33" width="94" height="28">
+                <PartText x="0" y="34" width="96" height="28">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="NORMAL">+</Font>
                     </Text>
                 </PartText>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="204" y="212" width="96" height="96" slotId="3" name="lower_circle" displayName="slot_lower_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
+        <ComplicationSlot x="202" y="199" width="96" height="96" slotId="3" name="lower_circle" displayName="slot_lower_circle" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS WEIGHTED_ELEMENTS MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
             <BoundingOval x="0" y="0" width="96" height="96" />
             <DefaultProviderPolicy defaultSystemProvider="SUNRISE_SUNSET" defaultSystemProviderType="SHORT_TEXT" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
