@@ -189,7 +189,9 @@ def verify_taps(prefix, expected):
 
 
 def open_panel_menu(prefix):
-    adb("shell", "am", "start", "-n", HOST + "/.SetupActivity")
+    # Start at setup deliberately. A normal launcher-style resume may correctly
+    # return to the still-open panel menu, especially after untappable None.
+    adb("shell", "am", "start", "-f", "0x14000000", "-n", HOST + "/.SetupActivity")
     time.sleep(3)
     current = capture(prefix + "-setup")
     button = next((n for n in current.iter("node") if n.get("text") == "Bottom panel"), None)
