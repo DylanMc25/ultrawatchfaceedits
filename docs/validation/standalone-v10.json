@@ -1,0 +1,287 @@
+{
+  "workflow_run": 36266834989,
+  "source_commit": "a88249db6d16eee05b1ecfe0429098e92e366b3e",
+  "version_code": 10,
+  "version_name": "0.1.9",
+  "devices": {
+    "api34-large": {
+      "editor": {
+        "editor_opened": true,
+        "slot_captures": [
+          {
+            "name": "upper",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "middle",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "lower",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "left",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "right",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "bottom",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "weather",
+            "provider_chooser_visible": true
+          }
+        ],
+        "tap_captures": [
+          {
+            "name": "heart-rate",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "steps",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "sunrise-sunset",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          },
+          {
+            "name": "battery",
+            "expected_slot": 4,
+            "observed_launch_slots": [
+              4
+            ]
+          },
+          {
+            "name": "upper-boundary",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "middle-upper-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "middle-lower-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "lower-boundary",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          }
+        ],
+        "tap_mismatches": [],
+        "notes": [],
+        "edge_alarm_capture": true,
+        "weather_provider_test": {
+          "assigned_provider": "Battery",
+          "expected_slot": 7,
+          "observed_launch_slots": [
+            7
+          ],
+          "tap_attempts": [
+            {
+              "point": "left",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{e00de03 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            },
+            {
+              "point": "center",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{e00de03 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            },
+            {
+              "point": "right",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{e00de03 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            }
+          ],
+          "samsung_weather_verified": false
+        }
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 6038,
+        "lit_percent": 3.7296,
+        "limit_percent": 15
+      },
+      "captures_reviewed": true
+    },
+    "api35-small": {
+      "editor": {
+        "editor_opened": true,
+        "slot_captures": [
+          {
+            "name": "upper",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "middle",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "lower",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "left",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "right",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "bottom",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "weather",
+            "provider_chooser_visible": true
+          }
+        ],
+        "tap_captures": [
+          {
+            "name": "heart-rate",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "steps",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "sunrise-sunset",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          },
+          {
+            "name": "battery",
+            "expected_slot": 4,
+            "observed_launch_slots": [
+              4
+            ]
+          },
+          {
+            "name": "upper-boundary",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "middle-upper-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "middle-lower-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "lower-boundary",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          }
+        ],
+        "tap_mismatches": [],
+        "notes": [],
+        "edge_alarm_capture": true,
+        "weather_provider_test": {
+          "assigned_provider": "Battery",
+          "expected_slot": 7,
+          "observed_launch_slots": [
+            7
+          ],
+          "tap_attempts": [
+            {
+              "point": "left",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{4d57916 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            },
+            {
+              "point": "center",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{4d57916 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            },
+            {
+              "point": "right",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{4d57916 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t8}"
+            }
+          ],
+          "samsung_weather_verified": false
+        }
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 4787,
+        "lit_percent": 4.1333,
+        "limit_percent": 15
+      },
+      "captures_reviewed": true
+    }
+  },
+  "physical_samsung_verified": false,
+  "limitations": [
+    "Heart-rate taps produced no provider launch, so successful HR app opening is unverified.",
+    "Samsung Weather absent; rectangle replacement/taps tested with the system LONG_TEXT Battery source.",
+    "Long edge editor previews truncate; active short Set label fits.",
+    "Captured ambient states do not cover every date/time."
+  ]
+}

@@ -2,7 +2,20 @@
 
 ## Version 13 alignment, picker and signing update
 
-Local validation passes: 19 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v10 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The left gauge now has 18 ticks; the right arc spans 40 degrees. Shortcut slot 6 supports SMALL_IMAGE/EMPTY only. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
+Local validation passes: 19 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v10 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The left gauge now has 18 ticks; the right arc spans 40 degrees. Shortcut slot 6 supports SMALL_IMAGE/EMPTY only. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. All four final emulator jobs pass for source `a88249d`: [Wear OS 6 run 36266834935](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36266834935) and [standalone run 36266834989](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36266834989).
+
+- API 36: nine Android tests on each size; native shortcut picker retains **App shortcut**. The rectangle selects the separate **Test chart** image provider, persists through editor reopening and setup, opens its own activity from three tap positions, and restores **Weather**. The test-only chart app is excluded from the user APK.
+- API 34/35 standalone: all seven native choosers and rectangle Battery taps pass; no observed tap dispatch goes to a neighboring slot. Heart-rate taps have no observed provider launch, so successful HR app opening is not claimed.
+- DOZE lit pixels, including system overlays: API 36 small **4.0849%**, large **4.0082%**; API 35 small **4.1333%**, API 34 large **3.7296%**, all below 15%. These captures do not cover every time/date.
+- Reviewed active/ambient captures show the new header and edge indicators inside the display. System charging overlays still cover part of the empty bottom shortcut. No application crash or WFF expression error was found; stock sensor HAL aborts during ambient entry are retained in the logs.
+- Earlier intermediate runs failed because background-check points landed inside moved circles, then because the new shortcut check used Back and encountered a blank system transition. The final run uses clear background locations and selects the shortcut's existing Empty choice before continuing. Those earlier failed runs are not counted as passing evidence.
+
+[Version 13 structured results](validation/forecast-api36-v13.json) · [standalone v10 results](validation/standalone-v10.json)
+
+![Version 13 small watch: real emulator with unavailable Samsung weather](previews/forecast/api36-small-active-v13.png)
+![Version 13 large watch: black ambient display](previews/forecast/api36-large-ambient-v13.png)
+![Native replacement with a synthetic chart from a separate test-only app](previews/forecast/api36-large-chart-v13.png)
+![Native shortcut picker retains App shortcut](previews/forecast/api36-small-shortcut-picker-v13.png)
 
 The user reports weather works after tapping Allow. This supports a permission-reset explanation for the latest failure, not a weather-data regression. v10/v11 downloaded host certificates differ while their embedded face certificate is unchanged. The explicit cached host key and certificate checks address that CI defect; permission retention still requires a same-key physical update check.
 

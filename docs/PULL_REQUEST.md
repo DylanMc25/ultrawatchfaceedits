@@ -12,8 +12,10 @@ Missing data stays unavailable, expired data is marked, and bounded timelines ha
 
 - Version 13 local APK, test APK, unsigned host AAB and lint checks pass; 29 JVM and 19 Python tests pass.
 - Official Push validation passes all ten checks on the signed embedded face. Standalone v10 APK/AAB, WFF schema and memory checks pass.
-- Native emulator checks for this revision are pending. The new picker test uses a separate test-only image chart app, checks selection, persistence and all three tap positions, opens setup without overwriting the choice, and restores Weather. The fixture is not included in user artifacts.
-- [Versioned evidence](VALIDATION.md) distinguishes stock-emulator unavailable weather and synthetic images from physical Samsung reports.
+- [Run 36266834935](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36266834935), source `a88249d`, passes both API 36 sizes and nine Android tests each. The normal rectangle picker selects a separate test-only image chart app, persists its choice through setup, opens its activity from three tap positions, and restores Weather. The shortcut picker retains App shortcut. The fixture app is a separate test artifact and is not bundled in the user APK.
+- [Standalone run 36266834989](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36266834989) passes API 34 large and API 35 small, including all seven choosers and rectangle Battery taps.
+- Captured DOZE illumination is 4.0849% / 4.0082% on API 36 small/large, 4.1333% on API 35 small, and 3.7296% on API 34 large. These states are below 15%; they do not cover every time/date. No app crash or WFF expression failure was found. System charging overlays obscure part of the empty shortcut in active captures.
+- [Versioned evidence](https://github.com/DylanMc25/ultrawatchfaceedits/blob/codex/watchface-redesign/docs/VALIDATION.md) distinguishes stock-emulator unavailable weather and synthetic images from physical Samsung reports.
 
 
 The user installed an earlier preview on the API 36 Galaxy Watch and confirmed the forecast appears correctly in the rectangle and its tap opens Samsung Weather. The version 13 Samsung picker and layout, format/refresh edge cases, upgrade persistence and battery/ambient checks remain pending on physical hardware. Stock-emulator fixtures do not establish Samsung integration. The observed OEM interface is not a published stable Samsung API; commercial support and production signing remain release questions. The CI AAB contains a debug-signed embedded face and is a test artifact only.

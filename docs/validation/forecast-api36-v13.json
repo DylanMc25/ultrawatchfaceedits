@@ -1,0 +1,154 @@
+{
+  "workflow_run": 36266834935,
+  "source_commit": "a88249db6d16eee05b1ecfe0429098e92e366b3e",
+  "preview_version_code": 13,
+  "preview_version_name": "0.2.0-preview.6",
+  "scope": "Two-line header, raised circles/time, extended edges, image-only rectangle/shortcut, stable preview signing; no physical Samsung verification of this revision",
+  "artifact": {
+    "id": 10914258659,
+    "sha256": "2bac654288632f11415e83297bf5a0c569d9e9bae1e88ee745dabd8a58eb2305"
+  },
+  "signing_certificates_sha256": {
+    "host": "cbee7565bab4ac0c94ece6767747117b40cd7e3db87c7e437cc8b4cde78705f3",
+    "face": "a06b37b5f00f0cc39dfa0230d7427b1d2663cad8bac9367127690a10df74f7ba"
+  },
+  "host_apk_sha256": "72a3c99541d00650df1accf429819ada9de7338a9ab788be1b8a92e2a9165f2f",
+  "push_validation": {
+    "host_package": "com.example.ultrainfoboard.bridge",
+    "watchface_package": "com.example.ultrainfoboard.bridge.watchfacepush.board",
+    "watchface_version_code": 13,
+    "watchface_version_name": "0.2.0-preview.6",
+    "variant": "debug",
+    "forecast_provider": "com.example.ultrainfoboard.bridge/com.example.ultrainfoboard.bridge.SamsungForecastService",
+    "watchface_apk_sha256": "f93fb951574561bed50e944622da156cbdc9c0f3243b57052acee543fe7fbe2f",
+    "validator_filename": "validator-push-cli-1.1.0-alpha01.jar",
+    "validator_sha256": "04dc20a0994df3eaebf025e107f7589c147b2ce8a2c628745e01a5c0a63fe4dd",
+    "validation_token": "cVD0tdMH06/4aE+/O9SpSl62eQyM6iOqj7qHa6J/KP8=:MS4wLjA=",
+    "physical_installation_verified": false
+  },
+  "devices": {
+    "small": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "shortcut_picker_supports_app_shortcut": true
+          },
+          {
+            "replacement_persisted": "Test chart"
+          },
+          {
+            "tap": "chart-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{253281408 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "tap": "chart-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{253281408 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "tap": "chart-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{253281408 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{56179768 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{56179768 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{56179768 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Weather"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 4731,
+        "lit_percent": 4.0849,
+        "limit_percent": 15
+      },
+      "android_tests": 9,
+      "captures_reviewed": true
+    },
+    "large": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "shortcut_picker_supports_app_shortcut": true
+          },
+          {
+            "replacement_persisted": "Test chart"
+          },
+          {
+            "tap": "chart-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{243232230 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "tap": "chart-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{243232230 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "tap": "chart-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{243232230 u0 com.example.ultrainfoboard.panelfixture/com.example.ultrainfoboard.bridge.ChartTestActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{96865642 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{96865642 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{96865642 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Weather"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 6489,
+        "lit_percent": 4.0082,
+        "limit_percent": 15
+      },
+      "android_tests": 9,
+      "captures_reviewed": true
+    }
+  },
+  "limitations": [
+    "Samsung data, OEM picker, permission retention and update migration require physical-watch checks.",
+    "The synthetic chart provider is in a separate test-only app, not the downloadable host.",
+    "System charging overlay covers part of the empty bottom shortcut in active captures.",
+    "Stock sensor HAL abort seen during ambient entry; no application crash or WFF expression error found.",
+    "Captured ambient states do not cover every date/time."
+  ]
+}
