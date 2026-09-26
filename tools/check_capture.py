@@ -7,7 +7,7 @@ from PIL import Image
 im=Image.open(sys.argv[1]).convert('RGB')
 # Sample exposed background, clear of enlarged circles, the weather rectangle
 # and the system status overlay at the bottom of the screen.
-points=[(.5,.48),(.79,.32),(.8,.69)]
+points=[(.40,.48),(.68,.64),(.80,.69)]
 top=(35,74,119);bottom=(74,150,237)
 hits=0
 for x,y in points:
