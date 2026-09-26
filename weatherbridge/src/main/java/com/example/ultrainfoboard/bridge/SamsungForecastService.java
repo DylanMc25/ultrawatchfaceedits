@@ -120,7 +120,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
                                 result.detail, weatherTap(), panel)));
                     }
                     // If all future entries expire without an update, do not restore an old fresh image.
-                    data = unavailable("Open Weather");
+                    data = unavailable("Open Weather", panel);
                 }
                 ComplicationData fallback = data;
                 // Menu saves and final delivery share the main thread. An old
@@ -174,7 +174,10 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     private ComplicationData unavailable(String text) {
-        BottomPanelPreferences.Panel panel = BottomPanelPreferences.get(this);
+        return unavailable(text, BottomPanelPreferences.get(this));
+    }
+
+    private ComplicationData unavailable(String text, BottomPanelPreferences.Panel panel) {
         if (panel == BottomPanelPreferences.Panel.NONE) return emptyPanel();
         Bitmap bitmap = panel == BottomPanelPreferences.Panel.WEATHER
                 ? ForecastRenderer.render(new ForecastRenderer.RenderData(text, Collections.emptyList(), false))
