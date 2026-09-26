@@ -1,0 +1,299 @@
+{
+  "run_url": "https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36261887593",
+  "commit": "5f9a62f58e27a457b933b086f8ca7e39addae57e",
+  "scope": "Standalone resource-only WFF app com.example.ultrainfoboard. Does not verify the bundled Wear OS 6 Samsung forecast provider.",
+  "workflow_result": "success",
+  "official_wff2_syntax": "passed",
+  "official_memory_apk_aab": "passed",
+  "devices": {
+    "api34-large": {
+      "api": 34,
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 5897,
+        "lit_percent": 3.6426,
+        "limit_percent": 15
+      },
+      "seven_current_choosers_verified": true,
+      "editor": {
+        "editor_opened": true,
+        "slot_captures": [
+          {
+            "name": "upper",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "middle",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "lower",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "left",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "right",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "bottom",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "weather",
+            "provider_chooser_visible": true
+          }
+        ],
+        "tap_captures": [
+          {
+            "name": "heart-rate",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "steps",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "sunrise-sunset",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          },
+          {
+            "name": "battery",
+            "expected_slot": 4,
+            "observed_launch_slots": [
+              4
+            ]
+          },
+          {
+            "name": "upper-boundary",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "middle-upper-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "middle-lower-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "lower-boundary",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          }
+        ],
+        "tap_mismatches": [],
+        "notes": [],
+        "edge_alarm_capture": true,
+        "weather_provider_test": {
+          "assigned_provider": "Battery",
+          "expected_slot": 7,
+          "observed_launch_slots": [
+            7
+          ],
+          "tap_attempts": [
+            {
+              "point": "left",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{ce993fb u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            },
+            {
+              "point": "center",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{ce993fb u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            },
+            {
+              "point": "right",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{ce993fb u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            }
+          ],
+          "samsung_weather_verified": false
+        }
+      },
+      "bottom_long_text_battery_observed": true,
+      "dwf_errors": 0,
+      "fatal_exceptions": 0,
+      "visual_review": "Active time/date/readings and circles fit. Ambient black time/date only. Battery text and seconds fit; no edge clipping in active Set label."
+    },
+    "api35-small": {
+      "api": 35,
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 2275,
+        "lit_percent": 1.9643,
+        "limit_percent": 15
+      },
+      "seven_current_choosers_verified": true,
+      "editor": {
+        "editor_opened": true,
+        "slot_captures": [
+          {
+            "name": "upper",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "middle",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "lower",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "left",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "right",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "bottom",
+            "provider_chooser_visible": true
+          },
+          {
+            "name": "weather",
+            "provider_chooser_visible": true
+          }
+        ],
+        "tap_captures": [
+          {
+            "name": "heart-rate",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "steps",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "sunrise-sunset",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          },
+          {
+            "name": "battery",
+            "expected_slot": 4,
+            "observed_launch_slots": [
+              4
+            ]
+          },
+          {
+            "name": "upper-boundary",
+            "expected_slot": 1,
+            "observed_launch_slots": []
+          },
+          {
+            "name": "middle-upper-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "middle-lower-boundary",
+            "expected_slot": 2,
+            "observed_launch_slots": [
+              2
+            ]
+          },
+          {
+            "name": "lower-boundary",
+            "expected_slot": 3,
+            "observed_launch_slots": [
+              3
+            ]
+          }
+        ],
+        "tap_mismatches": [],
+        "notes": [],
+        "edge_alarm_capture": true,
+        "weather_provider_test": {
+          "assigned_provider": "Battery",
+          "expected_slot": 7,
+          "observed_launch_slots": [
+            7
+          ],
+          "tap_attempts": [
+            {
+              "point": "left",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{225ea2f u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            },
+            {
+              "point": "center",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{225ea2f u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            },
+            {
+              "point": "right",
+              "observed_launch_slots": [
+                7
+              ],
+              "resumed_activity": "    topResumedActivity=ActivityRecord{225ea2f u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+            }
+          ],
+          "samsung_weather_verified": false
+        }
+      },
+      "bottom_long_text_battery_observed": true,
+      "dwf_errors": 0,
+      "fatal_exceptions": 0,
+      "visual_review": "Active time/date/readings and circles fit. Ambient black time/date only. Battery text and seconds fit; no edge clipping in active Set label."
+    }
+  },
+  "limitations": [
+    "Stock emulators do not include Samsung Weather or a real Samsung forecast.",
+    "No launch event observed for the stock placeholder heart-rate source; other tested default circle/edge launches have expected slot IDs.",
+    "System status dot overlays the bottom shortcut on the small emulator.",
+    "Editor sample right-edge alarm text is ellipsized; active Set label fits.",
+    "Five-digit and longest sunset strings were measured locally, not supplied by native default providers in this run."
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "workflow_run": 36261887590,
+  "source_commit": "5f9a62f58e27a457b933b086f8ca7e39addae57e",
+  "preview_version_code": 11,
+  "preview_version_name": "0.2.0-preview.4",
+  "scope": "Native rendering, narrowed rectangle picker and Weather label; no physical Samsung validation of this revision",
+  "devices": {
+    "small": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Battery"
+          },
+          {
+            "tap": "battery-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{85736756 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "tap": "battery-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{85736756 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "tap": "battery-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{85736756 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{100061877 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{100061877 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{100061877 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Weather"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          384,
+          384
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 115816,
+        "lit_pixels_including_system_overlays": 4908,
+        "lit_percent": 4.2378,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:........\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 0.689\n\nOK (9 tests)",
+      "visual_review": "Time, date, circular readings and forecast bounds fit; system charging overlay covers bottom shortcut. Stock weather unavailable."
+    },
+    "large": {
+      "editor": {
+        "passed": true,
+        "checks": [
+          {
+            "replacement_persisted": "Battery"
+          },
+          {
+            "tap": "battery-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{62037954 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "tap": "battery-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{62037954 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "tap": "battery-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{62037954 u0 com.google.android.apps.wearable.settings/com.google.android.clockwork.settings.MainSettingsActivity t7}"
+          },
+          {
+            "replacement_survives_setup": true
+          },
+          {
+            "tap": "forecast-left",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{160442160 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-middle",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{160442160 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "tap": "forecast-right",
+            "resumed_activity": "    topResumedActivity=ActivityRecord{160442160 u0 com.example.ultrainfoboard.bridge/.SetupActivity t8}"
+          },
+          {
+            "restoration_persisted": "Weather"
+          }
+        ],
+        "samsung_integration_verified": false
+      },
+      "ambient": {
+        "capture": "after-idle.png",
+        "dimensions": [
+          454,
+          454
+        ],
+        "display_state": "DOZE",
+        "round_screen_pixels": 161892,
+        "lit_pixels_including_system_overlays": 6716,
+        "lit_percent": 4.1484,
+        "limit_percent": 15
+      },
+      "instrumentation": "com.example.ultrainfoboard.bridge.ForecastRendererTest:........\ncom.example.ultrainfoboard.bridge.WeatherConnectionTest:.\n\nTime: 0.854\n\nOK (9 tests)",
+      "visual_review": "Time, date, circular readings and forecast bounds fit; system charging overlay covers bottom shortcut. Stock weather unavailable."
+    }
+  },
+  "artifact_sha256": {
+    "small": "751ef8e487078c61f43409f8d402fca167de0864a9b5dc4b89d449a69ab66fbc",
+    "large": "a937bf5dd00c7b272ac163627f3c4464f493b6cc1844ae900dcda4047169b620",
+    "build": "c9b131a550884ef17f40845a78ce7282f2292df5360b3a7e561d364b606100e4"
+  },
+  "delivered_fixture_size": [
+    262,
+    94
+  ],
+  "maximum_five_bitmap_bytes": 492560,
+  "limitations": [
+    "Synthetic renderer fixtures are not Samsung weather readings.",
+    "Physical Samsung editor, assignment migration, readability and data edge cases need watch testing.",
+    "Active system charging overlay covers shortcut.",
+    "Stock emulator sensor HAL abort entering ambient remains unrelated to app; displays reached DOZE.",
+    "No app crashes, ANRs, OOMs or WFF expression failures found in reviewed logs."
+  ]
+}

@@ -8,7 +8,24 @@ The user reconfirmed that weather works on their Galaxy Watch before this revisi
 
 Local validation passes: **29 JVM tests**, **18 Python tests**, debug and test APKs, unsigned test AABs, Android lint, the official WFF 2 syntax/resource and standalone memory checks, and all **10 official Watch Face Push checks** on the signed embedded face. Four forecast timeline images plus one fallback use **492,560 bitmap bytes**, below 512 KiB; exact data-expiry boundaries are retained even when this shortens timeline coverage. No measurements here establish live Samsung access or visual correctness.
 
-Native small/large API 36 and standalone API 34/35 checks are pending for version 11. They now select Battery in the rectangle, verify its settings tap, and restore our app's **Weather** through the ordinary chooser. Renderer fixtures include exact delivered 262 × 94 images as well as supersampled previews. The historical screenshots below belong to their named earlier versions.
+**Native checks passed at `5f9a62f`** in [Samsung preview run 36261887590](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36261887590) and [standalone run 36261887593](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36261887593). Downloaded artifact hashes were verified and screenshots/logs reviewed. Both API 36 devices pass nine Android tests, select Battery in the rectangle, verify all three taps open its settings destination, retain that choice across setup launch, then restore our app's **Weather** through the ordinary chooser. Restoration and all three unavailable-weather setup taps pass. The API 34/35 checks open all seven choosers and verify the rectangle's LONG_TEXT Battery assignment and taps.
+
+| Native capture | Display | DOZE lit pixels, including overlays |
+| --- | --- | --- |
+| API 36 small | 384 × 384 | 4.2378% |
+| API 36 large | 454 × 454 | 4.1484% |
+| Standalone API 35 small | 384 × 384 | 1.9643% |
+| Standalone API 34 large | 454 × 454 | 3.6426% |
+
+Time/date, seconds and circular readings fit the reviewed captures. Exact delivered 262 × 94 forecast fixtures show readable temperatures/icons/times, including midnight rollover, saved data and partial missing entries. Native editor samples include `8418` and `6:32PM`; the longest five-digit and eight-character readings were checked with local font metrics rather than live native providers. No app crash, OOM or WFF expression error was found. API 36 retains the previously observed stock sensor-HAL abort when entering ambient; both displays reached DOZE. The active system charging/status overlay still obscures part of the bottom shortcut, and long right-edge editor labels can ellipsize. The placeholder heart-rate source supplied no launch event on the older stock images, so its tap destination remains unverified.
+
+Evidence: [API 36 report](validation/forecast-api36-v11.json), [standalone report](validation/standalone-v8.json), [large active](previews/forecast/api36-large-active-v11.png), [small ambient](previews/forecast/api36-small-ambient-v11.png).
+
+![Version 11 native small face; Samsung Weather unavailable on the stock emulator](previews/forecast/api36-small-active-v11.png)
+![Weather in the ordinary provider chooser](previews/forecast/api36-small-provider-list-v11.png)
+![Natural-size forecast fixture; sample data, not Samsung integration evidence](previews/forecast/v11-forecast-fixture-night-black-delivered-preview.png)
+
+The historical screenshots below belong to their named earlier versions. Physical readability, Samsung editor behavior and upgrade retention still require testing this revision on the watch.
 
 ## Version 10 Wear OS 6 evidence
 
