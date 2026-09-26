@@ -225,11 +225,15 @@ def main():
             raise RuntimeError("Forecast source not discoverable through standard complication action")
         open_editor("replace")
         tap(225 * WIDTH / 450, 425 * HEIGHT / 450)
-        capture("shortcut-chooser")
+        shortcut_tree = capture("shortcut-chooser")
         if "ProviderChooserActivity" not in top_activity():
             raise RuntimeError("Shortcut did not open the native chooser")
-        adb("shell", "input", "keyevent", "KEYCODE_BACK")
-        wait_editor()
+        if not any("app shortcut" in label(n).casefold() for n in shortcut_tree.iter("node")):
+            raise RuntimeError("The narrowed shortcut picker lost the system app shortcut source")
+        RESULT["checks"].append({"shortcut_picker_supports_app_shortcut": True})
+        # Cancelling this system picker with BACK can leave a blank transition.
+        # Commit its existing Empty choice instead, then require the real editor.
+        select_provider("Empty", "shortcut-empty")
         open_rectangle("replace-chooser")
         # A separate app proves SMALL_IMAGE remains replaceable through the native picker.
         select_provider("Test chart", "chart", "Panel test")
