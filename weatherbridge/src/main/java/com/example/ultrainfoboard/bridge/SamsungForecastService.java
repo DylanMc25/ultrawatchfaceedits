@@ -133,7 +133,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
 
     @Override public ComplicationData getPreviewData(ComplicationType type) {
         // Selection previews are illustrative labels, never fabricated live readings.
-        return unavailable("Samsung forecast");
+        return unavailable(getString(R.string.forecast_complication_name));
     }
 
     public static Intent weatherIntent(Context context) {
@@ -167,8 +167,9 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     private ComplicationData imageData(Bitmap source, String description, PendingIntent tap) {
-        // The physical slot is 262×60. At most seven timeline images plus one default stay below 512 KiB of pixels.
-        Bitmap bitmap = Bitmap.createScaledBitmap(source, 262, 60, true);
+        // The physical slot is 262×94. Four timeline images plus one default use 492,560 pixel bytes.
+        Bitmap bitmap = Bitmap.createScaledBitmap(source,
+                ForecastRenderer.SLOT_WIDTH, ForecastRenderer.SLOT_HEIGHT, true);
         if (bitmap != source) source.recycle();
         SmallImage image = new SmallImage.Builder(Icon.createWithBitmap(bitmap), SmallImageType.PHOTO).build();
         return new SmallImageComplicationData.Builder(image,

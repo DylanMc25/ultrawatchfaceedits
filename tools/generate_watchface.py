@@ -75,65 +75,46 @@ def clock(parent, ambient=False):
     g = group(parent, 'ambient_time' if ambient else 'interactive_time', alpha=0 if ambient else 255)
     el(g, 'Variant', mode='AMBIENT', target='alpha', value=255 if ambient else 0)
     color = '#FF8FA9BC' if ambient else C[2]
-    # Move minutes left to reserve a separate, larger seconds column.
-    d = box(g, 'DigitalClock', 18, 67, 194, 269)
-    for fmt, x, y, width in [('hh', 23, 0, 168), ('mm', 0, 130, 153)]:
-        t = box(d, 'TimeText', x, y, width, 139, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
-        el(t, 'Font', family='sans-serif-condensed', size=126 if ambient else 142,
+    # Retain the installed face's stacked time and two-line date. Slightly
+    # smaller, inset digits clear the battery gauge and larger forecast below.
+    d = box(g, 'DigitalClock', 28, 67, 176, 246)
+    for fmt, x, y, width in [('hh', 22, 0, 154), ('mm', 0, 116, 138)]:
+        t = box(d, 'TimeText', x, y, width, 130, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
+        el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else 134,
            color=color, weight='THIN' if ambient else 'MEDIUM')
-    text(g, 82, 17, 286, 40, 32, '%s', '[MONTH_F]', color=color, weight='LIGHT' if ambient else 'BOLD')
-    text(g, 230, 55, 142, 34, 28, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]', color=color)
+    text(g, 82, 17, 286, 40, 24, '%s', '[MONTH_F]',
+         color=color if ambient else C[3], weight='LIGHT' if ambient else 'NORMAL')
+    text(g, 230, 55, 142, 29, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
+         color=color if ambient else C[3])
     if not ambient:
-        seconds = box(g, 'DigitalClock', 173, 292, 36, 44)
-        t = box(seconds, 'TimeText', 0, 0, 36, 44, format='ss', align='CENTER')
+        seconds = box(g, 'DigitalClock', 168, 270, 36, 40)
+        t = box(seconds, 'TimeText', 0, 0, 36, 40, format='ss', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
 
 def rectangle_slot(parent):
-    # One wide native slot owns selection, data and taps. Providers can supply
-    # weather, text, progress or an image/chart; no hard-coded application launch.
-    kinds = ['SHORT_TEXT', 'LONG_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS',
-             'WEIGHTED_ELEMENTS', 'MONOCHROMATIC_IMAGE', 'SMALL_IMAGE', 'PHOTO_IMAGE', 'EMPTY']
-    s = box(parent, 'ComplicationSlot', 94, 339, 262, 60, slotId=7, name='rectangle',
+    # Keep the native picker, limited to formats suited to a wide information
+    # panel. The system controls app categories; WFF cannot whitelist providers.
+    kinds = ['LONG_TEXT', 'SMALL_IMAGE', 'EMPTY']
+    s = box(parent, 'ComplicationSlot', 94, 310, 262, 94, slotId=7, name='rectangle',
             displayName='slot_rectangle', supportedTypes=' '.join(kinds), isCustomizable='TRUE')
-    box(s, 'BoundingRoundBox', 0, 0, 262, 60, cornerRadius=16)
-    # Public provider component verified in the user's Samsung Weather APK.
-    # If absent/incompatible, leave the slot editable and empty on other watches.
+    box(s, 'BoundingRoundBox', 0, 0, 262, 94, cornerRadius=16)
     el(s, 'DefaultProviderPolicy',
        primaryProvider='com.samsung.android.watch.weather/com.samsung.android.watch.weather.complication.WeatherComplicationService',
        primaryProviderType='LONG_TEXT', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
     ambient_hide(s)
-    for kind in kinds:
-        p = el(s, 'Complication', type=kind)
-        if kind == 'EMPTY':
-            text(p, 8, 14, 246, 32, 23, '+ Complication', color=C[3])
-        elif kind in ['MONOCHROMATIC_IMAGE', 'SMALL_IMAGE', 'PHOTO_IMAGE']:
-            # Wide image providers can use this area for their own chart.
-            image(p, 12, 6, 238, 48, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
-        else:
-            image(p, 13, 15, 28, 28, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-            expr='textLength([COMPLICATION.TEXT]) > 0 ? [COMPLICATION.TEXT] : "—"'
-            if kind=='RANGED_VALUE':expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
-            if kind=='GOAL_PROGRESS':expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
-            c, titled = condition(p, 'rectangle_'+kind.lower()+'_title', 'textLength([COMPLICATION.TITLE]) > 0')
-            for target, y in [(titled, 2), (el(c, 'Default'), 6 if kind=='LONG_TEXT' else 13)]:
-                part = text(target, 50, y, 198, 37 if kind=='LONG_TEXT' and target is titled else 48 if kind=='LONG_TEXT' else 32,
-                            17 if kind=='LONG_TEXT' else 24, '%s', expr, align='START', weight='MEDIUM')
-                if kind=='LONG_TEXT': part.find('Text').set('maxLines','2')
-            text(titled, 50, 40 if kind=='LONG_TEXT' else 32, 198, 18 if kind=='LONG_TEXT' else 20, 16,
-                 '%s', '[COMPLICATION.TITLE]', align='START', color=C[3])
-            if kind=='WEIGHTED_ELEMENTS':
-                arc(p, 27, 29, 42, 0, 360, C[6], 3, weighted=True, viewport=(262,60))
-            elif kind in ['RANGED_VALUE', 'GOAL_PROGRESS']:
-                track=box(p, 'PartDraw', 16, 55, 230, 3)
-                line=el(track, 'Line', startX=0, startY=1.5, endX=230, endY=1.5)
-                el(line, 'Stroke', color=C[5], thickness=3, cap='ROUND')
-                ratio=RANGE if kind=='RANGED_VALUE' else GOAL
-                _, positive=condition(p, 'rectangle_'+kind.lower()+'_positive', f'{ratio} > 0')
-                foreground=box(positive, 'PartDraw', 16, 55, 230, 3)
-                line=el(foreground, 'Line', startX=0, startY=1.5, endX=230, endY=1.5)
-                el(line, 'Stroke', color=C[6], thickness=3, cap='ROUND')
-                el(line, 'Transform', target='endX', value=f'230 * {ratio}')
+    p = el(s, 'Complication', type='EMPTY')
+    text(p, 8, 31, 246, 32, 18, '+ Complication', color=C[3])
+    p = el(s, 'Complication', type='SMALL_IMAGE')
+    image(p, 0, 0, 262, 94, '[COMPLICATION.SMALL_IMAGE]')
+    p = el(s, 'Complication', type='LONG_TEXT')
+    image(p, 8, 29, 34, 34, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    expr='textLength([COMPLICATION.TEXT]) > 0 ? [COMPLICATION.TEXT] : "—"'
+    c, titled = condition(p, 'rectangle_long_text_title', 'textLength([COMPLICATION.TITLE]) > 0')
+    for target, y, h in [(titled, 8, 52), (el(c, 'Default'), 17, 62)]:
+        part = text(target, 49, y, 205, h, 23, '%s', expr, align='START', weight='MEDIUM')
+        part.find('Text').set('maxLines', '2')
+    text(titled, 49, 63, 205, 22, 16, '%s', '[COMPLICATION.TITLE]', align='START', color=C[3])
 
 
 RANGE = '([COMPLICATION.RANGED_VALUE_MAX] > [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0)'
@@ -141,20 +122,21 @@ GOAL = '([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] > 0 ? clamp([COMPLICATION.GOA
 
 
 def complication_label(parent, w, h, kind, label_id):
-    # Providers may send an icon, a title, both, or neither. Reserve both bands;
-    # absent optional fields render empty, leaving the primary reading centered.
-    image(parent, (w-28)/2, 6, 28, 28, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    # Primary values receive the largest type; optional provider titles stay
+    # subordinate in their own small band.
     expr = '[COMPLICATION.TEXT]'
     if kind == 'RANGED_VALUE': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
     if kind == 'GOAL_PROGRESS': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
+    inset = (h-96)/2
+    image(parent, (w-30)/2, 5+inset, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
     c, compact = condition(parent, label_id + '_compact', f'textLength({expr}) > 5')
-    text(compact, 6, 32, w-12, 37, 22, '%s', expr, weight='BOLD')
+    text(compact, 5, 32+inset, w-10, 45, 25, '%s', expr, weight='BOLD')
     dc, five = condition(el(c,'Default'), label_id + '_five', f'textLength({expr}) > 4')
-    text(five, 6, 32, w-12, 37, 30, '%s', expr, weight='BOLD')
+    text(five, 5, 32+inset, w-10, 45, 33, '%s', expr, weight='BOLD')
     fc, four = condition(el(dc,'Default'), label_id + '_four', f'textLength({expr}) > 3')
-    text(four, 6, 32, w-12, 37, 30, '%s', expr, weight='BOLD')
-    text(el(fc,'Default'), 6, 32, w-12, 37, 38, '%s', expr, weight='BOLD')
-    text(parent, 9, 68, w-18, 20, 16, '%s', '[COMPLICATION.TITLE]', color=C[3])
+    text(four, 5, 32+inset, w-10, 45, 37, '%s', expr, weight='BOLD')
+    text(el(fc,'Default'), 5, 32+inset, w-10, 45, 46, '%s', expr, weight='BOLD')
+    text(parent, 9, 77+inset, w-18, 18, 14, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
 def circle_slot(parent, sid, name, x, y, size, provider):
@@ -192,7 +174,7 @@ def edge_tick(parent, center, angle, color, viewport):
 
 def edge_slot(parent, sid, name, left=False):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'EMPTY']
-    x,y,w,h = (0,105,90,260) if left else (392,105,58,244)
+    x,y,w,h = (0,105,90,260) if left else (398,105,52,238)
     center = (225-x,225-y)
     s = box(parent, 'ComplicationSlot', x,y,w,h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
@@ -227,8 +209,8 @@ def edge_slot(parent, sid, name, left=False):
         else:
             image(p,ix,iy,28,28,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
         # The short rotated captions follow the reference without arc clip masks.
-        tx,ty=(27,218) if left else (3,178)
-        angle=50 if left else -65
+        tx,ty=(27,218) if left else (0,178)
+        angle=50 if left else -70
         expr='[COMPLICATION.TEXT]'
         if kind=='RANGED_VALUE':
             expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]'
@@ -250,12 +232,12 @@ def shortcut(parent):
     ambient_hide(s)
     p = el(s, 'Complication', type='SHORT_TEXT')
     image(p, 3, 3, 24, 24, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-    text(p, 31, 1, 106, 28, 22, '%s', '[COMPLICATION.TEXT]', color=C[2], align='START')
+    text(p, 31, 1, 106, 28, 24, '%s', '[COMPLICATION.TEXT]', color=C[2], align='START')
     for kind in ['MONOCHROMATIC_IMAGE','SMALL_IMAGE']:
         p = el(s, 'Complication', type=kind)
         image(p, 55, 0, 30, 30, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
     p = el(s, 'Complication', type='EMPTY')
-    text(p, 0, 1, 140, 28, 22, '+  Shortcut', color=C[3])
+    text(p, 0, 4, 140, 22, 16, '+ Shortcut', color=C[3])
 
 
 def build():
@@ -267,9 +249,9 @@ def build():
     el(fill, 'LinearGradient', startX=0, startY=0, endX=0, endY=450, colors=C[0]+' '+C[1], positions='0 1')
     clock(scene); clock(scene, ambient=True)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',210,91,90,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',301,166,90,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',210,245,90,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',204,86,96,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',302,166,94,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',204,212,96,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     rectangle_slot(scene)

@@ -18,10 +18,10 @@ def fixture_xml():
     slots = []
     for slot_id in range(1, 8):
         slots.append(f'''<ComplicationSlot slotId="{slot_id}" name="slot_{slot_id}"
-            x="{slot_id * 10}" y="339" width="262" height="60"
+            x="{slot_id * 10}" y="310" width="262" height="94"
             isCustomizable="TRUE" supportedTypes="SMALL_IMAGE EMPTY">
             <Variant mode="AMBIENT" target="alpha" value="0" />
-            <BoundingBox x="0" y="0" width="262" height="60" />
+            <BoundingBox x="0" y="0" width="262" height="94" />
             <DefaultProviderPolicy primaryProvider="original.provider/Slot{slot_id}"
                 primaryProviderType="LONG_TEXT" defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" />
             <Complication type="SMALL_IMAGE">
@@ -96,7 +96,7 @@ class PushBundleTests(unittest.TestCase):
             "defaultSystemProviderType": "EMPTY",
         })
         image = new_slots[6].find("Complication[@type='SMALL_IMAGE']/PartImage")
-        self.assertEqual(image.attrib, {"x": "0", "y": "0", "width": "262", "height": "60"})
+        self.assertEqual(image.attrib, {"x": "0", "y": "0", "width": "262", "height": "94"})
         # Reverting the two intended edits must recover the complete original document.
         policy.attrib.clear()
         policy.attrib.update(old_slots[6].find("DefaultProviderPolicy").attrib)

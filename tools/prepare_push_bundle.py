@@ -54,6 +54,8 @@ def prepare_resources():
         raise RuntimeError("Expected exactly one customizable bottom rectangle, slot 7")
     if "SMALL_IMAGE" not in rectangle[0].attrib.get("supportedTypes", "").split():
         raise RuntimeError("Bottom rectangle must support the forecast image")
+    slot_width = int(rectangle[0].get("width"))
+    slot_height = int(rectangle[0].get("height"))
     pattern = re.compile(r'(<ComplicationSlot\b[^>]*\bslotId="7"[^>]*>.*?)(<DefaultProviderPolicy\b[^>]*/>)', re.S)
     policy = (
         f'<DefaultProviderPolicy primaryProvider="{FORECAST_PROVIDER}" '
@@ -68,7 +70,7 @@ def prepare_resources():
     def fill_rectangle(match):
         content, image_count = re.subn(
             r'(<Complication type="SMALL_IMAGE">\s*)<PartImage\b[^>]*>',
-            r'\g<1><PartImage x="0" y="0" width="262" height="60">', match.group(2),
+            lambda image: image.group(1) + f'<PartImage x="0" y="0" width="{slot_width}" height="{slot_height}">', match.group(2),
         )
         if image_count != 1:
             raise RuntimeError("Expected one SMALL_IMAGE renderer in the bottom rectangle")
@@ -150,8 +152,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=("debug", "release"), default="debug")
     parser.add_argument("--validator", help="Existing official validator-push-cli JAR")
-    parser.add_argument("--version-code", type=int, default=10)
-    parser.add_argument("--version-name", default="0.2.0-preview.3")
+    parser.add_argument("--version-code", type=int, default=11)
+    parser.add_argument("--version-name", default="0.2.0-preview.4")
     args = parser.parse_args()
     if args.version_code < 1:
         parser.error("--version-code must be positive")

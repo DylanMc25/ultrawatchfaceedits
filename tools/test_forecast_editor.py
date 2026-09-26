@@ -19,6 +19,9 @@ from PIL import Image
 OUT = Path("build/forecast-emulator/editor")
 HOST = "com.example.ultrainfoboard.bridge"
 FACE = HOST + ".watchfacepush.board"
+BATTERY_ACTIVITY = ("com.google.android.apps.wearable.settings/"
+                    "com.google.android.clockwork.settings.MainSettingsActivity")
+RECTANGLE_CENTER = (225, 357)
 RESULT = {"passed": False, "checks": [], "samsung_integration_verified": False}
 WIDTH = HEIGHT = 0
 
@@ -112,31 +115,56 @@ def open_editor(name):
 
 def open_rectangle(name):
     wait_editor()
-    tap(225 * WIDTH / 450, 369 * HEIGHT / 450)
+    tap(RECTANGLE_CENTER[0] * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450)
     current = capture(name)
     if "ProviderChooserActivity" not in top_activity():
         raise RuntimeError("Rectangle did not open the normal provider chooser")
     return current
 
 
+def provider_match(current, wanted, category, in_category=False):
+    """Match a source within its own app, never another app's same-name source."""
+    for node in current.iter("node"):
+        b = bounds(node)
+        if len(b) != 4 or b[3] - b[1] < 18:
+            continue
+        if not category or in_category:
+            if label(node).casefold() == wanted.casefold():
+                return node
+        elif node.get("clickable") == "true":
+            # Flat pickers expose both the combined accessible label and the
+            # source/app children. Require the two names on the same row.
+            if label(node).casefold() == f"{wanted}, {category}".casefold():
+                return node
+            descendants = list(node.iter("node"))
+            primary = any(n.get("resource-id", "").endswith("wear_chip_primary_text")
+                          and label(n).casefold() == wanted.casefold() for n in descendants)
+            secondary = any(n.get("resource-id", "").endswith("wear_chip_secondary_text")
+                            and label(n).casefold() == category.casefold() for n in descendants)
+            if primary and secondary:
+                return node
+    return None
+
+
 def select_provider(wanted, prefix, category=None):
     previous = None
+    in_category = False
     for page in range(20):
         current = capture(f"{prefix}-page-{page:02}")
         nodes = list(current.iter("node"))
-        match = next((n for n in nodes if label(n).casefold() == wanted.casefold()
-                      and len(bounds(n)) == 4 and bounds(n)[3] - bounds(n)[1] >= 18), None)
+        match = provider_match(current, wanted, category, in_category)
         if match is not None:
             click(match)
             wait_editor()
             capture(prefix + "-selected")
             return
         # Some system versions group sources under their application name.
-        group = next((n for n in nodes if category and label(n).casefold() == category.casefold()
+        group = next((n for n in nodes if category and not in_category
+                      and label(n).casefold() == category.casefold()
                       and not n.get("resource-id", "").endswith("wear_chip_secondary_text")), None)
         if group is not None:
             click(group)
-            category = None
+            in_category = True
             previous = None
             continue
         visible = [(label(n), n.get("bounds")) for n in nodes if label(n)]
@@ -150,7 +178,7 @@ def select_provider(wanted, prefix, category=None):
 
 
 def rectangle_label(current):
-    x, y = 225 * WIDTH / 450, 369 * HEIGHT / 450
+    x, y = RECTANGLE_CENTER[0] * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450
     found = []
     for node in current.iter("node"):
         b = bounds(node)
@@ -173,7 +201,7 @@ def top_activity():
 def verify_taps(prefix, expected):
     for point, x in (("left", 100), ("middle", 225), ("right", 350)):
         ensure_face()
-        tap(x * WIDTH / 450, 369 * HEIGHT / 450)
+        tap(x * WIDTH / 450, RECTANGLE_CENTER[1] * HEIGHT / 450)
         capture(prefix + "-tap-" + point)
         resumed = top_activity()
         if not expected(resumed):
@@ -197,31 +225,32 @@ def main():
             raise RuntimeError("Forecast source not discoverable through standard complication action")
         open_editor("replace")
         open_rectangle("replace-chooser")
-        select_provider("Alarm", "alarm")
+        # Battery supports LONG_TEXT without account, permission or app setup.
+        select_provider("Battery", "battery", "Wear OS")
         leave_editor()
-        capture("alarm-active")
+        capture("battery-active")
         # Reopening proves it was saved, not only highlighted in the chooser.
-        current = open_editor("alarm-persisted")
-        if "alarm" not in rectangle_label(current).lower():
-            raise RuntimeError("Alarm assignment did not persist in the rectangle")
+        current = open_editor("battery-persisted")
+        if rectangle_label(current).casefold() != "battery":
+            raise RuntimeError("Battery assignment did not persist in the rectangle")
         RESULT["checks"].append({"replacement_persisted": rectangle_label(current)})
         leave_editor()
-        verify_taps("alarm", lambda resumed: "com.google.android.deskclock/" in resumed)
+        verify_taps("battery", lambda resumed: BATTERY_ACTIVITY in resumed)
         adb("shell", "am", "start", "-n", HOST + "/.SetupActivity")
         time.sleep(5)
-        current = open_editor("alarm-after-setup")
-        if "alarm" not in rectangle_label(current).lower():
-            raise RuntimeError("Opening setup replaced the saved Alarm assignment")
+        current = open_editor("battery-after-setup")
+        if rectangle_label(current).casefold() != "battery":
+            raise RuntimeError("Opening setup replaced the saved Battery assignment")
         RESULT["checks"].append({"replacement_survives_setup": True})
         leave_editor()
         open_editor("restore")
         open_rectangle("restore-chooser")
-        select_provider("Samsung hourly forecast", "forecast", "Ultra Info Board Weather")
+        select_provider("Weather", "forecast", "Ultra Info Board Weather")
         leave_editor()
         capture("forecast-restored-active")
         current = open_editor("forecast-persisted")
         restored_label = rectangle_label(current)
-        if "forecast" not in restored_label.lower():
+        if restored_label.casefold() != "weather":
             raise RuntimeError("Forecast assignment did not persist in the rectangle: " + restored_label)
         leave_editor()
         # Without Samsung installed, the real provider's unavailable-state tap

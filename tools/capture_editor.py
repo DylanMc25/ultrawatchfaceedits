@@ -14,6 +14,8 @@ import xml.etree.ElementTree as ET
 from PIL import Image
 
 out = Path('build/emulator')
+BATTERY_ACTIVITY = ('com.google.android.apps.wearable.settings/'
+                    'com.google.android.clockwork.settings.MainSettingsActivity')
 
 
 def adb(*args):
@@ -74,16 +76,36 @@ def return_to_editor():
     raise RuntimeError('Editor did not return after provider chooser; stopped coordinate taps.')
 
 
+def find_battery(chooser, w, h):
+    """Locate the stock LONG_TEXT source, including its Wear OS app label."""
+    previous = None
+    for page in range(8):
+        for node in chooser.iter('node'):
+            b = tuple(map(int, re.findall(r'\d+', node.get('bounds', ''))))
+            if (node.get('text') == 'Battery, Wear OS' and len(b) == 4
+                    and b[3] - b[1] >= 18):
+                return node
+        visible = [(n.get('text'), n.get('bounds')) for n in chooser.iter('node') if n.get('text')]
+        if visible == previous:
+            break
+        previous = visible
+        adb('shell', 'input', 'swipe', str(w // 2), str(round(h * .78)),
+            str(w // 2), str(round(h * .25)), '500')
+        time.sleep(2)
+        chooser = capture(f'weather-battery-page-{page:02}')
+    return None
+
+
 results = {'editor_opened': False, 'slot_captures': [], 'tap_captures': [], 'tap_mismatches': [], 'notes': []}
 try:
     w, h = Image.open(out / 'active.png').size
     adb('shell', 'input', 'keyevent', 'KEYCODE_WAKEUP')
     adb('shell', 'settings', 'put', 'system', 'screen_off_timeout', '1800000')
     # Observe the installed providers' own tap actions without changing settings.
-    for sid, name, x, y in [(1, 'heart-rate', 255, 136), (2, 'steps', 346, 211),
-                            (3, 'sunrise-sunset', 255, 290), (4, 'battery', 16, 225),
-                            (1, 'upper-boundary', 294, 150), (2, 'middle-upper-boundary', 305, 195),
-                            (2, 'middle-lower-boundary', 305, 227), (3, 'lower-boundary', 294, 275)]:
+    for sid, name, x, y in [(1, 'heart-rate', 252, 134), (2, 'steps', 349, 213),
+                            (3, 'sunrise-sunset', 252, 260), (4, 'battery', 16, 225),
+                            (1, 'upper-boundary', 290, 156), (2, 'middle-upper-boundary', 310, 193),
+                            (2, 'middle-lower-boundary', 310, 233), (3, 'lower-boundary', 290, 238)]:
         ensure_face()
         before=launch_log()
         tap(x*w/450, y*h/450)
@@ -108,9 +130,9 @@ try:
         slot_tree=capture('editor-slots')
         results['editor_opened'] = True
         # Coordinates come from the seven WFF touch regions, scaled to the display.
-        for name, x, y in [('upper', 255, 136), ('middle', 346, 211),
-                           ('lower', 255, 290), ('left', 16, 225),
-                           ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 369)]:
+        for name, x, y in [('upper', 252, 134), ('middle', 349, 213),
+                           ('lower', 252, 260), ('left', 16, 225),
+                           ('right', 420, 225), ('bottom', 225, 425), ('weather', 225, 357)]:
             slot_tree=return_to_editor()
             label='Bottom rectangle' if name=='weather' else 'Bottom shortcut' if name=='bottom' else f'{name.title()} '+('edge' if name in ['left','right'] else 'circle')
             node=next((n for n in slot_tree.iter('node') if label.lower() in (n.get('text','')+' '+n.get('content-desc','')).lower()),None)
@@ -138,8 +160,8 @@ try:
             ensure_face()
             capture('active-edge-alarm')
             results['edge_alarm_capture']=True
-        # A stock emulator lacks Samsung Weather. Select its Alarm provider in
-        # the weather slot to verify actual assignment and provider-owned taps.
+        # A stock emulator lacks Samsung Weather. Select its LONG_TEXT Battery
+        # provider in the rectangle to verify assignment and provider-owned taps.
         # This does not claim Samsung Weather integration on physical hardware.
         if results.get('edge_alarm_capture'):
             # Reopen the editor, since the preceding check returned to the face.
@@ -150,13 +172,13 @@ try:
             x1,y1,x2,y2=map(int,re.findall(r'\d+',edit.get('bounds')))
             tap((x1+x2)/2,(y1+y2)/2)
             return_to_editor()
-            tap(225*w/450,369*h/450)
+            tap(225*w/450,357*h/450)
             chooser=capture('weather-provider-chooser')
-            alarm=next((n for n in chooser.iter('node') if n.get('text')=='Alarm'),None)
-            if alarm is None:
-                results['notes'].append('Alarm test provider unavailable in weather slot.')
+            battery=find_battery(chooser,w,h)
+            if battery is None:
+                results['notes'].append('Battery test provider unavailable in rectangle slot.')
             else:
-                x1,y1,x2,y2=map(int,re.findall(r'\d+',alarm.get('bounds')))
+                x1,y1,x2,y2=map(int,re.findall(r'\d+',battery.get('bounds')))
                 tap((x1+x2)/2,(y1+y2)/2)
                 return_to_editor()
                 capture('editor-weather-assigned')
@@ -167,14 +189,18 @@ try:
                 for point,x in [('left',100),('center',225),('right',350)]:
                     ensure_face()
                     before=launch_log()
-                    tap(x*w/450,369*h/450)
+                    tap(x*w/450,357*h/450)
                     capture('tap-rectangle-'+point)
                     evidence=sorted(launch_log()-before)
                     (out/f'tap-rectangle-{point}-launch.txt').write_text('\n'.join(evidence)+'\n')
                     ids=[int(m.group(1)) for line in evidence if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
-                    attempts.append({'point':point,'observed_launch_slots':ids})
-                    if ids != [7]:results['tap_mismatches'].append('rectangle-'+point)
-                results['weather_provider_test']={'assigned_provider':'Alarm','expected_slot':7,
+                    activity=(out/f'tap-rectangle-{point}-activity.txt').read_text()
+                    resumed='\n'.join(line for line in activity.splitlines() if
+                                      'mResumedActivity' in line or 'topResumedActivity' in line)
+                    attempts.append({'point':point,'observed_launch_slots':ids,'resumed_activity':resumed})
+                    if ids != [7] or BATTERY_ACTIVITY not in resumed:
+                        results['tap_mismatches'].append('rectangle-'+point)
+                results['weather_provider_test']={'assigned_provider':'Battery','expected_slot':7,
                     'observed_launch_slots':attempts[1]['observed_launch_slots'],'tap_attempts':attempts,
                     'samsung_weather_verified':False}
 

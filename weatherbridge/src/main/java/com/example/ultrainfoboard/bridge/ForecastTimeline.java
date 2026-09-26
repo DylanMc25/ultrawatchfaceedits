@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 /** Bounded display intervals; never merge across a cache expiry to save an image. */
 public final class ForecastTimeline {
-    public static final int MAX_ENTRIES = 7;
+    public static final int MAX_ENTRIES = 4;
     private static final long HORIZON = 3 * 3_600_000L;
     public record Interval(long start, long end) { }
     private ForecastTimeline() { }

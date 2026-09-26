@@ -1,4 +1,4 @@
-"""Exercise the rectangle's actual generated expressions with provider payloads.
+"""Exercise actual generated expressions with provider payloads.
 These modeled checks complement native emulator checks; they do not prove any app's data availability.
 """
 import json
@@ -9,9 +9,10 @@ import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 FACE=ET.parse(ROOT/'app/src/main/res/raw/watchface.xml').getroot()
 PANEL=FACE.find("Scene/ComplicationSlot[@slotId='7']")
-EXPRESSIONS=sorted({n.text for n in PANEL.iter('Expression')} |
-                   {n.get('expression') for n in PANEL.iter('Parameter')} |
-                   {n.get('value') for n in PANEL.iter('Transform')})
+CIRCLE=FACE.find("Scene/ComplicationSlot[@slotId='1']")
+EXPRESSIONS=sorted({n.text for slot in [PANEL,CIRCLE] for n in slot.iter('Expression')} |
+                   {n.get('expression') for slot in [PANEL,CIRCLE] for n in slot.iter('Parameter')} |
+                   {n.get('value') for slot in [PANEL,CIRCLE] for n in slot.iter('Transform')})
 JS = r'''
 let input='';process.stdin.on('data',d=>input+=d);process.stdin.on('end',()=>{
  const {expressions, fixtures}=JSON.parse(input);
@@ -37,7 +38,7 @@ def evaluate(*fixtures):
     return json.loads(result.stdout)
 
 
-def visible(option, values):
+def visible(option, values, slot=PANEL):
     """Resolve the actual XML branches; retain chart lines and text for assertions."""
     nodes=[]
     def visit(node):
@@ -52,7 +53,7 @@ def visible(option, values):
             return
         nodes.append(node)
         for child in node:visit(child)
-    visit(PANEL.find(f"Complication[@type='{option}']"))
+    visit(slot.find(f"Complication[@type='{option}']"))
     texts=[]
     for node in nodes:
         if node.tag=='Font':
@@ -66,13 +67,11 @@ class RectangleDataTests(unittest.TestCase):
     def test_provider_text_and_units_are_preserved(self):
         for text in ['-40°C', '120°F', '0°', 'Meeting at noon', 'Rain likely after 11 PM']:
             values,=evaluate({'COMPLICATION.TEXT':text,'COMPLICATION.TITLE':'Provider title'})
-            for kind in ['SHORT_TEXT','LONG_TEXT']:
-                self.assertEqual(visible(kind,values)[1],[text,'Provider title'])
+            self.assertEqual(visible('LONG_TEXT',values)[1],[text,'Provider title'])
 
     def test_missing_data_is_not_a_fake_weather_reading(self):
         values,=evaluate({})
-        for kind in ['SHORT_TEXT','LONG_TEXT']:
-            self.assertEqual(visible(kind,values)[1],['—'])
+        self.assertEqual(visible('LONG_TEXT',values)[1],['—'])
         nodes,texts=visible('EMPTY',values)
         self.assertEqual(texts,['+ Complication'])
         self.assertFalse(any(n.tag=='Launch' for n in nodes))
@@ -80,15 +79,16 @@ class RectangleDataTests(unittest.TestCase):
     def test_progress_zero_invalid_range_and_over_goal(self):
         for kind,prefix,limits in [('RANGED_VALUE','RANGED_VALUE',{'MIN':0,'MAX':100}),
                                    ('GOAL_PROGRESS','GOAL_PROGRESS',{'TARGET_VALUE':100})]:
-            for amount,expected in [(-1,0),(0,0),(50,115),(150,230)]:
+            for amount,expected in [(-1,0),(0,0),(50,180),(150,360)]:
                 data={f'COMPLICATION.{prefix}_{k}':v for k,v in limits.items()}
                 data[f'COMPLICATION.{prefix}_VALUE']=amount
                 values,=evaluate(data)
-                nodes,texts=visible(kind,values)
+                nodes,texts=visible(kind,values,CIRCLE)
                 endpoints=[values[n.get('value')] for n in nodes if n.tag=='Transform']
-                self.assertEqual(endpoints,[] if expected==0 else [expected])
+                self.assertEqual(endpoints,[expected])
             values,=evaluate({f'COMPLICATION.{prefix}_{k}':0 for k in limits} |
                              {f'COMPLICATION.{prefix}_VALUE':50})
-            self.assertFalse(any(n.tag=='Transform' for n in visible(kind,values)[0]))
+            nodes,_=visible(kind,values,CIRCLE)
+            self.assertEqual([values[n.get('value')] for n in nodes if n.tag=='Transform'],[0])
 
 if __name__=='__main__':unittest.main()

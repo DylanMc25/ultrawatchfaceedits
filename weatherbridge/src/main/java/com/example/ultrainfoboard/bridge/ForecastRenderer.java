@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Draws an original, transparent forecast image for the face's 262 by 60 slot. */
+/** Draws an original, transparent forecast image for the face's 262 by 94 slot. */
 public final class ForecastRenderer {
-    public static final int WIDTH = 786;
-    public static final int HEIGHT = 180;
+    public static final int SLOT_WIDTH = 262;
+    public static final int SLOT_HEIGHT = 94;
+    public static final int WIDTH = SLOT_WIDTH * 3;
+    public static final int HEIGHT = SLOT_HEIGHT * 3;
 
     // Our semantic values, deliberately separate from Samsung's versioned icon codes.
     public static final int UNKNOWN = -1;
@@ -55,8 +57,8 @@ public final class ForecastRenderer {
     private static final int SECONDARY = Color.rgb(161, 209, 242);
     private static final int SEPARATOR = Color.argb(82, 161, 209, 242);
     private static final String MISSING = "\u2014";
-    private static final float LOGICAL_WIDTH = 262f;
-    private static final float LOGICAL_HEIGHT = 60f;
+    private static final float LOGICAL_WIDTH = SLOT_WIDTH;
+    private static final float LOGICAL_HEIGHT = SLOT_HEIGHT;
     private static final float CELL_WIDTH = LOGICAL_WIDTH / 4f;
 
     private ForecastRenderer() {}
@@ -137,30 +139,30 @@ public final class ForecastRenderer {
         }
 
         void draw(RenderData data) {
-            icon(data.currentCondition, data.currentDay, 9f, 7.7f, 11.4f);
-            float headerWidth = data.stale ? 201f : 238f;
+            icon(data.currentCondition, data.currentDay, 11f, 12f, 19f);
+            float headerWidth = data.stale ? 190f : 230f;
             label(data.currentText.isEmpty() ? MISSING : data.currentText,
-                    19f, 12f, headerWidth, 11.5f, 9f, TEXT, false);
+                    26f, 20.5f, headerWidth, 20f, 14.5f, TEXT, false);
             if (data.stale) {
-                label("Saved", 257f, 11f, 33f, 7.5f, 7.5f, SECONDARY, true);
+                label("Saved", 257f, 18f, 34f, 10.5f, 10.5f, SECONDARY, true);
             }
 
             for (int i = 0; i < 4; i++) {
                 float center = CELL_WIDTH * (i + 0.5f);
                 if (i > 0) {
                     stroke(SEPARATOR, 0.8f);
-                    canvas.drawLine(CELL_WIDTH * i, 20f, CELL_WIDTH * i, 45.5f, paint);
+                    canvas.drawLine(CELL_WIDTH * i, 30f, CELL_WIDTH * i, 72.5f, paint);
                 }
                 Hour hour = i < data.hours.size() ? data.hours.get(i) : null;
                 boolean available = hour != null && hour.available;
                 String temperature = available && !hour.temperatureLabel.isEmpty()
                         ? hour.temperatureLabel : MISSING;
-                centeredLabel(temperature, center, 26f, CELL_WIDTH - 7f,
-                        10.5f, 8.5f, available ? TEXT : SECONDARY);
+                centeredLabel(temperature, center, 44f, CELL_WIDTH - 8f,
+                        19f, 14f, available ? TEXT : SECONDARY);
                 icon(available ? hour.condition : UNKNOWN,
-                        available && hour.day, center, 37f, 13.5f);
+                        available && hour.day, center, 60f, 24f);
                 String time = hour == null || hour.timeLabel.isEmpty() ? MISSING : hour.timeLabel;
-                centeredLabel(time, center, 56f, CELL_WIDTH - 7f, 9.6f, 8f, SECONDARY);
+                centeredLabel(time, center, 89f, CELL_WIDTH - 8f, 15f, 11.5f, SECONDARY);
             }
         }
 

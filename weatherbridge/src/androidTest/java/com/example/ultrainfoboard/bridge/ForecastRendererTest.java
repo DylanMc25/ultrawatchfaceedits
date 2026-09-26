@@ -111,9 +111,22 @@ public final class ForecastRendererTest {
 
         assertFalse("A saved forecast needs a visible status indication", before.sameAs(after));
         // This region contains the hourly values, icons and times, below the current row.
-        Bitmap hourlyBefore = Bitmap.createBitmap(before, 0, 54, before.getWidth(), before.getHeight() - 54);
-        Bitmap hourlyAfter = Bitmap.createBitmap(after, 0, 54, after.getWidth(), after.getHeight() - 54);
+        Bitmap hourlyBefore = Bitmap.createBitmap(before, 0, 81, before.getWidth(), before.getHeight() - 81);
+        Bitmap hourlyAfter = Bitmap.createBitmap(after, 0, 81, after.getWidth(), after.getHeight() - 81);
         assertTrue("Marking data as saved must preserve its forecast", hourlyBefore.sameAs(hourlyAfter));
+    }
+
+    @Test
+    public void enlargedForecastTimelineStaysWithinPixelMemoryBudget() {
+        Bitmap rendered = ForecastRenderer.render(conditionFixture(ForecastRenderer.PARTLY_CLOUDY, false));
+        Bitmap delivered = Bitmap.createScaledBitmap(rendered,
+                ForecastRenderer.SLOT_WIDTH, ForecastRenderer.SLOT_HEIGHT, true);
+        assertEquals("The complication image must fill the enlarged face slot", 262, delivered.getWidth());
+        assertEquals("The complication image must not shrink back to the old height", 94, delivered.getHeight());
+        long allImages = (long) delivered.getAllocationByteCount() * (ForecastTimeline.MAX_ENTRIES + 1);
+        assertTrue("Timeline images plus its default exceed the 512 KiB pixel budget", allImages < 512 * 1024);
+        delivered.recycle();
+        rendered.recycle();
     }
 
     @Test
@@ -156,7 +169,7 @@ public final class ForecastRendererTest {
 
     private static void assertVisibleWithClearOuterBorder(Bitmap bitmap) {
         assertEquals("Image width must match the complication raster contract", 786, bitmap.getWidth());
-        assertEquals("Image height must match the complication raster contract", 180, bitmap.getHeight());
+        assertEquals("Image height must match the complication raster contract", 282, bitmap.getHeight());
         assertEquals(Bitmap.Config.ARGB_8888, bitmap.getConfig());
         int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
         bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -178,7 +191,29 @@ public final class ForecastRendererTest {
             throws IOException {
         Bitmap rendered = ForecastRenderer.render(data);
         assertVisibleWithClearOuterBorder(rendered);
-        Bitmap preview = Bitmap.createBitmap(rendered.getWidth() + 32, rendered.getHeight() + 70,
+        Bitmap delivered = Bitmap.createScaledBitmap(rendered,
+                ForecastRenderer.SLOT_WIDTH, ForecastRenderer.SLOT_HEIGHT, true);
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        File directory = new File(context.getFilesDir(), "render-fixtures");
+        assertTrue("Could not create fixture output directory", directory.isDirectory() || directory.mkdirs());
+
+        Bitmap preview = fixturePreview(rendered, blue, false);
+        writeFixture(directory, name, preview);
+        preview.recycle();
+
+        // Keep the exact delivered raster separately: embedding its label would change its size.
+        // Every file is a synthetic fixture, never a capture of live Samsung weather.
+        String stem = name.substring(0, name.length() - ".png".length());
+        writeFixture(directory, stem + "-delivered.png", delivered);
+        Bitmap deliveredPreview = fixturePreview(delivered, blue, true);
+        writeFixture(directory, stem + "-delivered-preview.png", deliveredPreview);
+        deliveredPreview.recycle();
+        delivered.recycle();
+        rendered.recycle();
+    }
+
+    private static Bitmap fixturePreview(Bitmap image, boolean blue, boolean delivered) {
+        Bitmap preview = Bitmap.createBitmap(image.getWidth() + 32, image.getHeight() + 70,
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(preview);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -191,18 +226,24 @@ public final class ForecastRendererTest {
         canvas.drawRect(0, 0, preview.getWidth(), preview.getHeight(), paint);
         paint.setShader(null);
         paint.setColor(Color.WHITE);
-        paint.setTextSize(16f);
         paint.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        canvas.drawText("ILLUSTRATIVE FIXTURE · NOT DEVICE WEATHER", 16f, 26f, paint);
-        canvas.drawBitmap(rendered, 16f, 48f, null);
-
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        File directory = new File(context.getFilesDir(), "render-fixtures");
-        assertTrue("Could not create fixture output directory", directory.isDirectory() || directory.mkdirs());
-        try (FileOutputStream output = new FileOutputStream(new File(directory, name))) {
-            assertTrue("Could not encode the fixture PNG", preview.compress(Bitmap.CompressFormat.PNG, 100, output));
+        if (delivered) {
+            paint.setTextSize(11f);
+            canvas.drawText("ILLUSTRATIVE FIXTURE · NOT DEVICE WEATHER", 16f, 19f, paint);
+            canvas.drawText("262 × 94 delivered pixels · shown 1:1", 16f, 35f, paint);
+        } else {
+            paint.setTextSize(16f);
+            canvas.drawText("ILLUSTRATIVE FIXTURE · NOT DEVICE WEATHER", 16f, 26f, paint);
         }
-        preview.recycle();
-        rendered.recycle();
+        // An explicit destination rectangle prevents density-based Canvas scaling.
+        canvas.drawBitmap(image, null,
+                new android.graphics.Rect(16, 48, 16 + image.getWidth(), 48 + image.getHeight()), null);
+        return preview;
+    }
+
+    private static void writeFixture(File directory, String name, Bitmap bitmap) throws IOException {
+        try (FileOutputStream output = new FileOutputStream(new File(directory, name))) {
+            assertTrue("Could not encode the fixture PNG", bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
+        }
     }
 }

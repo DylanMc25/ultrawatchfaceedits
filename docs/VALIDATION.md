@@ -1,6 +1,16 @@
 # Validation
 
-## Current Wear OS 6 Samsung forecast preview
+## Current preview 0.2.0-preview.4 (version 11)
+
+The installed face remains the layout baseline: two-line date, stacked time and three staggered circles. Month/date text is smaller, time is slightly smaller and inset, and live readings are larger. The forecast rectangle grows from 262 × 60 to 262 × 94 with larger temperatures, icons and hourly labels. Its source is now named **Weather**. The native picker accepts `LONG_TEXT`, `SMALL_IMAGE` and `EMPTY`; the OS decides which providers satisfy those formats. All seven slot IDs and provider component identities remain stable, but bounds have changed. The original standalone build is now 0.1.7 (version 8).
+
+The user reconfirmed that weather works on their Galaxy Watch before this revision. This does not validate the new layout or the narrower picker on Samsung. Forecast comparison across units/location/refresh states, saved assignments after upgrade and physical readability remain device checks.
+
+Local validation passes: **29 JVM tests**, **18 Python tests**, debug and test APKs, unsigned test AABs, Android lint, the official WFF 2 syntax/resource and standalone memory checks, and all **10 official Watch Face Push checks** on the signed embedded face. Four forecast timeline images plus one fallback use **492,560 bitmap bytes**, below 512 KiB; exact data-expiry boundaries are retained even when this shortens timeline coverage. No measurements here establish live Samsung access or visual correctness.
+
+Native small/large API 36 and standalone API 34/35 checks are pending for version 11. They now select Battery in the rectangle, verify its settings tap, and restore our app's **Weather** through the ordinary chooser. Renderer fixtures include exact delivered 262 × 94 images as well as supersampled previews. The historical screenshots below belong to their named earlier versions.
+
+## Version 10 Wear OS 6 evidence
 
 The current implementation is a Wear OS 6 / API 36 host app with a bundled resource-only WFF 2 face and an ordinary replaceable rectangular forecast complication. The bundled face is named **Ultra Forecast** in preview 0.2.0-preview.3 (version code 10), distinct from the original standalone **Ultra Info Board**. Version 9's longer **Ultra Info Board Forecast** name was truncated in the round picker and is superseded. See [Samsung preview installation and checks](SAMSUNG_FORECAST_TESTING.md) and [bundle architecture](WATCH_FACE_PUSH_PLAN.md).
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Ultra Info Board Weather</string>
-    <string name="forecast_complication_name">Samsung hourly forecast</string>
+    <string name="forecast_complication_name">Weather</string>
     <string name="forecast_face_name">Ultra Forecast</string>
     <string name="forecast_picker_help">Watch face: %1$s\nChange content: Customize → Bottom rectangle\nRestore forecast: %2$s → %3$s</string>
 </resources>

@@ -103,8 +103,8 @@ class WatchFaceTests(unittest.TestCase):
         slot=self.face.find(".//ComplicationSlot[@slotId='7']")
         self.assertEqual(slot.get('name'),'rectangle')
         self.assertEqual(slot.get('displayName'),'slot_rectangle')
-        self.assertIn('SHORT_TEXT',slot.get('supportedTypes').split())
-        self.assertTrue({'LONG_TEXT','SMALL_IMAGE','PHOTO_IMAGE','RANGED_VALUE','GOAL_PROGRESS','WEIGHTED_ELEMENTS'} <= set(slot.get('supportedTypes').split()))
+        self.assertEqual({'LONG_TEXT','SMALL_IMAGE','EMPTY'},set(slot.get('supportedTypes').split()),
+                         'The rectangle should offer text cards and images, not every compact/gauge format')
         self.assertEqual(slot.find('DefaultProviderPolicy').get('defaultSystemProvider'),'EMPTY')
         self.assertFalse(self.face.findall('.//Launch'), 'Provider must own the tap action')
         xml=ET.tostring(self.face,encoding='unicode')
@@ -114,8 +114,8 @@ class WatchFaceTests(unittest.TestCase):
         self.assertEqual(policy.get('primaryProviderType'),'LONG_TEXT')
         self.assertTrue(policy.get('primaryProvider').endswith('.WeatherComplicationService'))
         self.assertFalse(slot.findall('.//RoundRectangle'), 'Keep the panel integrated with the face')
-        self.assertTrue(all(n.get('maxLines')=='2' for n in slot.findall("Complication[@type='LONG_TEXT']//PartText/Text") if n.find('Font').get('size')=='17'))
-        self.assertEqual(tuple(float(slot.get(k)) for k in ['x','y','width','height']),(94,339,262,60))
+        self.assertTrue(all(n.get('maxLines')=='2' for n in slot.findall("Complication[@type='LONG_TEXT']//PartText/Text") if n.find('Font').get('size')=='23'))
+        self.assertEqual(tuple(float(slot.get(k)) for k in ['x','y','width','height']),(94,310,262,94))
 
     def test_minutes_and_seconds_have_separate_space(self):
         g=self.face.find(".//Group[@name='interactive_time']")
@@ -131,7 +131,7 @@ class WatchFaceTests(unittest.TestCase):
         for sid in ['1','2','3']:
             slot=self.face.find(f".//ComplicationSlot[@slotId='{sid}']")
             x,y,w,h=map(float,(slot.get(k) for k in ['x','y','width','height']))
-            self.assertGreaterEqual(w,90)
+            self.assertGreaterEqual(w,94)
             self.assertLessEqual(math.hypot(x+w/2-225,y+h/2-225)+w/2,225)
         g=self.face.find(".//Group[@name='interactive_time']")
         for clock in g.findall('DigitalClock'):
@@ -139,7 +139,7 @@ class WatchFaceTests(unittest.TestCase):
                 x=float(clock.get('x'))+float(t.get('x'));y=float(clock.get('y'))+float(t.get('y'))
                 w=float(t.get('width'));h=float(t.get('height'))
                 if t.get('format') in ['hh','mm']:
-                    self.assertGreaterEqual(float(t.find('Font').get('size')),142)
+                    self.assertGreaterEqual(float(t.find('Font').get('size')),130)
                 for slot in slots[:3]:
                     sx,sy,sw,sh=map(float,(slot.get(k) for k in ['x','y','width','height']))
                     self.assertTrue(x+w<=sx or sx+sw<=x or y+h<=sy or sy+sh<=y,
