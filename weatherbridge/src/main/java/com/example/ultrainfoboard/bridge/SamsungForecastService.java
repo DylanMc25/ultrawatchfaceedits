@@ -163,13 +163,17 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
 
     private PendingIntent weatherTap() {
         Intent launch = weatherIntent(this);
-        if (launch == null) launch = new Intent(this, SetupActivity.class);
+        if (launch == null) return setupTap();
         return PendingIntent.getActivity(this, 1, launch,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     private PendingIntent setupTap() {
-        return PendingIntent.getActivity(this, 2, new Intent(this, SetupActivity.class),
+        // Clear a previously opened panel menu above setup when resuming its task.
+        // Use a new request code so older cached intents cannot retain old flags.
+        Intent launch = new Intent(this, SetupActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return PendingIntent.getActivity(this, 3, launch,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 

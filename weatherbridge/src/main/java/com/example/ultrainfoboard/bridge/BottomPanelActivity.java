@@ -24,7 +24,7 @@ public final class BottomPanelActivity extends Activity {
         TextView heading = label("Bottom panel", 20);
         heading.setTypeface(null, android.graphics.Typeface.BOLD);
         content.addView(heading);
-        content.addView(label("Choose a chart for your watch face. Changes save automatically.", 13));
+        content.addView(label("Choose a chart", 13));
         RadioGroup choices = new RadioGroup(this);
         choices.setOrientation(RadioGroup.VERTICAL);
         BottomPanelPreferences.Panel selected = BottomPanelPreferences.get(this);
@@ -42,7 +42,7 @@ public final class BottomPanelActivity extends Activity {
             button.setOnClickListener(view -> BottomPanelPreferences.set(this, panel));
         }
         content.addView(choices, new LinearLayout.LayoutParams(-1, -2));
-        content.addView(label("Weather charts use Samsung Weather. Tap a chart on the face to open Weather. The six other complications stay editable on the face.", 12));
+        content.addView(label("Changes save automatically. Tap a chart on the face to open Samsung Weather. The six other complications stay editable on the face.", 12));
         setContentView(scroll);
     }
 
