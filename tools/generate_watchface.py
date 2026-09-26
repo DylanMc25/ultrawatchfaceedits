@@ -82,9 +82,9 @@ def clock(parent, ambient=False):
         t = box(d, 'TimeText', x, y, width, 130, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else (130 if fmt == 'mm' else 134),
            color=color, weight='THIN' if ambient else 'MEDIUM')
-    text(g, 82, 17, 286, 40, 24, '%s', '[MONTH_F]',
+    text(g, 82, 17, 286, 30, 24, '%s', '[MONTH_F]',
          color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
-    text(g, 202, 55, 96, 29, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
+    text(g, 82, 47, 286, 26, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
          color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
     if not ambient:
         seconds = box(g, 'DigitalClock', 166, 270, 36, 40)

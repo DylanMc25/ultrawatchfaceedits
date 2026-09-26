@@ -21,7 +21,7 @@
                     <Font family="sans-serif-condensed" size="130" color="#FFDAF1FF" weight="MEDIUM" />
                 </TimeText>
             </DigitalClock>
-            <PartText x="82" y="17" width="286" height="40">
+            <PartText x="82" y="17" width="286" height="30">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                     <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="BOLD">
                         <Template>%s<Parameter expression="[MONTH_F]" />
@@ -29,7 +29,7 @@
                     </Font>
                 </Text>
             </PartText>
-            <PartText x="202" y="55" width="96" height="29">
+            <PartText x="82" y="47" width="286" height="26">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                     <Font family="sans-serif" size="21" color="#FFB4DAF6" weight="BOLD">
                         <Template>%s %s<Parameter expression="[DAY_OF_WEEK_S]" />
@@ -54,7 +54,7 @@
                     <Font family="sans-serif-condensed" size="116" color="#FF8FA9BC" weight="THIN" />
                 </TimeText>
             </DigitalClock>
-            <PartText x="82" y="17" width="286" height="40">
+            <PartText x="82" y="17" width="286" height="30">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                     <Font family="sans-serif" size="24" color="#FF8FA9BC" weight="LIGHT">
                         <Template>%s<Parameter expression="[MONTH_F]" />
@@ -62,7 +62,7 @@
                     </Font>
                 </Text>
             </PartText>
-            <PartText x="202" y="55" width="96" height="29">
+            <PartText x="82" y="47" width="286" height="26">
                 <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                     <Font family="sans-serif" size="21" color="#FF8FA9BC" weight="LIGHT">
                         <Template>%s %s<Parameter expression="[DAY_OF_WEEK_S]" />
