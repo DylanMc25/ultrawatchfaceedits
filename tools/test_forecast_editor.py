@@ -9,10 +9,11 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import statistics
 import time
 import xml.etree.ElementTree as ET
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 
 OUT = Path("build/forecast-emulator/editor")
@@ -222,6 +223,25 @@ def select_chart(wanted, prefix):
     time.sleep(5)
 
 
+def panel_pixels(prefix, empty=False):
+    # Stay within the panel, clear of the rim, clock and charging overlay.
+    shot = Image.open(OUT / (prefix + "-active.png")).convert("RGB")
+    crop = shot.crop(tuple(round(v * (WIDTH if i % 2 == 0 else HEIGHT) / 450)
+                           for i, v in enumerate((99, 316, 351, 397))))
+    foreground = 0
+    for y in range(crop.height):
+        row = [crop.getpixel((x, y)) for x in range(crop.width)]
+        background = [statistics.median(p[c] for p in row) for c in range(3)]
+        foreground += sum(max(abs(p[c] - background[c]) for c in range(3)) > 8 for p in row)
+    if empty and foreground > crop.width * crop.height * .001:
+        raise RuntimeError("None still has visible panel content")
+    if not empty and foreground < 100:
+        raise RuntimeError(prefix + " has no visible panel content")
+    RESULT["checks"].append({"panel_pixels": prefix, "foreground_pixels": foreground})
+    crop.save(OUT / (prefix + "-panel-crop.png"))
+    return crop
+
+
 def main():
     global WIDTH, HEIGHT
     OUT.mkdir(parents=True, exist_ok=True)
@@ -254,6 +274,7 @@ def main():
             raise RuntimeError("Shortcut lost the system App shortcut source")
         select_provider("Empty", "shortcut-empty")
         leave_editor()
+        rendered_panels = []
         for wanted in ["Temperature trend", "Chance of rain", "None", "Weather"]:
             prefix = wanted.lower().replace(" ", "-")
             open_panel_menu(prefix)
@@ -265,6 +286,11 @@ def main():
             leave_editor()
             time.sleep(8)
             capture(prefix + "-active")
+            crop = panel_pixels(prefix, empty=wanted == "None")
+            if wanted != "None":
+                if any(ImageChops.difference(crop, previous).getbbox() is None for previous in rendered_panels):
+                    raise RuntimeError("Different panel choices produced the same image")
+                rendered_panels.append(crop)
             if wanted == "None":
                 before = top_activity()
                 verify_taps(prefix, lambda resumed: resumed == before)

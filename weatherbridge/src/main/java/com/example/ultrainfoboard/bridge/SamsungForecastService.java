@@ -17,7 +17,6 @@ import android.os.RemoteException;
 
 import androidx.wear.watchface.complications.data.ComplicationData;
 import androidx.wear.watchface.complications.data.ComplicationType;
-import androidx.wear.watchface.complications.data.EmptyComplicationData;
 import androidx.wear.watchface.complications.data.PlainComplicationText;
 import androidx.wear.watchface.complications.data.SmallImage;
 import androidx.wear.watchface.complications.data.SmallImageComplicationData;
@@ -83,8 +82,12 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     @Override public void onComplicationRequest(ComplicationRequest request, ComplicationRequestListener listener) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            handler.post(() -> onComplicationRequest(request, listener));
+            return;
+        }
         if (BottomPanelPreferences.get(this) == BottomPanelPreferences.Panel.NONE) {
-            send(listener, new AtomicBoolean(), new EmptyComplicationData());
+            send(listener, new AtomicBoolean(), emptyPanel());
             return;
         }
         observe();
@@ -92,7 +95,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
         CancellationSignal cancellation = new CancellationSignal();
         ScheduledFuture<?> timeout = timer.schedule(() -> {
             cancellation.cancel();
-            send(listener, delivered, unavailable("Weather unavailable"));
+            handler.post(() -> send(listener, delivered, unavailable("Weather unavailable")));
         }, 8, TimeUnit.SECONDS);
         worker.execute(() -> {
             try {
@@ -119,22 +122,23 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
                     // If all future entries expire without an update, do not restore an old fresh image.
                     data = unavailable("Open Weather");
                 }
-                // A menu change during a slow read must not reinstall an old chart
-                // or its future timeline after the user has chosen None.
-                if (panel != BottomPanelPreferences.get(this)) {
-                    timeline.clear();
-                    data = data(result.snapshot, result.detail,
-                            result.state == SamsungWeatherReader.State.PERMISSION_REQUIRED ? setupTap() : weatherTap(),
-                            BottomPanelPreferences.get(this));
-                    requestUpdates(this);
-                }
-                if (delivered.compareAndSet(false, true)) {
-                    try {
-                        listener.onComplicationDataTimeline(new ComplicationDataTimeline(data, timeline));
-                    } catch (RemoteException ignored) { /* Watch face has disconnected. */ }
-                }
+                ComplicationData fallback = data;
+                // Menu saves and final delivery share the main thread. An old
+                // worker cannot restore its chart/timeline after a newer choice.
+                handler.post(() -> {
+                    BottomPanelPreferences.Panel latest = BottomPanelPreferences.get(this);
+                    if (latest != panel) {
+                        send(listener, delivered, data(result.snapshot, result.detail,
+                                result.state == SamsungWeatherReader.State.PERMISSION_REQUIRED ? setupTap() : weatherTap(), latest));
+                        requestUpdates(this);
+                    } else if (delivered.compareAndSet(false, true)) {
+                        try {
+                            listener.onComplicationDataTimeline(new ComplicationDataTimeline(fallback, timeline));
+                        } catch (RemoteException ignored) { /* Watch face has disconnected. */ }
+                    }
+                });
             } catch (RuntimeException error) {
-                send(listener, delivered, unavailable("Weather unavailable"));
+                handler.post(() -> send(listener, delivered, unavailable("Weather unavailable")));
             } finally {
                 timeout.cancel(false);
             }
@@ -148,8 +152,9 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
     }
 
     @Override public ComplicationData getPreviewData(ComplicationType type) {
-        // Selection previews are illustrative labels, never fabricated live readings.
-        return unavailable(getString(R.string.forecast_complication_name));
+        // Cached provider previews must not depend on a saved panel preference.
+        return imageData(ForecastRenderer.render(new ForecastRenderer.RenderData("Weather",
+                Collections.emptyList(), false)), "Weather", null);
     }
 
     public static Intent weatherIntent(Context context) {
@@ -170,7 +175,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
 
     private ComplicationData unavailable(String text) {
         BottomPanelPreferences.Panel panel = BottomPanelPreferences.get(this);
-        if (panel == BottomPanelPreferences.Panel.NONE) return new EmptyComplicationData();
+        if (panel == BottomPanelPreferences.Panel.NONE) return emptyPanel();
         Bitmap bitmap = panel == BottomPanelPreferences.Panel.WEATHER
                 ? ForecastRenderer.render(new ForecastRenderer.RenderData(text, Collections.emptyList(), false))
                 : renderPanel(null, panel);
@@ -180,7 +185,7 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
 
     private ComplicationData data(SamsungWeatherContract.Snapshot snapshot, String detail, PendingIntent tap,
             BottomPanelPreferences.Panel panel) {
-        if (panel == BottomPanelPreferences.Panel.NONE) return new EmptyComplicationData();
+        if (panel == BottomPanelPreferences.Panel.NONE) return emptyPanel();
         return imageData(renderPanel(snapshot, panel), describePanel(snapshot, detail, panel), tap);
     }
 
@@ -223,14 +228,23 @@ public final class SamsungForecastService extends ComplicationDataSourceService 
         return description.toString();
     }
 
-    private ComplicationData imageData(Bitmap source, String description, PendingIntent tap) {
+    static ComplicationData emptyPanel() {
+        // Datasource 1.3 rejects TYPE_EMPTY. A transparent SMALL_IMAGE with no
+        // PendingIntent clears both old artwork and its action using a valid type.
+        return imageData(Bitmap.createBitmap(ForecastRenderer.SLOT_WIDTH, ForecastRenderer.SLOT_HEIGHT,
+                Bitmap.Config.ARGB_8888), "No bottom panel", null);
+    }
+
+    private static ComplicationData imageData(Bitmap source, String description, PendingIntent tap) {
         // The physical slot is 262×94. Four timeline images plus one default use 492,560 pixel bytes.
         Bitmap bitmap = Bitmap.createScaledBitmap(source,
                 ForecastRenderer.SLOT_WIDTH, ForecastRenderer.SLOT_HEIGHT, true);
         if (bitmap != source) source.recycle();
         SmallImage image = new SmallImage.Builder(Icon.createWithBitmap(bitmap), SmallImageType.PHOTO).build();
-        return new SmallImageComplicationData.Builder(image,
-                new PlainComplicationText.Builder(description).build()).setTapAction(tap).build();
+        SmallImageComplicationData.Builder builder = new SmallImageComplicationData.Builder(image,
+                new PlainComplicationText.Builder(description).build());
+        if (tap != null) builder.setTapAction(tap);
+        return builder.build();
     }
 
     public static Bitmap render(SamsungWeatherReader.Result result) { return render(result.snapshot); }
