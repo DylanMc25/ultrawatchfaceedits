@@ -87,12 +87,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_1_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_1_short_text_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_1_short_text_compact">
+                    <Compare expression="slot_1_short_text_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -102,12 +102,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_1_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_1_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_1_short_text_five">
+                            <Compare expression="slot_1_short_text_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -117,12 +117,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_1_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_1_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_1_short_text_four">
+                                    <Compare expression="slot_1_short_text_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -130,14 +130,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_1_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_1_short_text_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_1_short_text_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_1_short_text_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -175,12 +209,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_1_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_1_ranged_value_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_1_ranged_value_compact">
+                    <Compare expression="slot_1_ranged_value_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -190,12 +224,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_1_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_1_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_1_ranged_value_five">
+                            <Compare expression="slot_1_ranged_value_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -205,12 +239,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_1_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_1_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_1_ranged_value_four">
+                                    <Compare expression="slot_1_ranged_value_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -218,14 +252,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_1_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_1_ranged_value_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_1_ranged_value_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_1_ranged_value_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -263,12 +331,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_1_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_1_goal_progress_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_1_goal_progress_compact">
+                    <Compare expression="slot_1_goal_progress_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -278,12 +346,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_1_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_1_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_1_goal_progress_five">
+                            <Compare expression="slot_1_goal_progress_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -293,12 +361,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_1_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_1_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_1_goal_progress_four">
+                                    <Compare expression="slot_1_goal_progress_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -306,14 +374,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_1_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_1_goal_progress_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_1_goal_progress_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_1_goal_progress_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -350,12 +452,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_1_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_1_weighted_elements_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_1_weighted_elements_compact">
+                    <Compare expression="slot_1_weighted_elements_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -365,12 +467,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_1_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_1_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_1_weighted_elements_five">
+                            <Compare expression="slot_1_weighted_elements_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -380,12 +482,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_1_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_1_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_1_weighted_elements_four">
+                                    <Compare expression="slot_1_weighted_elements_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -393,14 +495,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_1_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_1_weighted_elements_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_1_weighted_elements_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_1_weighted_elements_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -464,12 +600,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_2_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_2_short_text_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_2_short_text_compact">
+                    <Compare expression="slot_2_short_text_long">
                         <PartText x="5" y="31" width="84" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -479,12 +615,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_2_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_2_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_2_short_text_five">
+                            <Compare expression="slot_2_short_text_compact">
                                 <PartText x="5" y="31" width="84" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -494,12 +630,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_2_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_2_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_2_short_text_four">
+                                    <Compare expression="slot_2_short_text_five">
                                         <PartText x="5" y="31" width="84" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -507,14 +643,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="31" width="84" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_2_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_2_short_text_four">
+                                                <PartText x="5" y="31" width="84" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_2_short_text_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_2_short_text_three">
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -552,12 +722,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_2_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_2_ranged_value_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_2_ranged_value_compact">
+                    <Compare expression="slot_2_ranged_value_long">
                         <PartText x="5" y="31" width="84" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -567,12 +737,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_2_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_2_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_2_ranged_value_five">
+                            <Compare expression="slot_2_ranged_value_compact">
                                 <PartText x="5" y="31" width="84" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -582,12 +752,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_2_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_2_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_2_ranged_value_four">
+                                    <Compare expression="slot_2_ranged_value_five">
                                         <PartText x="5" y="31" width="84" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -595,14 +765,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="31" width="84" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_2_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_2_ranged_value_four">
+                                                <PartText x="5" y="31" width="84" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_2_ranged_value_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_2_ranged_value_three">
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -640,12 +844,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_2_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_2_goal_progress_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_2_goal_progress_compact">
+                    <Compare expression="slot_2_goal_progress_long">
                         <PartText x="5" y="31" width="84" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -655,12 +859,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_2_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_2_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_2_goal_progress_five">
+                            <Compare expression="slot_2_goal_progress_compact">
                                 <PartText x="5" y="31" width="84" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -670,12 +874,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_2_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_2_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_2_goal_progress_four">
+                                    <Compare expression="slot_2_goal_progress_five">
                                         <PartText x="5" y="31" width="84" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -683,14 +887,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="31" width="84" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_2_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_2_goal_progress_four">
+                                                <PartText x="5" y="31" width="84" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_2_goal_progress_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_2_goal_progress_three">
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -727,12 +965,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_2_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_2_weighted_elements_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_2_weighted_elements_compact">
+                    <Compare expression="slot_2_weighted_elements_long">
                         <PartText x="5" y="31" width="84" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -742,12 +980,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_2_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_2_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_2_weighted_elements_five">
+                            <Compare expression="slot_2_weighted_elements_compact">
                                 <PartText x="5" y="31" width="84" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -757,12 +995,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_2_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_2_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_2_weighted_elements_four">
+                                    <Compare expression="slot_2_weighted_elements_five">
                                         <PartText x="5" y="31" width="84" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -770,14 +1008,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="31" width="84" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_2_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_2_weighted_elements_four">
+                                                <PartText x="5" y="31" width="84" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_2_weighted_elements_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_2_weighted_elements_three">
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="31" width="84" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -841,12 +1113,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_3_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_3_short_text_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_3_short_text_compact">
+                    <Compare expression="slot_3_short_text_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -856,12 +1128,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_3_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_3_short_text_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_3_short_text_five">
+                            <Compare expression="slot_3_short_text_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -871,12 +1143,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_3_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_3_short_text_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_3_short_text_four">
+                                    <Compare expression="slot_3_short_text_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -884,14 +1156,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_3_short_text_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_3_short_text_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_3_short_text_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_3_short_text_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -929,12 +1235,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_3_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_3_ranged_value_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_3_ranged_value_compact">
+                    <Compare expression="slot_3_ranged_value_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -944,12 +1250,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_3_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_3_ranged_value_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_3_ranged_value_five">
+                            <Compare expression="slot_3_ranged_value_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -959,12 +1265,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_3_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_3_ranged_value_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_3_ranged_value_four">
+                                    <Compare expression="slot_3_ranged_value_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -972,14 +1278,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_3_ranged_value_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_3_ranged_value_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_3_ranged_value_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_3_ranged_value_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -1017,12 +1357,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_3_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_3_goal_progress_long">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_3_goal_progress_compact">
+                    <Compare expression="slot_3_goal_progress_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -1032,12 +1372,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_3_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_3_goal_progress_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_3_goal_progress_five">
+                            <Compare expression="slot_3_goal_progress_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -1047,12 +1387,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_3_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_3_goal_progress_five">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_3_goal_progress_four">
+                                    <Compare expression="slot_3_goal_progress_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -1060,14 +1400,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_3_goal_progress_four">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_3_goal_progress_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_3_goal_progress_three">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_3_goal_progress_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>
@@ -1104,12 +1478,12 @@
                 </PartImage>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_3_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
+                        <Expression name="slot_3_weighted_elements_long">textLength([COMPLICATION.TEXT]) &gt; 7</Expression>
                     </Expressions>
-                    <Compare expression="slot_3_weighted_elements_compact">
+                    <Compare expression="slot_3_weighted_elements_long">
                         <PartText x="5" y="32" width="86" height="45">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                <Font family="sans-serif" size="25" color="#FFDAF1FF" weight="BOLD">
+                                <Font family="sans-serif" size="19" color="#FFDAF1FF" weight="BOLD">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                     </Template>
                                 </Font>
@@ -1119,12 +1493,12 @@
                     <Default>
                         <Condition>
                             <Expressions>
-                                <Expression name="slot_3_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
+                                <Expression name="slot_3_weighted_elements_compact">textLength([COMPLICATION.TEXT]) &gt; 5</Expression>
                             </Expressions>
-                            <Compare expression="slot_3_weighted_elements_five">
+                            <Compare expression="slot_3_weighted_elements_compact">
                                 <PartText x="5" y="32" width="86" height="45">
                                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                        <Font family="sans-serif" size="33" color="#FFDAF1FF" weight="BOLD">
+                                        <Font family="sans-serif" size="22" color="#FFDAF1FF" weight="BOLD">
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                             </Template>
                                         </Font>
@@ -1134,12 +1508,12 @@
                             <Default>
                                 <Condition>
                                     <Expressions>
-                                        <Expression name="slot_3_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                        <Expression name="slot_3_weighted_elements_five">textLength([COMPLICATION.TEXT]) &gt; 4</Expression>
                                     </Expressions>
-                                    <Compare expression="slot_3_weighted_elements_four">
+                                    <Compare expression="slot_3_weighted_elements_five">
                                         <PartText x="5" y="32" width="86" height="45">
                                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="37" color="#FFDAF1FF" weight="BOLD">
+                                                <Font family="sans-serif" size="29" color="#FFDAF1FF" weight="BOLD">
                                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
                                                     </Template>
                                                 </Font>
@@ -1147,14 +1521,48 @@
                                         </PartText>
                                     </Compare>
                                     <Default>
-                                        <PartText x="5" y="32" width="86" height="45">
-                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
-                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
-                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                                                    </Template>
-                                                </Font>
-                                            </Text>
-                                        </PartText>
+                                        <Condition>
+                                            <Expressions>
+                                                <Expression name="slot_3_weighted_elements_four">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
+                                            </Expressions>
+                                            <Compare expression="slot_3_weighted_elements_four">
+                                                <PartText x="5" y="32" width="86" height="45">
+                                                    <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                        <Font family="sans-serif" size="34" color="#FFDAF1FF" weight="BOLD">
+                                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                            </Template>
+                                                        </Font>
+                                                    </Text>
+                                                </PartText>
+                                            </Compare>
+                                            <Default>
+                                                <Condition>
+                                                    <Expressions>
+                                                        <Expression name="slot_3_weighted_elements_three">textLength([COMPLICATION.TEXT]) &gt; 2</Expression>
+                                                    </Expressions>
+                                                    <Compare expression="slot_3_weighted_elements_three">
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="44" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Compare>
+                                                    <Default>
+                                                        <PartText x="5" y="32" width="86" height="45">
+                                                            <Text align="CENTER" ellipsis="TRUE" maxLines="1">
+                                                                <Font family="sans-serif" size="46" color="#FFDAF1FF" weight="BOLD">
+                                                                    <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
+                                                                    </Template>
+                                                                </Font>
+                                                            </Text>
+                                                        </PartText>
+                                                    </Default>
+                                                </Condition>
+                                            </Default>
+                                        </Condition>
                                     </Default>
                                 </Condition>
                             </Default>

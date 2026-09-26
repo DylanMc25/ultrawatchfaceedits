@@ -43,6 +43,13 @@ def capture(name):
     return ET.fromstring(raw)
 
 
+def resumed_activity(activity):
+    # Older chooser activities remain in the task history after dismissal.
+    # Only the current foreground activity can prove that a new tap opened it.
+    return '\n'.join(line for line in activity.splitlines() if
+                     'mResumedActivity' in line or 'topResumedActivity' in line)
+
+
 def tap(x, y):
     adb('shell', 'input', 'tap', str(round(x)), str(round(y)))
     time.sleep(3)
@@ -143,7 +150,8 @@ try:
             chooser=capture(f'editor-slot-{name}')
             activity=(out / f'editor-slot-{name}-activity.txt').read_text()
             visible=any(n.get('text') for n in chooser.iter('node'))
-            results['slot_captures'].append({'name':name,'provider_chooser_visible':visible and 'ProviderChooserActivity' in activity})
+            results['slot_captures'].append({'name':name,'provider_chooser_visible':visible and
+                                            'ProviderChooserActivity' in resumed_activity(activity)})
         # Reproduce the reported edge-label clipping with real provider text.
         return_to_editor()
         tap(420*w/450,225*h/450)
@@ -195,8 +203,7 @@ try:
                     (out/f'tap-rectangle-{point}-launch.txt').write_text('\n'.join(evidence)+'\n')
                     ids=[int(m.group(1)) for line in evidence if (m:=re.search(r'\[Launch::onTap\] complication: COMPLICATION\.(\d+)',line))]
                     activity=(out/f'tap-rectangle-{point}-activity.txt').read_text()
-                    resumed='\n'.join(line for line in activity.splitlines() if
-                                      'mResumedActivity' in line or 'topResumedActivity' in line)
+                    resumed=resumed_activity(activity)
                     attempts.append({'point':point,'observed_launch_slots':ids,'resumed_activity':resumed})
                     if ids != [7] or BATTERY_ACTIVITY not in resumed:
                         results['tap_mismatches'].append('rectangle-'+point)

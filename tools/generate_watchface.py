@@ -129,13 +129,17 @@ def complication_label(parent, w, h, kind, label_id):
     if kind == 'GOAL_PROGRESS': expr = '[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
     inset = (h-96)/2
     image(parent, (w-30)/2, 5+inset, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-    c, compact = condition(parent, label_id + '_compact', f'textLength({expr}) > 5')
-    text(compact, 5, 32+inset, w-10, 45, 25, '%s', expr, weight='BOLD')
+    lc, long = condition(parent, label_id + '_long', f'textLength({expr}) > 7')
+    text(long, 5, 32+inset, w-10, 45, 19, '%s', expr, weight='BOLD')
+    c, compact = condition(el(lc,'Default'), label_id + '_compact', f'textLength({expr}) > 5')
+    text(compact, 5, 32+inset, w-10, 45, 22, '%s', expr, weight='BOLD')
     dc, five = condition(el(c,'Default'), label_id + '_five', f'textLength({expr}) > 4')
-    text(five, 5, 32+inset, w-10, 45, 33, '%s', expr, weight='BOLD')
+    text(five, 5, 32+inset, w-10, 45, 29, '%s', expr, weight='BOLD')
     fc, four = condition(el(dc,'Default'), label_id + '_four', f'textLength({expr}) > 3')
-    text(four, 5, 32+inset, w-10, 45, 37, '%s', expr, weight='BOLD')
-    text(el(fc,'Default'), 5, 32+inset, w-10, 45, 46, '%s', expr, weight='BOLD')
+    text(four, 5, 32+inset, w-10, 45, 34, '%s', expr, weight='BOLD')
+    tc, three = condition(el(fc,'Default'), label_id + '_three', f'textLength({expr}) > 2')
+    text(three, 5, 32+inset, w-10, 45, 44, '%s', expr, weight='BOLD')
+    text(el(tc,'Default'), 5, 32+inset, w-10, 45, 46, '%s', expr, weight='BOLD')
     text(parent, 9, 77+inset, w-18, 18, 14, '%s', '[COMPLICATION.TITLE]', color=C[3])
 
 
