@@ -2,7 +2,7 @@
 
 ## Version 12 alignment, picker and signing update
 
-Local validation passes: 18 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v9 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
+Local validation passes: 19 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v9 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The left gauge now has 18 ticks; the right arc spans 40 degrees. Shortcut slot 6 supports MONOCHROMATIC_IMAGE/EMPTY only. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
 
 The user reports weather works after tapping Allow. This supports a permission-reset explanation for the latest failure, not a weather-data regression. v10/v11 downloaded host certificates differ while their embedded face certificate is unchanged. The explicit cached host key and certificate checks address that CI defect; permission retention still requires a same-key physical update check.
 
@@ -13,7 +13,7 @@ The installed face remains the layout baseline: two-line date, stacked time and 
 
 The user reconfirmed that weather works on their Galaxy Watch before this revision. This does not validate the new layout or the narrower picker on Samsung. Forecast comparison across units/location/refresh states, saved assignments after upgrade and physical readability remain device checks.
 
-Local validation passes: **29 JVM tests**, **18 Python tests**, debug and test APKs, unsigned test AABs, Android lint, the official WFF 2 syntax/resource and standalone memory checks, and all **10 official Watch Face Push checks** on the signed embedded face. Four forecast timeline images plus one fallback use **492,560 bitmap bytes**, below 512 KiB; exact data-expiry boundaries are retained even when this shortens timeline coverage. No measurements here establish live Samsung access or visual correctness.
+Local validation passes: **29 JVM tests**, **19 Python tests**, debug and test APKs, unsigned test AABs, Android lint, the official WFF 2 syntax/resource and standalone memory checks, and all **10 official Watch Face Push checks** on the signed embedded face. Four forecast timeline images plus one fallback use **492,560 bitmap bytes**, below 512 KiB; exact data-expiry boundaries are retained even when this shortens timeline coverage. No measurements here establish live Samsung access or visual correctness.
 
 **Native checks passed at `5f9a62f`** in [Samsung preview run 36261887590](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36261887590) and [standalone run 36261887593](https://github.com/DylanMc25/ultrawatchfaceedits/actions/runs/36261887593). Downloaded artifact hashes were verified and screenshots/logs reviewed. Both API 36 devices pass nine Android tests, select Battery in the rectangle, verify all three taps open its settings destination, retain that choice across setup launch, then restore our app's **Weather** through the ordinary chooser. Restoration and all three unavailable-weather setup taps pass. The API 34/35 checks open all seven choosers and verify the rectangle's LONG_TEXT Battery assignment and taps.
 
@@ -42,7 +42,7 @@ The current implementation is a Wear OS 6 / API 36 host app with a bundled resou
 
 ### Local validation
 
-The latest local checks passed: **28 JVM tests**, **18 Python tests**, host debug APK / unsigned release AAB builds and lint, plus all **10 checks in the official Watch Face Push validator** for the bundled APK. The latter includes WFF syntax/resources, memory, manifest/package restrictions, and APK signing. Bundle preparation validates the final signed face and embeds its corresponding token. These checks cannot prove Samsung runtime behavior or editor usability.
+The latest local checks passed: **28 JVM tests**, **19 Python tests**, host debug APK / unsigned release AAB builds and lint, plus all **10 checks in the official Watch Face Push validator** for the bundled APK. The latter includes WFF syntax/resources, memory, manifest/package restrictions, and APK signing. Bundle preparation validates the final signed face and embeds its corresponding token. These checks cannot prove Samsung runtime behavior or editor usability.
 
 Coverage includes Samsung payload parsing, missing/stale and denied data, units and local-hour selection, bounded forecast timeline transitions, original complication/tap geometry, seven stable slots, generated-bundle isolation, and rejecting a validator with an unexpected hash. The six original complication definitions and all seven touch rectangles remain unchanged; the bottom image fills its existing 262 × 60 area.
 

@@ -99,6 +99,10 @@ class WatchFaceTests(unittest.TestCase):
                 highest_text_pixel=y+h/2-abs(math.sin(a))*w/2-abs(math.cos(a))*h/2
                 self.assertGreaterEqual(highest_text_pixel-lowest_drawn_pixel,2)
 
+    def test_shortcut_offers_only_icons(self):
+        slot=self.face.find(".//ComplicationSlot[@slotId='6']")
+        self.assertEqual(set(slot.get('supportedTypes').split()), {'MONOCHROMATIC_IMAGE','EMPTY'})
+
     def test_weather_is_one_native_editable_slot(self):
         slot=self.face.find(".//ComplicationSlot[@slotId='7']")
         self.assertEqual(slot.get('name'),'rectangle')

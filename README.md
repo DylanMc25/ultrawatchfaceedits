@@ -12,9 +12,9 @@ The current layout is standalone `:app` version **0.1.8 / 9** and Samsung foreca
 
 ## Layout
 
-- Month and day/date remain on two lines above stacked hours/minutes. Active month/date text is bold, 24/21 units and time is 134 units; seconds retain a separate column.
+- Month and day/date remain on two lines above stacked hours/minutes. Active month/date text is bold, 24/21 units and hours/minutes are 134/130 units; seconds retain a separate column.
 - Three staggered circles on the right: heart rate, steps and sunrise/sunset. Diameters are 96/96/96 units, with main readings up to 46 units and smaller sizes for longer values.
-- Segmented left battery gauge, thick right-edge arc, provider icons and angled edge labels. Right edge and bottom shortcut start unassigned.
+- Longer edges: an 18-segment battery gauge on the left and a 40-degree arc on the right, with inset icons and angled labels. The bottom shortcut accepts only `MONOCHROMATIC_IMAGE` or Empty to reduce picker choices. Right edge and shortcut start unassigned.
 - One transparent **Bottom rectangle**, 262 × 94 units, for compatible installed apps' image panels (`SMALL_IMAGE`) or Empty in the Wear OS 6 forecast face. The legacy standalone face also accepts `LONG_TEXT`. Wear OS determines which installed sources support those types; there is no app whitelist.
 - Black always-on display with thin time and date; all complications are hidden.
 

@@ -17,8 +17,8 @@
                 <TimeText x="22" y="0" width="152" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="134" color="#FFDAF1FF" weight="MEDIUM" />
                 </TimeText>
-                <TimeText x="0" y="116" width="136" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
-                    <Font family="sans-serif-condensed" size="134" color="#FFDAF1FF" weight="MEDIUM" />
+                <TimeText x="4" y="116" width="132" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                    <Font family="sans-serif-condensed" size="130" color="#FFDAF1FF" weight="MEDIUM" />
                 </TimeText>
             </DigitalClock>
             <PartText x="82" y="17" width="286" height="40">
@@ -50,7 +50,7 @@
                 <TimeText x="22" y="0" width="152" height="130" format="hh" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="116" color="#FF8FA9BC" weight="THIN" />
                 </TimeText>
-                <TimeText x="0" y="116" width="136" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
+                <TimeText x="4" y="116" width="132" height="130" format="mm" hourFormat="SYNC_TO_DEVICE" align="CENTER">
                     <Font family="sans-serif-condensed" size="116" color="#FF8FA9BC" weight="THIN" />
                 </TimeText>
             </DigitalClock>
@@ -1611,72 +1611,102 @@
                 </PartText>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="0" y="105" width="90" height="260" slotId="4" name="left_edge" displayName="slot_left_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
-            <BoundingRoundBox x="0" y="0" width="90" height="260" cornerRadius="12" />
+        <ComplicationSlot x="0" y="75" width="90" height="290" slotId="4" name="left_edge" displayName="slot_left_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
+            <BoundingRoundBox x="0" y="0" width="90" height="290" cornerRadius="12" />
             <DefaultProviderPolicy defaultSystemProvider="WATCH_BATTERY" defaultSystemProviderType="RANGED_VALUE" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Complication type="SHORT_TEXT">
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartImage x="34" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartImage x="46" y="27" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -1684,7 +1714,7 @@
                         <Expression name="slot_4_short_text_edge_compact">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_4_short_text_edge_compact">
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1694,7 +1724,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -1706,211 +1736,313 @@
                 </Condition>
             </Complication>
             <Complication type="RANGED_VALUE">
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_0">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.08333333</Expression>
+                        <Expression name="slot_4_ranged_value_tick_0">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.05555556</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_0">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_1">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.16666667</Expression>
+                        <Expression name="slot_4_ranged_value_tick_1">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.11111111</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_1">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_2">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.25000000</Expression>
+                        <Expression name="slot_4_ranged_value_tick_2">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.16666667</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_2">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_3">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.33333333</Expression>
+                        <Expression name="slot_4_ranged_value_tick_3">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.22222222</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_3">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_4">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.41666667</Expression>
+                        <Expression name="slot_4_ranged_value_tick_4">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.27777778</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_4">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_5">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.50000000</Expression>
+                        <Expression name="slot_4_ranged_value_tick_5">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.33333333</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_5">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_6">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.58333333</Expression>
+                        <Expression name="slot_4_ranged_value_tick_6">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.38888889</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_6">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_7">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.66666667</Expression>
+                        <Expression name="slot_4_ranged_value_tick_7">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.44444444</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_7">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_8">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.75000000</Expression>
+                        <Expression name="slot_4_ranged_value_tick_8">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.50000000</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_8">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_9">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.83333333</Expression>
+                        <Expression name="slot_4_ranged_value_tick_9">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.55555556</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_9">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_10">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.91666667</Expression>
+                        <Expression name="slot_4_ranged_value_tick_10">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.61111111</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_10">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_ranged_value_tick_11">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 1.00000000</Expression>
+                        <Expression name="slot_4_ranged_value_tick_11">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.66666667</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_tick_11">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartImage x="34" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_12">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.72222222</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_12">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_13">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.77777778</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_13">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_14">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.83333333</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_14">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_15">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.88888889</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_15">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_16">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 0.94444444</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_16">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_ranged_value_tick_17">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt;= 1.00000000</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_ranged_value_tick_17">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartImage x="46" y="27" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -1918,7 +2050,7 @@
                         <Expression name="slot_4_ranged_value_edge_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_4_ranged_value_edge_compact">
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -1928,7 +2060,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -1940,211 +2072,313 @@
                 </Condition>
             </Complication>
             <Complication type="GOAL_PROGRESS">
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_0">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.08333333</Expression>
+                        <Expression name="slot_4_goal_progress_tick_0">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.05555556</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_0">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_1">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.16666667</Expression>
+                        <Expression name="slot_4_goal_progress_tick_1">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.11111111</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_1">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_2">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.25000000</Expression>
+                        <Expression name="slot_4_goal_progress_tick_2">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.16666667</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_2">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_3">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.33333333</Expression>
+                        <Expression name="slot_4_goal_progress_tick_3">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.22222222</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_3">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_4">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.41666667</Expression>
+                        <Expression name="slot_4_goal_progress_tick_4">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.27777778</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_4">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_5">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.50000000</Expression>
+                        <Expression name="slot_4_goal_progress_tick_5">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.33333333</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_5">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_6">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.58333333</Expression>
+                        <Expression name="slot_4_goal_progress_tick_6">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.38888889</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_6">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_7">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.66666667</Expression>
+                        <Expression name="slot_4_goal_progress_tick_7">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.44444444</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_7">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_8">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.75000000</Expression>
+                        <Expression name="slot_4_goal_progress_tick_8">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.50000000</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_8">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_9">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.83333333</Expression>
+                        <Expression name="slot_4_goal_progress_tick_9">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.55555556</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_9">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_10">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.91666667</Expression>
+                        <Expression name="slot_4_goal_progress_tick_10">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.61111111</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_10">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
                 <Condition>
                     <Expressions>
-                        <Expression name="slot_4_goal_progress_tick_11">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 1.00000000</Expression>
+                        <Expression name="slot_4_goal_progress_tick_11">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.66666667</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_tick_11">
-                        <PartDraw x="0" y="0" width="90" height="260">
-                            <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                                 <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
                             </Line>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartImage x="34" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_12">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.72222222</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_12">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_13">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.77777778</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_13">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_14">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.83333333</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_14">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_15">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.88888889</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_15">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_16">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 0.94444444</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_16">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="slot_4_goal_progress_tick_17">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt;= 1.00000000</Expression>
+                    </Expressions>
+                    <Compare expression="slot_4_goal_progress_tick_17">
+                        <PartDraw x="0" y="0" width="90" height="290">
+                            <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                                <Stroke color="#FFB4DAF6" thickness="6" cap="ROUND" />
+                            </Line>
+                        </PartDraw>
+                    </Compare>
+                </Condition>
+                <PartImage x="46" y="27" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -2152,7 +2386,7 @@
                         <Expression name="slot_4_goal_progress_edge_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_4_goal_progress_edge_compact">
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2162,7 +2396,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="27" y="218" width="50" height="26" angle="50">
+                        <PartText x="27" y="248" width="50" height="26" angle="50">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2174,94 +2408,124 @@
                 </Condition>
             </Complication>
             <Complication type="EMPTY">
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="26.069" startY="155.077" endX="14.251" endY="157.161">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="35.182" startY="219.088" endX="23.906" endY="223.192">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.593" startY="145.317" endX="12.687" endY="146.821">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="32.034" startY="209.733" endX="20.57" endY="213.282">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.595" startY="135.497" endX="11.631" endY="136.418">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="29.346" startY="200.235" endX="17.723" endY="203.22">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.079" startY="125.64" endX="11.083" endY="125.975">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="27.126" startY="190.618" endX="15.371" endY="193.031">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.044" startY="115.77" endX="11.047" endY="115.518">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="25.378" startY="180.903" endX="13.519" endY="182.739">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="23.492" startY="105.909" endX="11.521" endY="105.072">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.107" startY="171.115" endX="12.172" endY="172.369">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="24.421" startY="96.082" endX="12.505" endY="94.662">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.315" startY="161.276" endX="11.334" endY="161.946">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="25.829" startY="86.313" endX="13.997" endY="84.311">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.005" startY="151.41" endX="11.005" endY="151.494">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="27.712" startY="76.623" endX="15.992" endY="74.047">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.177" startY="141.541" endX="11.188" endY="141.039">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="30.067" startY="67.038" endX="18.486" endY="63.892">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="23.831" startY="131.692" endX="11.881" endY="130.605">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="32.887" startY="57.579" endX="21.474" endY="53.87">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="24.966" startY="121.887" endX="13.083" endY="120.217">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="90" height="260">
-                    <Line startX="36.165" startY="48.268" endX="24.947" endY="44.007">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="26.578" startY="112.149" endX="14.791" endY="109.9">
                         <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
                     </Line>
                 </PartDraw>
-                <PartDraw x="37" y="11" width="20" height="20">
-                    <Ellipse x="0" y="0" width="20" height="20">
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="28.664" startY="102.501" endX="17" endY="99.68">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="31.219" startY="92.967" endX="19.707" endY="89.579">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="34.236" startY="83.569" endX="22.903" endY="79.623">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="37.709" startY="74.329" endX="26.583" endY="69.834">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="41.629" startY="65.271" endX="30.736" endY="60.237">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="90" height="290">
+                    <Line startX="45.987" startY="56.414" endX="35.352" endY="50.855">
+                        <Stroke color="#FF234A77" thickness="6" cap="ROUND" />
+                    </Line>
+                </PartDraw>
+                <PartDraw x="49" y="30" width="10" height="10">
+                    <Ellipse x="0" y="0" width="10" height="10">
                         <Fill color="#FFB4DAF6" />
                     </Ellipse>
                 </PartDraw>
-                <PartText x="27" y="218" width="50" height="26" angle="50">
+                <PartText x="27" y="248" width="50" height="26" angle="50">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="NORMAL">+</Font>
                     </Text>
                 </PartText>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="398" y="105" width="52" height="238" slotId="5" name="right_edge" displayName="slot_right_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
-            <BoundingRoundBox x="0" y="0" width="52" height="238" cornerRadius="12" />
+        <ComplicationSlot x="397" y="95" width="53" height="260" slotId="5" name="right_edge" displayName="slot_right_edge" supportedTypes="SHORT_TEXT RANGED_VALUE GOAL_PROGRESS EMPTY" isCustomizable="TRUE">
+            <BoundingRoundBox x="0" y="0" width="53" height="260" cornerRadius="12" />
             <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
             <Complication type="SHORT_TEXT">
-                <PartDraw x="0" y="0" width="52" height="238">
-                    <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                <PartDraw x="0" y="0" width="53" height="260">
+                    <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                         <Stroke color="#FF234A77" thickness="20" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartDraw x="0" y="0" width="52" height="238">
-                    <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                <PartDraw x="0" y="0" width="53" height="260">
+                    <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                         <Stroke color="#FFB4DAF6" thickness="20" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartImage x="0" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartImage x="0" y="4" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -2269,7 +2533,7 @@
                         <Expression name="slot_5_short_text_edge_compact">textLength([COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_5_short_text_edge_compact">
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -2279,7 +2543,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
@@ -2291,8 +2555,8 @@
                 </Condition>
             </Complication>
             <Complication type="RANGED_VALUE">
-                <PartDraw x="0" y="0" width="52" height="238">
-                    <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                <PartDraw x="0" y="0" width="53" height="260">
+                    <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                         <Stroke color="#FF234A77" thickness="20" cap="ROUND" />
                     </Arc>
                 </PartDraw>
@@ -2301,15 +2565,15 @@
                         <Expression name="slot_5_ranged_value_positive">([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0) &gt; 0</Expression>
                     </Expressions>
                     <Compare expression="slot_5_ranged_value_positive">
-                        <PartDraw x="0" y="0" width="52" height="238">
-                            <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                        <PartDraw x="0" y="0" width="53" height="260">
+                            <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                                 <Stroke color="#FFB4DAF6" thickness="20" cap="ROUND" />
-                                <Transform target="endAngle" value="68 + 30 * ([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0)" />
+                                <Transform target="endAngle" value="62 + 40 * ([COMPLICATION.RANGED_VALUE_MAX] &gt; [COMPLICATION.RANGED_VALUE_MIN] ? clamp(([COMPLICATION.RANGED_VALUE_VALUE] - [COMPLICATION.RANGED_VALUE_MIN]) / ([COMPLICATION.RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]), 0, 1) : 0)" />
                             </Arc>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartImage x="0" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartImage x="0" y="4" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -2317,7 +2581,7 @@
                         <Expression name="slot_5_ranged_value_edge_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_5_ranged_value_edge_compact">
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2327,7 +2591,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.RANGED_VALUE_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2339,8 +2603,8 @@
                 </Condition>
             </Complication>
             <Complication type="GOAL_PROGRESS">
-                <PartDraw x="0" y="0" width="52" height="238">
-                    <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                <PartDraw x="0" y="0" width="53" height="260">
+                    <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                         <Stroke color="#FF234A77" thickness="20" cap="ROUND" />
                     </Arc>
                 </PartDraw>
@@ -2349,15 +2613,15 @@
                         <Expression name="slot_5_goal_progress_positive">([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0) &gt; 0</Expression>
                     </Expressions>
                     <Compare expression="slot_5_goal_progress_positive">
-                        <PartDraw x="0" y="0" width="52" height="238">
-                            <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                        <PartDraw x="0" y="0" width="53" height="260">
+                            <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                                 <Stroke color="#FFB4DAF6" thickness="20" cap="ROUND" />
-                                <Transform target="endAngle" value="68 + 30 * ([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0)" />
+                                <Transform target="endAngle" value="62 + 40 * ([COMPLICATION.GOAL_PROGRESS_TARGET_VALUE] &gt; 0 ? clamp([COMPLICATION.GOAL_PROGRESS_VALUE] / [COMPLICATION.GOAL_PROGRESS_TARGET_VALUE], 0, 1) : 0)" />
                             </Arc>
                         </PartDraw>
                     </Compare>
                 </Condition>
-                <PartImage x="0" y="8" width="28" height="28" tintColor="#FFB4DAF6">
+                <PartImage x="0" y="4" width="16" height="16" tintColor="#FFB4DAF6">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
                 </PartImage>
                 <Condition>
@@ -2365,7 +2629,7 @@
                         <Expression name="slot_5_goal_progress_edge_compact">textLength([COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]) &gt; 3</Expression>
                     </Expressions>
                     <Compare expression="slot_5_goal_progress_edge_compact">
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="20" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2375,7 +2639,7 @@
                         </PartText>
                     </Compare>
                     <Default>
-                        <PartText x="0" y="178" width="50" height="26" angle="-70">
+                        <PartText x="0" y="199" width="42" height="26" angle="-70">
                             <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                                 <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="MEDIUM">
                                     <Template>%s<Parameter expression="[COMPLICATION.TEXT] == &quot;&quot; ? numberFormat(&quot;#,###&quot;, [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]" />
@@ -2387,48 +2651,30 @@
                 </Condition>
             </Complication>
             <Complication type="EMPTY">
-                <PartDraw x="0" y="0" width="52" height="238">
-                    <Arc centerX="-173" centerY="120" width="416" height="416" startAngle="68" endAngle="98">
+                <PartDraw x="0" y="0" width="53" height="260">
+                    <Arc centerX="-172" centerY="130" width="416" height="416" startAngle="62" endAngle="102">
                         <Stroke color="#FF234A77" thickness="20" cap="ROUND" />
                     </Arc>
                 </PartDraw>
-                <PartDraw x="3" y="11" width="20" height="20">
-                    <Ellipse x="0" y="0" width="20" height="20">
+                <PartDraw x="3" y="7" width="10" height="10">
+                    <Ellipse x="0" y="0" width="10" height="10">
                         <Fill color="#FFB4DAF6" />
                     </Ellipse>
                 </PartDraw>
-                <PartText x="0" y="178" width="50" height="26" angle="-70">
+                <PartText x="0" y="199" width="42" height="26" angle="-70">
                     <Text align="CENTER" ellipsis="TRUE" maxLines="1">
                         <Font family="sans-serif" size="24" color="#FFB4DAF6" weight="NORMAL">+</Font>
                     </Text>
                 </PartText>
             </Complication>
         </ComplicationSlot>
-        <ComplicationSlot x="155" y="410" width="140" height="30" slotId="6" name="shortcut" displayName="slot_shortcut" supportedTypes="SHORT_TEXT MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY" isCustomizable="TRUE">
+        <ComplicationSlot x="155" y="410" width="140" height="30" slotId="6" name="shortcut" displayName="slot_shortcut" supportedTypes="MONOCHROMATIC_IMAGE EMPTY" isCustomizable="TRUE">
             <BoundingRoundBox x="0" y="0" width="140" height="30" cornerRadius="15" />
             <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" />
             <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Complication type="SHORT_TEXT">
-                <PartImage x="3" y="3" width="24" height="24" tintColor="#FFDAF1FF">
-                    <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
-                </PartImage>
-                <PartText x="31" y="1" width="106" height="28">
-                    <Text align="START" ellipsis="TRUE" maxLines="1">
-                        <Font family="sans-serif" size="24" color="#FFDAF1FF" weight="NORMAL">
-                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" />
-                            </Template>
-                        </Font>
-                    </Text>
-                </PartText>
-            </Complication>
             <Complication type="MONOCHROMATIC_IMAGE">
                 <PartImage x="55" y="0" width="30" height="30" tintColor="#FFDAF1FF">
                     <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
-                </PartImage>
-            </Complication>
-            <Complication type="SMALL_IMAGE">
-                <PartImage x="55" y="0" width="30" height="30">
-                    <Image resource="[COMPLICATION.SMALL_IMAGE]" />
                 </PartImage>
             </Complication>
             <Complication type="EMPTY">

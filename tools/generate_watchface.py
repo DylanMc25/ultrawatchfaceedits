@@ -78,9 +78,9 @@ def clock(parent, ambient=False):
     # Retain the installed face's stacked time and two-line date. Slightly
     # smaller, inset digits clear the battery gauge and larger forecast below.
     d = box(g, 'DigitalClock', 28, 67, 176, 246)
-    for fmt, x, y, width in [('hh', 22, 0, 152), ('mm', 0, 116, 136)]:
+    for fmt, x, y, width in [('hh', 22, 0, 152), ('mm', 4, 116, 132)]:
         t = box(d, 'TimeText', x, y, width, 130, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
-        el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else 134,
+        el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else (130 if fmt == 'mm' else 134),
            color=color, weight='THIN' if ambient else 'MEDIUM')
     text(g, 82, 17, 286, 40, 24, '%s', '[MONTH_F]',
          color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
@@ -178,7 +178,7 @@ def edge_tick(parent, center, angle, color, viewport):
 
 def edge_slot(parent, sid, name, left=False):
     kinds = ['SHORT_TEXT', 'RANGED_VALUE', 'GOAL_PROGRESS', 'EMPTY']
-    x,y,w,h = (0,105,90,260) if left else (398,105,52,238)
+    x,y,w,h = (0,75,90,290) if left else (397,95,53,260)
     center = (225-x,225-y)
     s = box(parent, 'ComplicationSlot', x,y,w,h, slotId=sid, name=name,
             displayName='slot_'+name, supportedTypes=' '.join(kinds), isCustomizable='TRUE')
@@ -191,29 +191,31 @@ def edge_slot(parent, sid, name, left=False):
         p = el(s, 'Complication', type=kind)
         ratio = RANGE if kind=='RANGED_VALUE' else GOAL if kind=='GOAL_PROGRESS' else None
         if left:
-            # Twelve separate rounded ticks, filled from the bottom upward.
-            for i in range(12):
-                a=260+i*2.8
+            # Eighteen rounded ticks extend the gauge, filled from the bottom upward.
+            for i in range(18):
+                a=250+i*2.8
                 edge_tick(p,center,a,C[5],(w,h))
                 if ratio:
-                    _, lit=condition(p,f'slot_{sid}_{kind.lower()}_tick_{i}',f'{ratio} >= {(i+1)/12:.8f}')
+                    _, lit=condition(p,f'slot_{sid}_{kind.lower()}_tick_{i}',f'{ratio} >= {(i+1)/18:.8f}')
                     edge_tick(lit,center,a,C[6],(w,h))
         else:
-            arc(p,*center,416,68,98,C[5],20,viewport=(w,h))
+            arc(p,*center,416,62,102,C[5],20,viewport=(w,h))
             if ratio:
                 # Hide the foreground at zero, avoiding a misleading round-cap dot.
                 _, positive=condition(p,f'slot_{sid}_{kind.lower()}_positive',f'{ratio} > 0')
-                arc(positive,*center,416,68,98,C[6],20,f'68 + 30 * {ratio}',viewport=(w,h))
+                arc(positive,*center,416,62,102,C[6],20,f'62 + 40 * {ratio}',viewport=(w,h))
             elif kind=='SHORT_TEXT':
                 # Decorative accent for a text-only provider, not a progress value.
-                arc(p,*center,416,68,98,C[6],20,viewport=(w,h))
-        ix,iy=(34,8) if left else (0,8)
+                arc(p,*center,416,62,102,C[6],20,viewport=(w,h))
+        ix,iy=(46,27) if left else (0,4)
+        icon_size=16
         if kind=='EMPTY':
-            ellipse(p,ix+3,iy+3,20,20,C[3])
+            ellipse(p,ix+3,iy+3,icon_size-6,icon_size-6,C[3])
         else:
-            image(p,ix,iy,28,28,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
+            image(p,ix,iy,icon_size,icon_size,'[COMPLICATION.MONOCHROMATIC_IMAGE]',C[6])
         # The short rotated captions follow the reference without arc clip masks.
-        tx,ty=(27,218) if left else (0,178)
+        tx,ty=(27,248) if left else (0,199)
+        label_width=50 if left else 42
         angle=50 if left else -70
         expr='[COMPLICATION.TEXT]'
         if kind=='RANGED_VALUE':
@@ -221,25 +223,21 @@ def edge_slot(parent, sid, name, left=False):
         if kind=='GOAL_PROGRESS':
             expr='[COMPLICATION.TEXT] == "" ? numberFormat("#,###", [COMPLICATION.GOAL_PROGRESS_VALUE]) : [COMPLICATION.TEXT]'
         if kind=='EMPTY':
-            text(p,tx,ty,50,26,24,'+',color=C[3],angle=angle)
+            text(p,tx,ty,label_width,26,24,'+',color=C[3],angle=angle)
         else:
             c, compact=condition(p,f'slot_{sid}_{kind.lower()}_edge_compact',f'textLength({expr}) > 3')
-            text(compact,tx,ty,50,26,20,'%s',expr,weight='MEDIUM',angle=angle)
-            text(el(c,'Default'),tx,ty,50,26,24,'%s',expr,weight='MEDIUM',angle=angle)
+            text(compact,tx,ty,label_width,26,20,'%s',expr,weight='MEDIUM',angle=angle)
+            text(el(c,'Default'),tx,ty,label_width,26,24,'%s',expr,weight='MEDIUM',angle=angle)
 
 
 def shortcut(parent):
     s = box(parent, 'ComplicationSlot', 155, 410, 140, 30, slotId=6, name='shortcut',
-            displayName='slot_shortcut', supportedTypes='SHORT_TEXT MONOCHROMATIC_IMAGE SMALL_IMAGE EMPTY', isCustomizable='TRUE')
+            displayName='slot_shortcut', supportedTypes='MONOCHROMATIC_IMAGE EMPTY', isCustomizable='TRUE')
     box(s, 'BoundingRoundBox', 0, 0, 140, 30, cornerRadius=15)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
     ambient_hide(s)
-    p = el(s, 'Complication', type='SHORT_TEXT')
-    image(p, 3, 3, 24, 24, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
-    text(p, 31, 1, 106, 28, 24, '%s', '[COMPLICATION.TEXT]', color=C[2], align='START')
-    for kind in ['MONOCHROMATIC_IMAGE','SMALL_IMAGE']:
-        p = el(s, 'Complication', type=kind)
-        image(p, 55, 0, 30, 30, f'[COMPLICATION.{kind}]', C[2] if kind=='MONOCHROMATIC_IMAGE' else None)
+    p = el(s, 'Complication', type='MONOCHROMATIC_IMAGE')
+    image(p, 55, 0, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
     p = el(s, 'Complication', type='EMPTY')
     text(p, 0, 4, 140, 22, 16, '+ Shortcut', color=C[3])
 
