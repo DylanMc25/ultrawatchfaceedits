@@ -224,6 +224,12 @@ def main():
         if b"SamsungForecastService" not in providers:
             raise RuntimeError("Forecast source not discoverable through standard complication action")
         open_editor("replace")
+        tap(225 * WIDTH / 450, 425 * HEIGHT / 450)
+        capture("shortcut-chooser")
+        if "ProviderChooserActivity" not in top_activity():
+            raise RuntimeError("Shortcut did not open the native chooser")
+        adb("shell", "input", "keyevent", "KEYCODE_BACK")
+        wait_editor()
         open_rectangle("replace-chooser")
         # A separate app proves SMALL_IMAGE remains replaceable through the native picker.
         select_provider("Test chart", "chart", "Panel test")

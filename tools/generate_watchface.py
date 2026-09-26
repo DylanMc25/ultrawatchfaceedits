@@ -77,17 +77,17 @@ def clock(parent, ambient=False):
     color = '#FF8FA9BC' if ambient else C[2]
     # Retain the installed face's stacked time and two-line date. Slightly
     # smaller, inset digits clear the battery gauge and larger forecast below.
-    d = box(g, 'DigitalClock', 28, 67, 176, 246)
+    d = box(g, 'DigitalClock', 28, 59, 176, 246)
     for fmt, x, y, width in [('hh', 22, 0, 152), ('mm', 4, 116, 132)]:
         t = box(d, 'TimeText', x, y, width, 130, format=fmt, hourFormat='SYNC_TO_DEVICE', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=116 if ambient else (130 if fmt == 'mm' else 134),
            color=color, weight='THIN' if ambient else 'MEDIUM')
-    text(g, 82, 17, 286, 30, 24, '%s', '[MONTH_F]',
+    text(g, 82, 15, 286, 28, 24, '%s', '[MONTH_F]',
          color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
-    text(g, 82, 47, 286, 26, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
+    text(g, 82, 43, 286, 26, 21, '%s %s', '[DAY_OF_WEEK_S]', '[DAY]',
          color=color if ambient else C[3], weight='LIGHT' if ambient else 'BOLD')
     if not ambient:
-        seconds = box(g, 'DigitalClock', 166, 270, 36, 40)
+        seconds = box(g, 'DigitalClock', 166, 262, 36, 40)
         t = box(seconds, 'TimeText', 0, 0, 36, 40, format='ss', align='CENTER')
         el(t, 'Font', family='sans-serif-condensed', size=36, color=C[3], weight='MEDIUM')
 
@@ -232,12 +232,12 @@ def edge_slot(parent, sid, name, left=False):
 
 def shortcut(parent):
     s = box(parent, 'ComplicationSlot', 155, 410, 140, 30, slotId=6, name='shortcut',
-            displayName='slot_shortcut', supportedTypes='MONOCHROMATIC_IMAGE EMPTY', isCustomizable='TRUE')
+            displayName='slot_shortcut', supportedTypes='SMALL_IMAGE EMPTY', isCustomizable='TRUE')
     box(s, 'BoundingRoundBox', 0, 0, 140, 30, cornerRadius=15)
     el(s, 'DefaultProviderPolicy', defaultSystemProvider='EMPTY', defaultSystemProviderType='EMPTY')
     ambient_hide(s)
-    p = el(s, 'Complication', type='MONOCHROMATIC_IMAGE')
-    image(p, 55, 0, 30, 30, '[COMPLICATION.MONOCHROMATIC_IMAGE]', C[2])
+    p = el(s, 'Complication', type='SMALL_IMAGE')
+    image(p, 55, 0, 30, 30, '[COMPLICATION.SMALL_IMAGE]')
     p = el(s, 'Complication', type='EMPTY')
     text(p, 0, 4, 140, 22, 16, '+ Shortcut', color=C[3])
 
@@ -251,9 +251,9 @@ def build():
     el(fill, 'LinearGradient', startX=0, startY=0, endX=0, endY=450, colors=C[0]+' '+C[1], positions='0 1')
     clock(scene); clock(scene, ambient=True)
     # Keep complication rendering last to reduce ambient memory use.
-    circle_slot(scene,1,'upper_circle',202,86,96,'HEART_RATE')
-    circle_slot(scene,2,'middle_circle',300,143,96,'STEP_COUNT')
-    circle_slot(scene,3,'lower_circle',202,199,96,'SUNRISE_SUNSET')
+    circle_slot(scene,1,'upper_circle',202,78,96,'HEART_RATE')
+    circle_slot(scene,2,'middle_circle',300,135,96,'STEP_COUNT')
+    circle_slot(scene,3,'lower_circle',202,191,96,'SUNRISE_SUNSET')
     edge_slot(scene,4,'left_edge',True); edge_slot(scene,5,'right_edge')
     shortcut(scene)
     rectangle_slot(scene)

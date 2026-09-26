@@ -1,8 +1,8 @@
 # Validation
 
-## Version 12 alignment, picker and signing update
+## Version 13 alignment, picker and signing update
 
-Local validation passes: 19 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v9 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The left gauge now has 18 ticks; the right arc spans 40 degrees. Shortcut slot 6 supports MONOCHROMATIC_IMAGE/EMPTY only. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
+Local validation passes: 19 Python checks, 29 JVM tests, app/test APK and unsigned host AAB builds, lint, ten official Push checks, and standalone v10 WFF schema/APK/AAB/memory checks. All three circle diameters are 96 with perimeter gaps within one design unit; the date is bold only in active mode. The left gauge now has 18 ticks; the right arc spans 40 degrees. Shortcut slot 6 supports SMALL_IMAGE/EMPTY only. The forecast rectangle stays 262 × 94 and the pushed face now accepts SMALL_IMAGE/EMPTY only. Stock emulator checks are pending for this revision.
 
 The user reports weather works after tapping Allow. This supports a permission-reset explanation for the latest failure, not a weather-data regression. v10/v11 downloaded host certificates differ while their embedded face certificate is unchanged. The explicit cached host key and certificate checks address that CI defect; permission retention still requires a same-key physical update check.
 

@@ -101,7 +101,7 @@ class WatchFaceTests(unittest.TestCase):
 
     def test_shortcut_offers_only_icons(self):
         slot=self.face.find(".//ComplicationSlot[@slotId='6']")
-        self.assertEqual(set(slot.get('supportedTypes').split()), {'MONOCHROMATIC_IMAGE','EMPTY'})
+        self.assertEqual(set(slot.get('supportedTypes').split()), {'SMALL_IMAGE','EMPTY'})
 
     def test_weather_is_one_native_editable_slot(self):
         slot=self.face.find(".//ComplicationSlot[@slotId='7']")
